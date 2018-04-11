@@ -1,0 +1,14 @@
+{
+  "name": "hisabisa",
+  "version": "0.0.1",
+  "description": "An application to help keep up with old friends",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Kevin",
+  "license": "ISC",
+  "dependencies": {
+    "pg": "^7.4.1"
+  }
+}
