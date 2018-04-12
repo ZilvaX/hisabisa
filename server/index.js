@@ -1,12 +1,3 @@
-// Setup Database Client
-const {Client} = require('pg')
-// Hard coded for now
-const client = new Client({
-  user: 'admin',
-  database: 'hisabisa',
-})
-client.connect()
-
 // Setup Command Line Interface
 const readline = require('readline')
 const rl = readline.createInterface({
@@ -15,10 +6,11 @@ const rl = readline.createInterface({
 })
 
 // Define Database Queries
+const db = require('../db')
 const queryEntries = (currentUser) => {
-  client.query('SELECT * FROM entries where userid=$1', [currentUser], (err, res) => {
-    console.log(res.rows)
-    client.end()
+  db.query('SELECT * FROM entries where userid=$1', [currentUser], (err, res) => {
+    // console.log(res.rows)
+    db.log(res.rows)
   })
 }
 
