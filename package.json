@@ -4,6 +4,7 @@
   "description": "An application to help keep up with old friends",
   "main": "index.js",
   "scripts": {
+    "start": "node server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Kevin",
