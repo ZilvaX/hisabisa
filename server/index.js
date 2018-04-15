@@ -4,7 +4,7 @@ const { getEntries } = require('./dao.js')
 
 app.get('/', (req, res) => res.send('/entries/:id: Gets entries for given id'))
 
-app.get('/entries/:id', async (req, res) => {
+app.get('/entries/:id(\\d+)', async (req, res) => {
   const entries = await getEntries(req.params.id)
   res.send(entries)
 })
