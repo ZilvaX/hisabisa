@@ -8,10 +8,9 @@ const rl = readline.createInterface({
 // Define Database Queries
 const db = require('../db')
 const queryEntries = (currentUser) => {
-  db.query('SELECT * FROM entries where userid=$1', [currentUser], (err, res) => {
-    // console.log(res.rows)
-    db.log(res.rows)
-  })
+  db.query('SELECT * FROM entries where userid=$1', [currentUser])
+    .then(res => console.log(res.rows))
+    .catch(e => console.error(e.stack))
 }
 
 // Command Line Interface
