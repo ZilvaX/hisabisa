@@ -9,8 +9,7 @@ const rl = readline.createInterface({
 const db = require('../db')
 const queryEntries = (currentUser) => {
   db.query('SELECT * FROM entries where userid=$1', [currentUser], (err, res) => {
-    // console.log(res.rows)
-    db.log(res.rows)
+    console.log(res.rows)
   })
 }
 
