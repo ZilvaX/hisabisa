@@ -1,20 +1,12 @@
-// Setup Command Line Interface
-const readline = require('readline')
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
+const express = require('express')
+const app = express()
+const { getEntries } = require('./dao.js')
+
+app.get('/', (req, res) => res.send('/entries/:id: Gets entries for given id'))
+
+app.get('/entries/:id', async (req, res) => {
+  const entries = await getEntries(req.params.id)
+  res.send(entries)
 })
 
-// Command Line Interface
-const { getEntries } = require('./dao.js')
-const queryAction = () => {
-  rl.question('hisabisa CLI userid: ', async (answer) => {
-    const currentUser = answer
-    console.log(`Querying userid: ${currentUser}`)
-    const entries = await getEntries(currentUser)
-    console.log(entries)
-    rl.close()
-  })
-}
-
-queryAction()
+app.listen(3000, () => console.log('Hisabisa listening on port 3000'))
