@@ -5,20 +5,14 @@ const rl = readline.createInterface({
   output: process.stdout
 })
 
-// Define Database Queries
-const db = require('../db')
-const queryEntries = (currentUser) => {
-  db.query('SELECT * FROM entries where userid=$1', [currentUser])
-    .then(res => console.log(res.rows))
-    .catch(e => console.error(e.stack))
-}
-
 // Command Line Interface
+const { getEntries } = require('./dao.js')
 const queryAction = () => {
-  rl.question('hisabisa CLI userid: ', (answer) => {
+  rl.question('hisabisa CLI userid: ', async (answer) => {
     const currentUser = answer
     console.log(`Querying userid: ${currentUser}`)
-    queryEntries(currentUser)
+    const entries = await getEntries(currentUser)
+    console.log(entries)
     rl.close()
   })
 }
