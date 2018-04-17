@@ -13,7 +13,7 @@ app.get('/entries/:id(\\d+)', async (req, res) => {
   res.send(entries)
 })
 
-app.post('/entry/', async (req, res) => {
+app.post('/entries/', async (req, res) => {
   const body = req.body
   const entry = await insertEntry(body.user, body.event, body.lastoccurence, body.frequency)
   res.send(entry)
