@@ -9,10 +9,9 @@ export default class App extends Component {
   }
 
   componentWillMount() {
-    fetch('http://localhost:3000/entries/2')
-      .then( results => {
-        console.log(results.json)
-      })
+    fetch('http://localhost:8080/entries/2')
+      .then( results => results.json())
+      .then( results => console.log(results))
   }
 
   render() {
