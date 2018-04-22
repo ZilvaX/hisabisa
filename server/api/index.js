@@ -1,6 +1,6 @@
-var express = require('express')
+const express = require('express')
 const { getEntries, insertEntry } = require('../dao.js')
-var router = express.Router()
+const router = express.Router()
 
 // define the home page route
 router.get('/', function (req, res) {
