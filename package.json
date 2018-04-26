@@ -16,7 +16,17 @@
   },
   "devDependencies": {
     "eslint": "^4.19.1",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-prettier": "^2.6.0",
     "eslint-plugin-react": "^7.7.0",
-    "nodemon": "^1.17.3"
+    "husky": "^1.0.0-rc.2",
+    "nodemon": "^1.17.3",
+    "prettier": "^1.12.1",
+    "pretty-quick": "^1.4.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npx pretty-quick --staged"
+    }
   }
 }
