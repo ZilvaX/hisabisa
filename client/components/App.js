@@ -4,19 +4,42 @@ export default class App extends Component {
   constructor() {
     super()
     this.state = {
-      entries: []
+      user: null,
+      entries: [],
     }
   }
 
-  componentWillMount() {
-    fetch('http://localhost:8080/entries/2')
-      .then( results => results.json())
-      .then( results => console.log(results))
+  handleUserChange(event){
+    this.setState({user: event.target.value})
+  }
+
+  handleUserSubmit(event){
+    fetch('/entries/'+this.state.user)
+      .then( results => {
+        return results.json()
+      }).then( data => {
+        this.setState({entries: data})
+      })
   }
 
   render() {
+    let userEntries = this.state.entries
+
     return (
-      <h1>Entries</h1>
+      <div>
+       <form>
+          <label>
+            User Id: <input type='text' value={this.state.value} onChange={this.handleUserChange.bind(this)}/>
+          </label>
+          <button type='button' onClick={this.handleUserSubmit.bind(this)}>Submit</button>
+        </form>
+        {userEntries.map(x => 
+          <div key={x.entryid}>
+            <h2>{x.event}</h2>
+            <p>Every {x.frequency.days} days</p>
+          </div>
+        )}
+      </div>
     )
   }
 }
