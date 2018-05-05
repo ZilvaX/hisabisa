@@ -9,16 +9,17 @@ export default class App extends Component {
     }
   }
 
-  handleUserChange(event){
-    this.setState({user: event.target.value})
+  handleUserChange(event) {
+    this.setState({ user: event.target.value })
   }
 
-  handleUserSubmit(event){
-    fetch('/entries/'+this.state.user)
-      .then( results => {
+  handleUserSubmit(event) {
+    fetch('/entries/' + this.state.user)
+      .then(results => {
         return results.json()
-      }).then( data => {
-        this.setState({entries: data})
+      })
+      .then(data => {
+        this.setState({ entries: data })
       })
   }
 
@@ -27,20 +28,26 @@ export default class App extends Component {
 
     return (
       <div>
-       <form>
+        <form>
           <label>
-            User Id: <input type='text' value={this.state.value} onChange={this.handleUserChange.bind(this)}/>
+            User Id:{' '}
+            <input
+              type="text"
+              value={this.state.value}
+              onChange={this.handleUserChange.bind(this)}
+            />
           </label>
-          <button type='button' onClick={this.handleUserSubmit.bind(this)}>Submit</button>
+          <button type="button" onClick={this.handleUserSubmit.bind(this)}>
+            Submit
+          </button>
         </form>
-        {userEntries.map(x => 
+        {userEntries.map(x => (
           <div key={x.entryid}>
             <h2>{x.event}</h2>
             <p>Every {x.frequency.days} days</p>
           </div>
-        )}
+        ))}
       </div>
     )
   }
 }
-

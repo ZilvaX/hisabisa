@@ -16,16 +16,14 @@ const config = {
     rules: [
       {
         test: /\.js$/,
-        include: [
-          APP_DIR,
-        ],
+        include: [APP_DIR],
         loader: 'babel-loader',
-      }
+      },
     ],
   },
   devServer: {
     proxy: {
-      '/entries': 'http://localhost:3000/'
+      '/entries': 'http://localhost:3000/',
     },
     contentBase: DIST_DIR,
     headers: {
