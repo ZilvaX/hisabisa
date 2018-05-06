@@ -23,7 +23,7 @@ const config = {
   },
   devServer: {
     proxy: {
-      '/entries': 'http://localhost:3000/',
+      '/api': 'http://localhost:3000/',
     },
     contentBase: DIST_DIR,
     headers: {
