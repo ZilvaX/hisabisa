@@ -29,5 +29,6 @@
     "hooks": {
       "pre-commit": "npx pretty-quick --staged"
     }
-  }
+  },
+  "repository": "https://github.com/ZilvaX/hisabisa.git"
 }
