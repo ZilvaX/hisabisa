@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import UserBox from './UserBox.js'
 
 export default class App extends Component {
   constructor() {
@@ -13,9 +14,10 @@ export default class App extends Component {
     this.setState({user: event.target.value})
   }
 
-  handleUserSubmit(event){
-    fetch('/entries/'+this.state.user)
-      .then( results => {
+
+  handleUserSubmit() {
+    fetch('/api/entries/' + this.state.user)
+      .then(results => {
         return results.json()
       }).then( data => {
         this.setState({entries: data})
@@ -27,13 +29,12 @@ export default class App extends Component {
 
     return (
       <div>
-       <form>
-          <label>
-            User Id: <input type='text' value={this.state.value} onChange={this.handleUserChange.bind(this)}/>
-          </label>
-          <button type='button' onClick={this.handleUserSubmit.bind(this)}>Submit</button>
-        </form>
-        {userEntries.map(x => 
+        <UserBox
+          value={this.state.user ? this.state.user : ''}
+          onChange={this.handleUserChange.bind(this)}
+          onClick={this.handleUserSubmit.bind(this)}
+        />
+        {userEntries.map(x => (
           <div key={x.entryid}>
             <h2>{x.event}</h2>
             <p>Every {x.frequency.days} days</p>
