@@ -13,7 +13,17 @@ const insertEntry = (user, event, lastoccurence, frequency) => {
 }
 const getEntries = user => {
   return db
-    .query('SELECT * FROM entries where userid=$1', [user])
+    .query('SELECT * FROM entries WHERE userid=$1', [user])
+    .then(res => res.rows)
+    .catch(e => console.error(e.stack))
+}
+
+const getOverdueEntries = user => {
+  return db
+    .query(
+      'SELECT * FROM entries WHERE userid=$1 AND lastoccurence + frequency > CURRENT_DATE',
+      [user],
+    )
     .then(res => res.rows)
     .catch(e => console.error(e.stack))
 }
@@ -29,4 +39,5 @@ module.exports = {
   getEntries,
   insertEntry,
   insertUser,
+  getOverdueEntries,
 }
