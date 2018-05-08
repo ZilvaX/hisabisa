@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 export default function UserBox(props) {
   return (
@@ -12,4 +13,10 @@ export default function UserBox(props) {
       </button>
     </div>
   )
+}
+
+UserBox.propTypes = {
+  value: PropTypes.string,
+  onChange: PropTypes.func,
+  onClick: PropTypes.func,
 }
