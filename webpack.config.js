@@ -16,11 +16,9 @@ const config = {
     rules: [
       {
         test: /\.js$/,
-        include: [
-          APP_DIR,
-        ],
+        include: [APP_DIR],
         loader: 'babel-loader',
-      }
+      },
     ],
   },
   devServer: {

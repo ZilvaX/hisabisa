@@ -12,10 +12,9 @@ export default class App extends Component {
     this.handleUserChange = this.handleUserChange.bind(this)
   }
 
-  handleUserChange(event){
-    this.setState({user: event.target.value})
+  handleUserChange(event) {
+    this.setState({ user: event.target.value })
   }
-
 
   handleUserSubmit() {
     if (this.state.user) {
@@ -42,4 +41,3 @@ export default class App extends Component {
     )
   }
 }
-
