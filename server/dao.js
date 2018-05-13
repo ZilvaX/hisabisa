@@ -31,9 +31,17 @@ const insertUser = (user, hashedPassword) => {
     .then(res => res)
 }
 
+const checkUser = username => {
+  return db
+    .query('SELECT password FROM users WHERE username=$1', [username])
+    .then(res => res.rows[0].password)
+    .catch(e => console.error(e.stack))
+}
+
 module.exports = {
   getEntries,
   insertEntry,
   insertUser,
   getOverdueEntries,
+  checkUser,
 }

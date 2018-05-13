@@ -15,5 +15,5 @@ export default function ResultsDisplay(props) {
 }
 
 ResultsDisplay.propTypes = {
-  value: PropTypes.Object,
+  value: PropTypes.array,
 }

@@ -36,7 +36,7 @@ export default class App extends Component {
           onChange={this.handleUserChange}
           onClick={this.handleUserSubmit.bind(this)}
         />
-        <ResultsDisplay value={this.state.entries} />
+        <ResultsDisplay value={this.state.entries ? this.state.entries : []} />
       </div>
     )
   }
