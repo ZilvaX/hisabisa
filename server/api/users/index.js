@@ -15,7 +15,7 @@ router.post('/', (req, res) => {
     .then(async hashedPassword => {
       const result = await insertUser(body.username, hashedPassword)
       if (result) {
-        res.status(200)
+        res.status(201)
         res.send(result)
       } else {
         res.status(400)
