@@ -1,4 +1,5 @@
 const express = require('express')
+const { isInt, isISO8601 } = require('validator')
 const { getEntries, insertEntry, getOverdueEntries } = require('../../dao.js')
 const router = express.Router()
 
@@ -21,14 +22,17 @@ router.get('/:id(\\d+)/overdue', async (req, res) => {
 })
 
 router.post('/', async (req, res) => {
+  const { user, event, lastoccurence, frequency } = req.body
+  if (
+    !isInt(user + '') ||
+    !isISO8601(lastoccurence) ||
+    !isInt(frequency + '')
+  ) {
+    res.status(400).send()
+  }
+
   try {
-    const body = req.body
-    const entry = await insertEntry(
-      body.user,
-      body.event,
-      body.lastoccurence,
-      body.frequency,
-    )
+    const entry = await insertEntry(user, event, lastoccurence, frequency)
     res.status(201).send(entry)
   } catch (e) {
     res.status(500).send('Failed to store entry')
