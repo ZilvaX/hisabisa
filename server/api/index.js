@@ -13,6 +13,7 @@ router.get('/', function(req, res) {
 })
 
 router.use('/authentication', authentication)
+router.use('/users', users)
 
 router.use((req, res, next) => {
   const token = req.headers.authorization
@@ -36,6 +37,5 @@ router.use((req, res, next) => {
 })
 
 router.use('/entries', entries)
-router.use('/users', users)
 
 module.exports = router

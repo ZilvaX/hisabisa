@@ -6,6 +6,7 @@ const { promisify } = require('util')
 
 const { insertUser } = require('../../dao.js')
 
+// create a new user
 const randomBytes = promisify(crypto.randomBytes)
 router.post('/', (req, res) => {
   const body = req.body

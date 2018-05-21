@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import UserBox from './UserBox.js'
 import ResultsDisplay from './ResultsDisplay'
+import LoginBox from './LoginBox'
 
 export default class App extends Component {
   constructor() {
@@ -8,12 +8,29 @@ export default class App extends Component {
     this.state = {
       user: null,
       entries: [],
+      jwt: null,
     }
-    this.handleUserChange = this.handleUserChange.bind(this)
+    this.handleLogin = this.handleLogin.bind(this)
   }
 
-  handleUserChange(event) {
-    this.setState({ user: event.target.value })
+  handleLogin(event, username, password) {
+    event.preventDefault()
+    const headers = { 'content-type': 'application/json' }
+    const body = { username, password }
+    fetch('/api/authentication/', {
+      method: 'POST',
+      body: JSON.stringify(body),
+      headers,
+    }).then(result => {
+      if (result.status === 200) {
+        result.json().then(r =>
+          this.setState({
+            user: username,
+            jwt: r.token,
+          }),
+        )
+      }
+    })
   }
 
   handleUserSubmit() {
@@ -31,11 +48,7 @@ export default class App extends Component {
   render() {
     return (
       <div>
-        <UserBox
-          value={this.state.user ? this.state.user : ''}
-          onChange={this.handleUserChange}
-          onClick={this.handleUserSubmit.bind(this)}
-        />
+        <LoginBox onSubmit={this.handleLogin} />
         <ResultsDisplay value={this.state.entries ? this.state.entries : []} />
       </div>
     )
