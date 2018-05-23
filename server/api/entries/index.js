@@ -3,7 +3,7 @@ const { isInt, isISO8601 } = require('validator')
 const { getEntries, insertEntry, getOverdueEntries } = require('../../dao.js')
 const router = express.Router()
 
-router.get('/:id(\\d+)', async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     const entries = await getEntries(req.params.id)
     res.send(entries)

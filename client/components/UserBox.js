@@ -4,19 +4,15 @@ import PropTypes from 'prop-types'
 export default function UserBox(props) {
   return (
     <div>
-      <label>
-        User Id:{' '}
-        <input type="text" value={props.value} onChange={props.onChange} />
-      </label>
+      <h1>Hello, {props.user}</h1>
       <button type="button" onClick={props.onClick}>
-        Submit
+        Logout
       </button>
     </div>
   )
 }
 
 UserBox.propTypes = {
-  value: PropTypes.string,
-  onChange: PropTypes.func,
+  user: PropTypes.string,
   onClick: PropTypes.func,
 }

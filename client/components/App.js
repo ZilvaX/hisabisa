@@ -1,16 +1,19 @@
 import React, { Component } from 'react'
 import ResultsDisplay from './ResultsDisplay'
 import LoginBox from './LoginBox'
+import UserBox from './UserBox'
 
 export default class App extends Component {
   constructor() {
     super()
     this.state = {
+      isLoggedIn: false,
       user: null,
       entries: [],
       jwt: null,
     }
     this.handleLogin = this.handleLogin.bind(this)
+    this.handleLogout = this.handleLogout.bind(this)
   }
 
   handleLogin(event, username, password) {
@@ -23,22 +26,34 @@ export default class App extends Component {
       headers,
     }).then(result => {
       if (result.status === 200) {
-        result.json().then(r =>
+        result.json().then(r => {
           this.setState({
+            isLoggedIn: true,
             user: username,
             jwt: r.token,
-          }),
-        )
+          })
+          this.handleEntriesDisplay()
+        })
       }
     })
   }
 
-  handleUserSubmit() {
+  handleLogout() {
+    this.setState({
+      isLoggedIn: false,
+      user: null,
+      entries: [],
+      jwt: null,
+    })
+  }
+
+  handleEntriesDisplay() {
     if (this.state.user) {
-      fetch('/api/entries/' + this.state.user)
-        .then(results => {
-          return results.json()
-        })
+      const headers = { authorization: this.state.jwt }
+      fetch('/api/entries/' + this.state.user, {
+        headers,
+      })
+        .then(results => results.json())
         .then(data => {
           this.setState({ entries: data })
         })
@@ -46,9 +61,18 @@ export default class App extends Component {
   }
 
   render() {
+    let greetingForm = null
+    if (this.state.isLoggedIn) {
+      greetingForm = (
+        <UserBox user={this.state.user} onClick={this.handleLogout} />
+      )
+    } else {
+      greetingForm = <LoginBox onSubmit={this.handleLogin} />
+    }
+
     return (
       <div>
-        <LoginBox onSubmit={this.handleLogin} />
+        {greetingForm}
         <ResultsDisplay value={this.state.entries ? this.state.entries : []} />
       </div>
     )

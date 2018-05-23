@@ -10,9 +10,13 @@ const insertEntry = (user, event, lastoccurence, frequency) => {
     ])
     .then(res => res)
 }
+
 const getEntries = user => {
   return db
-    .query('SELECT * FROM entries WHERE userid=$1', [user])
+    .query(
+      'SELECT * FROM entries WHERE userid=(select userid from users where username=$1)',
+      [user],
+    )
     .then(res => res.rows)
 }
 

@@ -42,7 +42,7 @@ export default class LoginBox extends Component {
           <label>
             Password:
             <input
-              type="text"
+              type="password"
               name="password"
               value={this.state.password}
               onChange={this.handleInputChange}
