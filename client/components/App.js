@@ -1,9 +1,9 @@
-import React, { Component } from 'react'
-import ResultsDisplay from './ResultsDisplay'
+import React from 'react'
+import EntriesBox from './EntriesBox'
 import LoginBox from './LoginBox'
 import UserBox from './UserBox'
 
-export default class App extends Component {
+export default class App extends React.Component {
   constructor() {
     super()
     this.state = {
@@ -73,7 +73,7 @@ export default class App extends Component {
     return (
       <div>
         {greetingForm}
-        <ResultsDisplay value={this.state.entries ? this.state.entries : []} />
+        <EntriesBox entries={this.state.entries} />
       </div>
     )
   }
