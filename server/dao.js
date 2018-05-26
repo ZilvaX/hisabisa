@@ -1,8 +1,9 @@
 // Define Database Queries
 const db = require('./db')
 const insertEntry = (user, event, lastoccurence, frequency) => {
+  const userId = '(SELECT userid from users where username = $1)'
   return db
-    .query('INSERT INTO entries VALUES (DEFAULT, $1, $2, $3, $4)', [
+    .query(`INSERT INTO entries VALUES (DEFAULT, ${userId}, $2, $3, $4)`, [
       user,
       event,
       lastoccurence,

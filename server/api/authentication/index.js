@@ -14,7 +14,7 @@ router.post('/', (req, res) => {
     .then(result => {
       if (result) {
         const user = {
-          user: body.user,
+          username: body.username,
         }
         const token = jwt.sign(user, secret)
         res.status(200)

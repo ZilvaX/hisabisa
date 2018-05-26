@@ -21,9 +21,8 @@ router.use((req, res, next) => {
   if (token) {
     verify(token, secret)
       .then(result => {
-        if (result) {
-          next()
-        }
+        req.jwt = result
+        next()
       })
       .catch(e => {
         res.status(401)
