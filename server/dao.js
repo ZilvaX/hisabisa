@@ -7,7 +7,7 @@ const insertEntry = (user, event, lastoccurence, frequency) => {
       user,
       event,
       lastoccurence,
-      `${frequency} days`,
+      frequency + 'days',
     ])
     .then(res => res)
 }
