@@ -73,7 +73,7 @@ export default class App extends React.Component {
     return (
       <div>
         {greetingForm}
-        <EntriesBox entries={this.state.entries} />
+        <EntriesBox jwt={this.state.jwt} entries={this.state.entries} />
       </div>
     )
   }
