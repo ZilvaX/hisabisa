@@ -8,48 +8,42 @@ export default class AddEntriesBox extends React.Component {
       lastOccurence: '',
       frequency: '',
     }
-    this.onEventChange = this.onEventChange.bind(this)
-    this.onLastOccurenceChange = this.onLastOccurenceChange.bind(this)
-    this.onFrequencyChange = this.onFrequencyChange.bind(this)
+    this.handleFormChange = this.handleFormChange.bind(this)
   }
-  onEventChange(event) {
+  handleFormChange(event) {
+    const { target } = event
     this.setState({
-      event: event.target.value,
+      [target.id]: target.value,
     })
   }
-  onLastOccurenceChange(event) {
-    this.setState({
-      lastOccurence: event.target.value,
-    })
-  }
-  onFrequencyChange(event) {
-    this.setState({
-      frequency: event.target.value,
-    })
+
+  handleSubmit(event) {
+    console.log('submit')
+    event.preventDefault()
   }
   render() {
     return (
-      <form>
+      <form onSubmit={this.handleSubmit}>
         <label htmlFor="event">Event:</label>
         <input
           id="event"
           type="text"
           value={this.state.event}
-          onChange={this.onEventChange}
+          onChange={this.handleFormChange}
         />
         <label htmlFor="lastOccurence">Last Occurence:</label>
         <input
           id="lastOccurence"
           type="date"
           value={this.state.lastOccurence}
-          onChange={this.onLastOccurenceChange}
+          onChange={this.handleFormChange}
         />
         <label htmlFor="frequency">How Often:</label>
         <input
           id="frequency"
           type="number"
           value={this.state.frequency}
-          onChange={this.onFrequencyChange}
+          onChange={this.handleFormChange}
         />
         <input type="submit" value="+" />
       </form>
