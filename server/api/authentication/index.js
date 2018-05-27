@@ -3,13 +3,13 @@ const router = express.Router()
 const { argon2i } = require('argon2-ffi')
 const jwt = require('jsonwebtoken')
 
-const { checkUser } = require('../../dao.js')
+const { getUserHash } = require('../../dao.js')
 const { secret } = require('../../config.js')
 
 //check user login password and give token to client
 router.post('/', (req, res) => {
   const body = req.body
-  checkUser(body.username)
+  getUserHash(body.username)
     .then(hash => argon2i.verify(hash, body.password))
     .then(result => {
       if (result) {

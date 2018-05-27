@@ -15,6 +15,28 @@ export default class App extends React.Component {
     this.handleLogin = this.handleLogin.bind(this)
     this.handleLogout = this.handleLogout.bind(this)
     this.addEntry = this.addEntry.bind(this)
+    this.handleRegister = this.handleRegister.bind(this)
+  }
+
+  handleRegister(event, username, password) {
+    event.preventDefault()
+    const headers = { 'content-type': 'application/json' }
+    const body = { username, password }
+    fetch('/api/users/', {
+      method: 'POST',
+      body: JSON.stringify(body),
+      headers,
+    }).then(result => {
+      if (result.status === 201) {
+        //log the new user in
+        this.loginSuccess(username, result)
+      } else if (result.status === 409) {
+        console.log('username already taken')
+        console.log(result)
+      } else {
+        console.log('error')
+      }
+    })
   }
 
   handleLogin(event, username, password) {
@@ -25,17 +47,17 @@ export default class App extends React.Component {
       method: 'POST',
       body: JSON.stringify(body),
       headers,
-    }).then(result => {
-      if (result.status === 200) {
-        result.json().then(r => {
-          this.setState({
-            isLoggedIn: true,
-            user: username,
-            jwt: r.token,
-          })
-          this.handleEntriesDisplay()
-        })
-      }
+    }).then(result => this.loginSuccess(username, result))
+  }
+
+  loginSuccess(username, result) {
+    result.json().then(r => {
+      this.setState({
+        isLoggedIn: true,
+        user: username,
+        jwt: r.token,
+      })
+      this.handleEntriesDisplay()
     })
   }
 

@@ -34,7 +34,19 @@ const insertUser = (user, hashedPassword) => {
     .then(res => res)
 }
 
-const checkUser = username => {
+const checkUserExists = username => {
+  return db
+    .query('SELECT * FROM users WHERE username=$1', [username])
+    .then(res => {
+      if (res.rowCount === 0) {
+        return false
+      } else {
+        return true
+      }
+    })
+}
+
+const getUserHash = username => {
   return db
     .query('SELECT password FROM users WHERE username=$1', [username])
     .then(res => res.rows[0].password)
@@ -45,5 +57,6 @@ module.exports = {
   insertEntry,
   insertUser,
   getOverdueEntries,
-  checkUser,
+  getUserHash,
+  checkUserExists,
 }
