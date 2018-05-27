@@ -9,7 +9,9 @@ export default class EntriesBox extends React.Component {
     return (
       <div>
         <ResultsDisplay value={this.props.entries} />
-        {this.props.jwt && <AddEntriesBox />}
+        {this.props.jwt && (
+          <AddEntriesBox addEntry={this.props.addEntry} jwt={this.props.jwt} />
+        )}
       </div>
     )
   }
@@ -18,4 +20,5 @@ export default class EntriesBox extends React.Component {
 EntriesBox.propTypes = {
   entries: PropTypes.array,
   jwt: PropTypes.string,
+  addEntry: PropTypes.func.isRequired,
 }

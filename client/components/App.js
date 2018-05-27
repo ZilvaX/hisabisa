@@ -14,6 +14,7 @@ export default class App extends React.Component {
     }
     this.handleLogin = this.handleLogin.bind(this)
     this.handleLogout = this.handleLogout.bind(this)
+    this.addEntry = this.addEntry.bind(this)
   }
 
   handleLogin(event, username, password) {
@@ -60,6 +61,10 @@ export default class App extends React.Component {
     }
   }
 
+  addEntry(entry) {
+    this.setState({ entries: [...this.state.entries, entry] })
+  }
+
   render() {
     let greetingForm = null
     if (this.state.isLoggedIn) {
@@ -73,7 +78,11 @@ export default class App extends React.Component {
     return (
       <div>
         {greetingForm}
-        <EntriesBox jwt={this.state.jwt} entries={this.state.entries} />
+        <EntriesBox
+          jwt={this.state.jwt}
+          entries={this.state.entries}
+          addEntry={this.addEntry}
+        />
       </div>
     )
   }

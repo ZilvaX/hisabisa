@@ -24,12 +24,20 @@ router.get('/:id(\\d+)/overdue', async (req, res) => {
 router.post('/', async (req, res) => {
   const username = req.jwt.username
   const { event, lastoccurence, frequency } = req.body
-  if (!isISO8601(lastoccurence) || !isInt(frequency + '')) {
+  if (!isISO8601(lastoccurence + '') || !isInt(frequency + '')) {
     res.status(400).send()
+    return
   }
-
   try {
-    const entry = await insertEntry(username, event, lastoccurence, frequency)
+    const results = await insertEntry(username, event, lastoccurence, frequency)
+    const entry = {
+      entryid: results.entryid,
+      userid: results.userid,
+      event,
+      lastoccurence: results.lastoccurence,
+      frequency: results.frequency,
+    }
+    console.log(entry)
     res.status(201).send(entry)
   } catch (e) {
     res.status(500).send('Failed to store entry')

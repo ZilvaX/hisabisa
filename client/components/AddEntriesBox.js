@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 export default class AddEntriesBox extends React.Component {
   constructor(props) {
@@ -9,7 +10,9 @@ export default class AddEntriesBox extends React.Component {
       frequency: '',
     }
     this.handleFormChange = this.handleFormChange.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
   }
+
   handleFormChange(event) {
     const { target } = event
     this.setState({
@@ -18,9 +21,29 @@ export default class AddEntriesBox extends React.Component {
   }
 
   handleSubmit(event) {
-    console.log('submit')
+    const body = {
+      event: this.state.event,
+      lastoccurence: this.state.lastOccurence,
+      frequency: this.state.frequency,
+    }
+    const headers = {
+      'content-type': 'application/json',
+      Authorization: this.props.jwt,
+    }
+    fetch('/api/entries', {
+      method: 'POST',
+      body: JSON.stringify(body),
+      headers,
+    }).then(result => {
+      if (result.status === 201) {
+        result.json().then(json => {
+          this.props.addEntry(json)
+        })
+      }
+    })
     event.preventDefault()
   }
+
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
@@ -49,4 +72,9 @@ export default class AddEntriesBox extends React.Component {
       </form>
     )
   }
+}
+
+AddEntriesBox.propTypes = {
+  jwt: PropTypes.string.isRequired,
+  addEntry: PropTypes.func.isRequired,
 }

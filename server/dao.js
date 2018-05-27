@@ -3,13 +3,11 @@ const db = require('./db')
 const insertEntry = (user, event, lastoccurence, frequency) => {
   const userId = '(SELECT userid from users where username = $1)'
   return db
-    .query(`INSERT INTO entries VALUES (DEFAULT, ${userId}, $2, $3, $4)`, [
-      user,
-      event,
-      lastoccurence,
-      frequency + 'days',
-    ])
-    .then(res => res)
+    .query(
+      `INSERT INTO entries VALUES (DEFAULT, ${userId}, $2, $3, $4) returning entryid, userid,lastoccurence, frequency`,
+      [user, event, lastoccurence, frequency + 'days'],
+    )
+    .then(res => res.rows[0])
 }
 
 const getEntries = user => {
