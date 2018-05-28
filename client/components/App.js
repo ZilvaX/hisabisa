@@ -1,9 +1,9 @@
-import React, { Component } from 'react'
-import ResultsDisplay from './ResultsDisplay'
+import React from 'react'
+import EntriesBox from './EntriesBox'
 import LoginBox from './LoginBox'
 import UserBox from './UserBox'
 
-export default class App extends Component {
+export default class App extends React.Component {
   constructor() {
     super()
     this.state = {
@@ -14,6 +14,7 @@ export default class App extends Component {
     }
     this.handleLogin = this.handleLogin.bind(this)
     this.handleLogout = this.handleLogout.bind(this)
+    this.addEntry = this.addEntry.bind(this)
   }
 
   handleLogin(event, username, password) {
@@ -60,6 +61,10 @@ export default class App extends Component {
     }
   }
 
+  addEntry(entry) {
+    this.setState({ entries: [...this.state.entries, entry] })
+  }
+
   render() {
     let greetingForm = null
     if (this.state.isLoggedIn) {
@@ -73,7 +78,11 @@ export default class App extends Component {
     return (
       <div>
         {greetingForm}
-        <ResultsDisplay value={this.state.entries ? this.state.entries : []} />
+        <EntriesBox
+          jwt={this.state.jwt}
+          entries={this.state.entries}
+          addEntry={this.addEntry}
+        />
       </div>
     )
   }
