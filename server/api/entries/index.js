@@ -37,7 +37,6 @@ router.post('/', async (req, res) => {
       lastoccurence: results.lastoccurence,
       frequency: results.frequency,
     }
-    console.log(entry)
     res.status(201).send(entry)
   } catch (e) {
     res.status(500).send('Failed to store entry')
