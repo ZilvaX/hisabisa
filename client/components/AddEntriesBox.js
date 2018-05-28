@@ -61,7 +61,7 @@ export default class AddEntriesBox extends React.Component {
           value={this.state.lastOccurence}
           onChange={this.handleFormChange}
         />
-        <label htmlFor="frequency">How Often:</label>
+        <label htmlFor="frequency">How Often (in days):</label>
         <input
           id="frequency"
           type="number"
