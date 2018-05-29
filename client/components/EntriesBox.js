@@ -1,14 +1,26 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import _ from 'lodash'
 
-import ResultsDisplay from './ResultsDisplay'
 import AddEntriesBox from './AddEntriesBox'
 
 export default class EntriesBox extends React.Component {
+  handleRemoveEntry(id) {
+    console.log(id)
+  }
   render() {
+    const entries = _.map(this.props.entries, x => (
+      <div key={x.entryid}>
+        <b>{x.event}</b>
+        Every {x.frequency.days} days
+        <button type="button" onClick={() => this.handleRemoveEntry(x.entryid)}>
+          X
+        </button>
+      </div>
+    ))
     return (
       <div>
-        <ResultsDisplay value={this.props.entries} />
+        {entries}
         {this.props.jwt && (
           <AddEntriesBox addEntry={this.props.addEntry} jwt={this.props.jwt} />
         )}
