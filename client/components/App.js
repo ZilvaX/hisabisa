@@ -2,6 +2,7 @@ import React from 'react'
 import EntriesBox from './EntriesBox'
 import LoginBox from './LoginBox'
 import UserBox from './UserBox'
+import RegisterBox from './RegisterBox'
 
 export default class App extends React.Component {
   constructor() {
@@ -19,7 +20,6 @@ export default class App extends React.Component {
   }
 
   handleRegister(event, username, password) {
-    event.preventDefault()
     const headers = { 'content-type': 'application/json' }
     const body = { username, password }
     fetch('/api/users/', {
@@ -88,23 +88,23 @@ export default class App extends React.Component {
   }
 
   render() {
-    let greetingForm = null
-    if (this.state.isLoggedIn) {
-      greetingForm = (
-        <UserBox user={this.state.user} onClick={this.handleLogout} />
-      )
-    } else {
-      greetingForm = <LoginBox onSubmit={this.handleLogin} />
-    }
-
     return (
       <div>
-        {greetingForm}
-        <EntriesBox
-          jwt={this.state.jwt}
-          entries={this.state.entries}
-          addEntry={this.addEntry}
-        />
+        {!this.state.isLoggedIn ? (
+          <div>
+            <LoginBox onSubmit={this.handleLogin} />
+            <RegisterBox onSubmit={this.handleRegister} />
+          </div>
+        ) : (
+          <div>
+            <UserBox user={this.state.user} onClick={this.handleLogout} />
+            <EntriesBox
+              jwt={this.state.jwt}
+              entries={this.state.entries}
+              addEntry={this.addEntry}
+            />
+          </div>
+        )}
       </div>
     )
   }

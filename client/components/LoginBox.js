@@ -19,9 +19,9 @@ export default class LoginBox extends Component {
   handleInputChange(event) {
     const target = event.target
     const value = target.value
-    const name = target.name
+    const id = target.id
 
-    this.setState({ [name]: value })
+    this.setState({ [id]: value })
   }
 
   render() {
@@ -29,25 +29,25 @@ export default class LoginBox extends Component {
       <div>
         <h1>Hello, please login</h1>
         <form onSubmit={this.handleSubmit}>
-          <label>
-            Username:
-            <input
-              type="text"
-              name="username"
-              value={this.state.username}
-              onChange={this.handleInputChange}
-            />
-          </label>
+          <label htmlFor="username">Username:</label>
           <br />
-          <label>
+          <input
+            type="text"
+            id="username"
+            value={this.state.username}
+            onChange={this.handleInputChange}
+          />
+          <br />
+          <label htmlFor="password">
             Password:
-            <input
-              type="password"
-              name="password"
-              value={this.state.password}
-              onChange={this.handleInputChange}
-            />
+            <br />
           </label>
+          <input
+            type="password"
+            id="password"
+            value={this.state.password}
+            onChange={this.handleInputChange}
+          />
           <br />
           <input type="submit" value="Submit" />
         </form>
