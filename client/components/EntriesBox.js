@@ -1,14 +1,35 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import _ from 'lodash'
 
-import ResultsDisplay from './ResultsDisplay'
 import AddEntriesBox from './AddEntriesBox'
 
 export default class EntriesBox extends React.Component {
+  handleOnClick(id) {
+    const headers = {
+      'content-type': 'application/json',
+      Authorization: this.props.jwt,
+    }
+    fetch(`/api/entries/${id}`, {
+      method: 'DELETE',
+      headers,
+    }).then(() => {
+      this.props.removeEntry(id)
+    })
+  }
   render() {
+    const entries = _.map(this.props.entries, x => (
+      <div key={x.entryid}>
+        <b>{x.event}</b>
+        Every {x.frequency.days} days
+        <button type="button" onClick={() => this.handleOnClick(x.entryid)}>
+          X
+        </button>
+      </div>
+    ))
     return (
       <div>
-        <ResultsDisplay value={this.props.entries} />
+        {entries}
         {this.props.jwt && (
           <AddEntriesBox addEntry={this.props.addEntry} jwt={this.props.jwt} />
         )}
@@ -21,4 +42,5 @@ EntriesBox.propTypes = {
   entries: PropTypes.array,
   jwt: PropTypes.string,
   addEntry: PropTypes.func.isRequired,
+  removeEntry: PropTypes.func.isRequired,
 }

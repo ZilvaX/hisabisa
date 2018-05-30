@@ -1,6 +1,11 @@
 const express = require('express')
 const { isInt, isISO8601 } = require('validator')
-const { getEntries, insertEntry, getOverdueEntries } = require('../../dao.js')
+const {
+  getEntries,
+  insertEntry,
+  getOverdueEntries,
+  removeEntry,
+} = require('../../dao.js')
 const router = express.Router()
 
 router.get('/:id', async (req, res) => {
@@ -41,6 +46,16 @@ router.post('/', async (req, res) => {
   } catch (e) {
     res.status(500).send('Failed to store entry')
   }
+})
+
+router.delete('/:id(\\d+)', (req, res) => {
+  // TODO Check if the user has permissions to remove the entry
+  removeEntry(req.params.id)
+    .then(() => res.status(204).send())
+    .catch(e => {
+      console.error(e)
+      res.status(500).send()
+    })
 })
 
 module.exports = router

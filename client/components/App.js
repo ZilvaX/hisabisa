@@ -1,4 +1,6 @@
 import React from 'react'
+import _ from 'lodash'
+
 import EntriesBox from './EntriesBox'
 import LoginBox from './LoginBox'
 import UserBox from './UserBox'
@@ -17,6 +19,7 @@ export default class App extends React.Component {
     this.handleLogout = this.handleLogout.bind(this)
     this.addEntry = this.addEntry.bind(this)
     this.handleRegister = this.handleRegister.bind(this)
+    this.removeEntry = this.removeEntry.bind(this)
   }
 
   handleRegister(event, username, password) {
@@ -87,6 +90,12 @@ export default class App extends React.Component {
     this.setState({ entries: [...this.state.entries, entry] })
   }
 
+  removeEntry(entryid) {
+    this.setState({
+      entries: _.filter(this.state.entries, x => x.entryid !== entryid),
+    })
+  }
+
   render() {
     return (
       <div>
@@ -102,6 +111,7 @@ export default class App extends React.Component {
               jwt={this.state.jwt}
               entries={this.state.entries}
               addEntry={this.addEntry}
+              removeEntry={this.removeEntry}
             />
           </div>
         )}
