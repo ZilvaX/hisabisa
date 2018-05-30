@@ -2,6 +2,7 @@ import React from 'react'
 import EntriesBox from './EntriesBox'
 import LoginBox from './LoginBox'
 import UserBox from './UserBox'
+import RegisterBox from './RegisterBox'
 
 export default class App extends React.Component {
   constructor() {
@@ -15,6 +16,27 @@ export default class App extends React.Component {
     this.handleLogin = this.handleLogin.bind(this)
     this.handleLogout = this.handleLogout.bind(this)
     this.addEntry = this.addEntry.bind(this)
+    this.handleRegister = this.handleRegister.bind(this)
+  }
+
+  handleRegister(event, username, password) {
+    const headers = { 'content-type': 'application/json' }
+    const body = { username, password }
+    fetch('/api/users/', {
+      method: 'POST',
+      body: JSON.stringify(body),
+      headers,
+    }).then(result => {
+      if (result.status === 201) {
+        //log the new user in
+        this.login(username, result)
+      } else if (result.status === 409) {
+        console.log('username already taken')
+        console.log(result)
+      } else {
+        console.log('error')
+      }
+    })
   }
 
   handleLogin(event, username, password) {
@@ -25,17 +47,17 @@ export default class App extends React.Component {
       method: 'POST',
       body: JSON.stringify(body),
       headers,
-    }).then(result => {
-      if (result.status === 200) {
-        result.json().then(r => {
-          this.setState({
-            isLoggedIn: true,
-            user: username,
-            jwt: r.token,
-          })
-          this.handleEntriesDisplay()
-        })
-      }
+    }).then(result => this.login(username, result))
+  }
+
+  login(username, result) {
+    result.json().then(r => {
+      this.setState({
+        isLoggedIn: true,
+        user: username,
+        jwt: r.token,
+      })
+      this.handleEntriesDisplay()
     })
   }
 
@@ -66,23 +88,23 @@ export default class App extends React.Component {
   }
 
   render() {
-    let greetingForm = null
-    if (this.state.isLoggedIn) {
-      greetingForm = (
-        <UserBox user={this.state.user} onClick={this.handleLogout} />
-      )
-    } else {
-      greetingForm = <LoginBox onSubmit={this.handleLogin} />
-    }
-
     return (
       <div>
-        {greetingForm}
-        <EntriesBox
-          jwt={this.state.jwt}
-          entries={this.state.entries}
-          addEntry={this.addEntry}
-        />
+        {!this.state.isLoggedIn ? (
+          <div>
+            <LoginBox onSubmit={this.handleLogin} />
+            <RegisterBox onSubmit={this.handleRegister} />
+          </div>
+        ) : (
+          <div>
+            <UserBox user={this.state.user} onClick={this.handleLogout} />
+            <EntriesBox
+              jwt={this.state.jwt}
+              entries={this.state.entries}
+              addEntry={this.addEntry}
+            />
+          </div>
+        )}
       </div>
     )
   }
