@@ -29,7 +29,7 @@ export default class App extends React.Component {
     }).then(result => {
       if (result.status === 201) {
         //log the new user in
-        this.loginSuccess(username, result)
+        this.login(username, result)
       } else if (result.status === 409) {
         console.log('username already taken')
         console.log(result)
@@ -47,10 +47,10 @@ export default class App extends React.Component {
       method: 'POST',
       body: JSON.stringify(body),
       headers,
-    }).then(result => this.loginSuccess(username, result))
+    }).then(result => this.login(username, result))
   }
 
-  loginSuccess(username, result) {
+  login(username, result) {
     result.json().then(r => {
       this.setState({
         isLoggedIn: true,
