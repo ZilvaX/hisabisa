@@ -8,7 +8,6 @@ export default class EntriesBox extends React.Component {
   handleOnClick(id) {
     const headers = {
       'content-type': 'application/json',
-      Authorization: this.props.jwt,
     }
     fetch(`/api/entries/${id}`, {
       method: 'DELETE',
@@ -30,8 +29,11 @@ export default class EntriesBox extends React.Component {
     return (
       <div>
         {entries}
-        {this.props.jwt && (
-          <AddEntriesBox addEntry={this.props.addEntry} jwt={this.props.jwt} />
+        {this.props.userid && (
+          <AddEntriesBox
+            addEntry={this.props.addEntry}
+            userid={this.props.userid}
+          />
         )}
       </div>
     )
@@ -39,8 +41,8 @@ export default class EntriesBox extends React.Component {
 }
 
 EntriesBox.propTypes = {
-  entries: PropTypes.array,
-  jwt: PropTypes.string,
+  entries: PropTypes.array.isRequired,
+  userid: PropTypes.number,
   addEntry: PropTypes.func.isRequired,
   removeEntry: PropTypes.func.isRequired,
 }

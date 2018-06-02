@@ -28,7 +28,6 @@ export default class AddEntriesBox extends React.Component {
     }
     const headers = {
       'content-type': 'application/json',
-      Authorization: this.props.jwt,
     }
     fetch('/api/entries', {
       method: 'POST',
@@ -75,6 +74,6 @@ export default class AddEntriesBox extends React.Component {
 }
 
 AddEntriesBox.propTypes = {
-  jwt: PropTypes.string.isRequired,
+  userid: PropTypes.number.isRequired,
   addEntry: PropTypes.func.isRequired,
 }

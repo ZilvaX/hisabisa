@@ -25,7 +25,7 @@ router.post('/', async (req, res) => {
     if (result) {
       req.session.username = body.username
       req.session.userid = userid
-      res.status(204).send()
+      res.status(200).send({ userid })
     } else {
       res.status(401).send()
     }
