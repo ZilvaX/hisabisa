@@ -8,6 +8,9 @@ const jwt = require('jsonwebtoken')
 const { secret } = require('../../config.js')
 const { insertUser } = require('../../dao.js')
 const { checkUserExists } = require('../../dao.js')
+const entries = require('./entries')
+
+router.use('/:id(\\d+)/entries', entries)
 
 // create a new user
 const randomBytes = promisify(crypto.randomBytes)
@@ -22,6 +25,8 @@ router.post('/', async (req, res) => {
       .then(async hashedPassword => {
         const result = await insertUser(body.username, hashedPassword)
         if (result) {
+          req.session.username = body.username
+          req.sesion.userid = result.userid
           const token = jwt.sign(body.username, secret)
           res.status(201)
           res.send({ token })

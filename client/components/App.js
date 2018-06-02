@@ -50,6 +50,7 @@ export default class App extends React.Component {
       method: 'POST',
       body: JSON.stringify(body),
       headers,
+      credentials: 'include',
     }).then(result => this.login(username, result))
   }
 
@@ -78,6 +79,7 @@ export default class App extends React.Component {
       const headers = { authorization: this.state.jwt }
       fetch('/api/entries/' + this.state.user, {
         headers,
+        credentials: 'include',
       })
         .then(results => results.json())
         .then(data => {

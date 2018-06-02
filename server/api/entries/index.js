@@ -10,6 +10,7 @@ const router = express.Router()
 
 router.get('/:id', async (req, res) => {
   try {
+    console.log(req.session)
     const entries = await getEntries(req.params.id)
     res.send(entries)
   } catch (e) {
@@ -28,6 +29,7 @@ router.get('/:id(\\d+)/overdue', async (req, res) => {
 
 router.post('/', async (req, res) => {
   const username = req.jwt.username
+  console.log(req.session)
   const { event, lastoccurence, frequency } = req.body
   if (!isISO8601(lastoccurence + '') || !isInt(frequency + '')) {
     res.status(400).send()
