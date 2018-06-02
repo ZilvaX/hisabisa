@@ -1,9 +1,10 @@
 const express = require('express')
-const router = express.Router()
 const { argon2i } = require('argon2-ffi')
 const { isAscii } = require('validator')
 
 const { getUserIdAndHash } = require('../../dao.js')
+
+const router = express.Router()
 
 router.post('/', async (req, res) => {
   const body = req.body

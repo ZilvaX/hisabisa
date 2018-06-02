@@ -1,19 +1,21 @@
 // Define Database Queries
 const db = require('./db')
 
-//TODO remove the 'ById'
-const insertEntryById = (userid, event, lastoccurence, frequency) => {
+const insertEntry = (userid, event, lastoccurence, frequency) => {
   return db
     .query(
-      'INSERT INTO entries VALUES (DEFAULT, $1, $2, $3, $4) RETURNING entryid, userid,lastoccurence, frequency',
+      'INSERT INTO entries VALUES (DEFAULT, $1, $2, $3, $4) RETURNING entryid, lastoccurence, frequency',
       [userid, event, lastoccurence, frequency + 'days'],
     )
     .then(res => res.rows[0])
 }
 
-const getEntriesById = user => {
+const getEntries = user => {
   return db
-    .query('SELECT * FROM entries WHERE userid=$1', [user])
+    .query(
+      'SELECT entryid, event, lastoccurence, frequency FROM entries WHERE userid=$1',
+      [user],
+    )
     .then(res => res.rows)
 }
 
@@ -36,7 +38,7 @@ const insertUser = (user, hashedPassword) => {
       user,
       hashedPassword,
     ])
-    .then(res => res.rows[0])
+    .then(res => res.rows[0].userid)
 }
 
 const checkUserExists = username => {
@@ -58,8 +60,8 @@ const getUserIdAndHash = username => {
 }
 
 module.exports = {
-  getEntriesById,
-  insertEntryById,
+  getEntries,
+  insertEntry,
   insertUser,
   getOverdueEntries,
   getUserHash,

@@ -1,7 +1,7 @@
 const express = require('express')
 const { isISO8601, isInt } = require('validator')
 
-const { getEntriesById, insertEntryById, removeEntry } = require('../../../dao')
+const { getEntries, insertEntry, removeEntry } = require('../../../dao')
 
 const router = express.Router({ mergeParams: true })
 
@@ -19,7 +19,7 @@ router.use(authorize)
 
 router.get('/', async (req, res) => {
   try {
-    const entries = await getEntriesById(req.params.id)
+    const entries = await getEntries(req.params.id)
     res.send(entries)
   } catch (e) {
     res.status(500).send('Failed to obtain entries')
@@ -39,16 +39,14 @@ router.post('/', async (req, res) => {
     return
   }
   try {
-    const results = await insertEntryById(
+    const results = await insertEntry(
       req.params.id,
       event,
       lastoccurence,
       frequency,
     )
-    // TODO Check if we need userid
     const entry = {
       entryid: results.entryid,
-      userid: results.userid,
       event,
       lastoccurence: results.lastoccurence,
       frequency: results.frequency,
