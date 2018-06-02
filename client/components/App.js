@@ -64,12 +64,15 @@ export default class App extends React.Component {
     })
   }
 
-  // TODO Add logout api call
   handleLogout() {
-    this.setState({
-      user: null,
-      userid: null,
-      entries: [],
+    fetch('/api/authentication/logout', {
+      method: 'POST',
+    }).then(() => {
+      this.setState({
+        user: null,
+        userid: null,
+        entries: [],
+      })
     })
   }
 

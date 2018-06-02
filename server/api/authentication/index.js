@@ -35,4 +35,14 @@ router.post('/', async (req, res) => {
   }
 })
 
+router.post('/logout', (req, res) => {
+  req.session.destroy(err => {
+    if (!err) {
+      res.status(204).send()
+    } else {
+      res.status(500).send()
+    }
+  })
+})
+
 module.exports = router
