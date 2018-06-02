@@ -1,7 +1,7 @@
 const express = require('express')
 const { isISO8601, isInt } = require('validator')
 
-const { getEntriesById, insertEntryById } = require('../../../dao')
+const { getEntriesById, insertEntryById, removeEntry } = require('../../../dao')
 
 const router = express.Router({ mergeParams: true })
 
@@ -57,6 +57,15 @@ router.post('/', async (req, res) => {
   } catch (e) {
     res.status(500).send('Failed to store entry')
   }
+})
+
+router.delete('/:entryid(\\d+)', (req, res) => {
+  removeEntry(req.params.entryid)
+    .then(() => res.status(204).send())
+    .catch(e => {
+      console.error(e)
+      res.status(500).send()
+    })
 })
 
 module.exports = router

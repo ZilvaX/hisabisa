@@ -28,6 +28,7 @@ export default class App extends React.Component {
       method: 'POST',
       body: JSON.stringify(body),
       headers,
+      credentials: 'include',
     }).then(result => {
       if (result.status === 201) {
         //log the new user in

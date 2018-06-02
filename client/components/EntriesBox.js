@@ -9,9 +9,10 @@ export default class EntriesBox extends React.Component {
     const headers = {
       'content-type': 'application/json',
     }
-    fetch(`/api/entries/${id}`, {
+    fetch(`/api/users/${this.props.userid}/entries/${id}`, {
       method: 'DELETE',
       headers,
+      credentials: 'include',
     }).then(() => {
       this.props.removeEntry(id)
     })

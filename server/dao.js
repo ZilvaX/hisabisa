@@ -1,6 +1,7 @@
 // Define Database Queries
 const db = require('./db')
 
+//TODO remove the 'ById'
 const insertEntryById = (userid, event, lastoccurence, frequency) => {
   return db
     .query(
