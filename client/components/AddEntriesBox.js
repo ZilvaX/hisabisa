@@ -29,10 +29,11 @@ export default class AddEntriesBox extends React.Component {
     const headers = {
       'content-type': 'application/json',
     }
-    fetch('/api/entries', {
+    fetch(`/api/users/${this.props.userid}/entries`, {
       method: 'POST',
       body: JSON.stringify(body),
       headers,
+      credentials: 'include',
     }).then(result => {
       if (result.status === 201) {
         result.json().then(json => {
