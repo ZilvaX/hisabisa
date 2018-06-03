@@ -61,7 +61,6 @@ router.delete('/:entryid(\\d+)', (req, res) => {
   removeEntry(req.params.entryid)
     .then(() => res.status(204).send())
     .catch(e => {
-      console.error(e)
       res.status(500).send()
     })
 })

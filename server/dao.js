@@ -47,12 +47,6 @@ const checkUserExists = username => {
     .then(res => res.rows[0].exists)
 }
 
-const getUserHash = username => {
-  return db
-    .query('SELECT password FROM users WHERE username=$1', [username])
-    .then(res => res.rows[0].password)
-}
-
 const getUserIdAndHash = username => {
   return db
     .query('SELECT userid, password FROM users WHERE username=$1', [username])
@@ -64,7 +58,6 @@ module.exports = {
   insertEntry,
   insertUser,
   getOverdueEntries,
-  getUserHash,
   checkUserExists,
   removeEntry,
   getUserIdAndHash,
