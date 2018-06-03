@@ -1,12 +1,21 @@
 const express = require('express')
-const bodyParser = require('body-parser')
-const router = require('./api')
 const helmet = require('helmet')
+const session = require('express-session')
+
+const router = require('./api')
+const { secret } = require('./config')
 
 const app = express()
-app.use(bodyParser.urlencoded({ extended: true }))
-app.use(bodyParser.json())
+app.use(express.json())
 app.use(helmet())
+app.use(
+  session({
+    secret,
+    cookie: {},
+    resave: false,
+    saveUninitialized: false,
+  }),
+)
 
 app.use('/api', router)
 

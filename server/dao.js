@@ -1,11 +1,11 @@
 // Define Database Queries
 const db = require('./db')
-const insertEntry = (user, event, lastoccurence, frequency) => {
-  const userId = '(SELECT userid from users where username = $1)'
+
+const insertEntry = (userid, event, lastoccurence, frequency) => {
   return db
     .query(
-      `INSERT INTO entries VALUES (DEFAULT, ${userId}, $2, $3, $4) returning entryid, userid,lastoccurence, frequency`,
-      [user, event, lastoccurence, frequency + 'days'],
+      'INSERT INTO entries VALUES (DEFAULT, $1, $2, $3, $4) RETURNING entryid, lastoccurence, frequency',
+      [userid, event, lastoccurence, frequency + 'days'],
     )
     .then(res => res.rows[0])
 }
@@ -13,7 +13,7 @@ const insertEntry = (user, event, lastoccurence, frequency) => {
 const getEntries = user => {
   return db
     .query(
-      'SELECT * FROM entries WHERE userid=(select userid from users where username=$1)',
+      'SELECT entryid, event, lastoccurence, frequency FROM entries WHERE userid=$1',
       [user],
     )
     .then(res => res.rows)
@@ -34,26 +34,23 @@ const removeEntry = entryid => {
 
 const insertUser = (user, hashedPassword) => {
   return db
-    .query('INSERT INTO users VALUES (DEFAULT, $1, $2)', [user, hashedPassword])
-    .then(res => res)
+    .query('INSERT INTO users VALUES (DEFAULT, $1, $2) RETURNING userid', [
+      user,
+      hashedPassword,
+    ])
+    .then(res => res.rows[0].userid)
 }
 
 const checkUserExists = username => {
   return db
-    .query('SELECT * FROM users WHERE username=$1', [username])
-    .then(res => {
-      if (res.rowCount === 0) {
-        return false
-      } else {
-        return true
-      }
-    })
+    .query('SELECT EXISTS(SELECT 1 FROM users WHERE username=$1 )', [username])
+    .then(res => res.rows[0].exists)
 }
 
-const getUserHash = username => {
+const getUserIdAndHash = username => {
   return db
-    .query('SELECT password FROM users WHERE username=$1', [username])
-    .then(res => res.rows[0].password)
+    .query('SELECT userid, password FROM users WHERE username=$1', [username])
+    .then(res => res.rows[0])
 }
 
 module.exports = {
@@ -61,7 +58,7 @@ module.exports = {
   insertEntry,
   insertUser,
   getOverdueEntries,
-  getUserHash,
   checkUserExists,
   removeEntry,
+  getUserIdAndHash,
 }

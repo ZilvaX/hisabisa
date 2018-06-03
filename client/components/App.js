@@ -10,10 +10,9 @@ export default class App extends React.Component {
   constructor() {
     super()
     this.state = {
-      isLoggedIn: false,
       user: null,
+      userid: null,
       entries: [],
-      jwt: null,
     }
     this.handleLogin = this.handleLogin.bind(this)
     this.handleLogout = this.handleLogout.bind(this)
@@ -29,6 +28,7 @@ export default class App extends React.Component {
       method: 'POST',
       body: JSON.stringify(body),
       headers,
+      credentials: 'include',
     }).then(result => {
       if (result.status === 201) {
         //log the new user in
@@ -50,34 +50,36 @@ export default class App extends React.Component {
       method: 'POST',
       body: JSON.stringify(body),
       headers,
+      credentials: 'include',
     }).then(result => this.login(username, result))
   }
 
   login(username, result) {
     result.json().then(r => {
       this.setState({
-        isLoggedIn: true,
         user: username,
-        jwt: r.token,
+        userid: r.userid,
       })
       this.handleEntriesDisplay()
     })
   }
 
   handleLogout() {
-    this.setState({
-      isLoggedIn: false,
-      user: null,
-      entries: [],
-      jwt: null,
+    fetch('/api/authentication/logout', {
+      method: 'POST',
+    }).then(() => {
+      this.setState({
+        user: null,
+        userid: null,
+        entries: [],
+      })
     })
   }
 
   handleEntriesDisplay() {
     if (this.state.user) {
-      const headers = { authorization: this.state.jwt }
-      fetch('/api/entries/' + this.state.user, {
-        headers,
+      fetch(`/api/users/${this.state.userid}/entries/`, {
+        credentials: 'include',
       })
         .then(results => results.json())
         .then(data => {
@@ -99,7 +101,7 @@ export default class App extends React.Component {
   render() {
     return (
       <div>
-        {!this.state.isLoggedIn ? (
+        {!this.state.userid ? (
           <div>
             <LoginBox onSubmit={this.handleLogin} />
             <RegisterBox onSubmit={this.handleRegister} />
@@ -108,7 +110,7 @@ export default class App extends React.Component {
           <div>
             <UserBox user={this.state.user} onClick={this.handleLogout} />
             <EntriesBox
-              jwt={this.state.jwt}
+              userid={this.state.userid}
               entries={this.state.entries}
               addEntry={this.addEntry}
               removeEntry={this.removeEntry}
