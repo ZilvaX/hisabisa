@@ -1,4 +1,5 @@
 const path = require('path')
+const webpack = require('webpack')
 
 const DIST_DIR = path.resolve(__dirname, 'dist')
 const APP_DIR = path.resolve(__dirname, 'client')
@@ -19,6 +20,22 @@ const config = {
         include: [APP_DIR],
         loader: 'babel-loader',
       },
+      {
+        test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]',
+              outputPath: 'fonts/',
+            },
+          },
+        ],
+      },
+      {
+        test: /\.css$/,
+        use: [{ loader: 'style-loader' }, { loader: 'css-loader' }],
+      },
     ],
   },
   devServer: {
@@ -29,7 +46,12 @@ const config = {
     headers: {
       'Access-Control-Allow-Origin': '*',
     },
+    hot: true,
   },
+  plugins: [
+    new webpack.NamedModulesPlugin(),
+    new webpack.HotModuleReplacementPlugin(),
+  ],
 }
 
 module.exports = config
