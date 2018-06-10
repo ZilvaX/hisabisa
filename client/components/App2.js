@@ -4,6 +4,7 @@ import AppBar from '@material-ui/core/AppBar'
 import Button from '@material-ui/core/Button'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
+import { hot } from 'react-hot-loader'
 
 import {
   MuiThemeProvider,
@@ -57,4 +58,4 @@ App2.propTypes = {
   classes: PropTypes.object,
 }
 
-export default withStyles(style)(App2)
+export default hot(module)(withStyles(style)(App2))
