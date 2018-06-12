@@ -1,9 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import AppBar from '@material-ui/core/AppBar'
-import Button from '@material-ui/core/Button'
-import Toolbar from '@material-ui/core/Toolbar'
-import Typography from '@material-ui/core/Typography'
+import AppBarContainer from './AppBarContainer'
 import { hot } from 'react-hot-loader'
 
 import {
@@ -30,28 +27,25 @@ const hisabisaTheme = createMuiTheme({
   },
 })
 
-function App2(props) {
-  const { classes } = props
-  return (
-    <div>
-      <MuiThemeProvider theme={hisabisaTheme}>
-        <AppBar position="static" color="primary">
-          <Toolbar>
-            <Typography
-              variant="title"
-              color="default"
-              className={classes.flexTitle}
-            >
-              Hisabisa
-            </Typography>
-            <Button color="inherit">
-              <Typography color="default">Login</Typography>
-            </Button>
-          </Toolbar>
-        </AppBar>
-      </MuiThemeProvider>
-    </div>
-  )
+class App2 extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+      username: null,
+      LoginDialogOpen: false,
+    }
+  }
+
+  render() {
+    // const { classes } = this.props
+    return (
+      <div>
+        <MuiThemeProvider theme={hisabisaTheme}>
+          <AppBarContainer />
+        </MuiThemeProvider>
+      </div>
+    )
+  }
 }
 
 App2.propTypes = {
