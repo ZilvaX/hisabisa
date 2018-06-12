@@ -31,9 +31,16 @@ class App2 extends React.Component {
   constructor() {
     super()
     this.state = {
-      username: null,
       LoginDialogOpen: false,
+      userid: null,
     }
+    this.updateUserid = this.updateUserid.bind(this)
+  }
+
+  updateUserid(userid) {
+    this.setState({
+      userid,
+    })
   }
 
   render() {
@@ -41,7 +48,10 @@ class App2 extends React.Component {
     return (
       <div>
         <MuiThemeProvider theme={hisabisaTheme}>
-          <AppBarContainer />
+          <AppBarContainer
+            userid={this.state.userid}
+            updateUserid={this.updateUserid}
+          />
         </MuiThemeProvider>
       </div>
     )

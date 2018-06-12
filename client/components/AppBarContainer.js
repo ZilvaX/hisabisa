@@ -23,7 +23,6 @@ class AppBarContainer extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      userid: null,
       username: null,
       LoginDialogOpen: false,
     }
@@ -56,10 +55,10 @@ class AppBarContainer extends React.Component {
   login(username, result) {
     result.json().then(r => {
       this.setState({
-        userid: r.userid,
         username,
         LoginDialogOpen: false,
       })
+      this.props.updateUserid(r.userid)
     })
   }
 
@@ -75,7 +74,7 @@ class AppBarContainer extends React.Component {
           >
             Hisabisa
           </Typography>
-          {!this.state.userid ? (
+          {!this.props.userid ? (
             <Button color="inherit" onClick={this.handleLoginOpen}>
               <Typography color="default">Login</Typography>
             </Button>
@@ -106,6 +105,8 @@ class AppBarContainer extends React.Component {
 
 AppBarContainer.propTypes = {
   classes: PropTypes.object,
+  updateUserid: PropTypes.func.isRequired,
+  userid: PropTypes.number,
 }
 
 export default withStyles(style)(AppBarContainer)
