@@ -1,23 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import AppBarContainer from './AppBarContainer'
 import { hot } from 'react-hot-loader'
-
-import {
-  MuiThemeProvider,
-  createMuiTheme,
-  withStyles,
-} from '@material-ui/core/styles'
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import cyan from '@material-ui/core/colors/cyan'
 import teal from '@material-ui/core/colors/teal'
 import deepOrange from '@material-ui/core/colors/deepOrange'
 
-const style = {
-  flexTitle: {
-    flex: 1,
-    marginLeft: 30,
-  },
-}
+import AppBarContainer from './AppBarContainer'
+import EntriesContainer from './EntriesContainer'
 
 const hisabisaTheme = createMuiTheme({
   palette: {
@@ -28,8 +18,8 @@ const hisabisaTheme = createMuiTheme({
 })
 
 class App2 extends React.Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
       LoginDialogOpen: false,
       userid: null,
@@ -44,7 +34,6 @@ class App2 extends React.Component {
   }
 
   render() {
-    // const { classes } = this.props
     return (
       <div>
         <MuiThemeProvider theme={hisabisaTheme}>
@@ -52,6 +41,7 @@ class App2 extends React.Component {
             userid={this.state.userid}
             updateUserid={this.updateUserid}
           />
+          <EntriesContainer userid={this.state.userid} />
         </MuiThemeProvider>
       </div>
     )
@@ -62,4 +52,4 @@ App2.propTypes = {
   classes: PropTypes.object,
 }
 
-export default hot(module)(withStyles(style)(App2))
+export default hot(module)(App2)
