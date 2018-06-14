@@ -20,8 +20,8 @@ router.post('/', async (req, res) => {
     return
   }
 
-  const { userid, password } = await getUserIdAndHash(body.username)
-  if (password) {
+  try {
+    const { userid, password } = await getUserIdAndHash(body.username)
     const result = await argon2i.verify(password, body.password)
     if (result) {
       req.session.username = body.username
@@ -30,7 +30,7 @@ router.post('/', async (req, res) => {
     } else {
       res.status(401).send()
     }
-  } else {
+  } catch (err) {
     res.status(404).send()
   }
 })

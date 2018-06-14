@@ -28,7 +28,8 @@ class AppBarContainer extends React.Component {
     }
     this.handleLoginOpen = this.handleLoginOpen.bind(this)
     this.handleLoginClose = this.handleLoginClose.bind(this)
-    this.handleLogin = this.handleLogin.bind(this)
+    this.login = this.login.bind(this)
+    this.logout = this.logout.bind(this)
   }
 
   handleLoginOpen() {
@@ -39,19 +40,6 @@ class AppBarContainer extends React.Component {
     this.setState({ LoginDialogOpen: false })
   }
 
-  handleLogin(event, username, password) {
-    console.log('verifying login...')
-    // event.preventDefault()
-    const headers = { 'content-type': 'application/json' }
-    const body = { username, password }
-    fetch('/api/authentication/', {
-      method: 'POST',
-      body: JSON.stringify(body),
-      headers,
-      credentials: 'include',
-    }).then(result => this.login(username, result))
-  }
-
   login(username, result) {
     result.json().then(r => {
       this.setState({
@@ -60,6 +48,13 @@ class AppBarContainer extends React.Component {
       })
       this.props.updateUserid(r.userid)
     })
+  }
+
+  logout() {
+    this.setState({
+      username: null,
+    })
+    this.props.updateUserid(null)
   }
 
   render() {
@@ -83,7 +78,7 @@ class AppBarContainer extends React.Component {
               <Typography color="default">
                 Hello, {this.state.username}
               </Typography>
-              <Button color="inherit" onClick={this.handleLoginOpen}>
+              <Button color="inherit" onClick={this.logout}>
                 <Typography color="default">Logout</Typography>
               </Button>
             </div>
@@ -94,7 +89,8 @@ class AppBarContainer extends React.Component {
           >
             <LoginDialog
               className={classes.container}
-              onSubmit={this.handleLogin}
+              updateUserid={this.props.updateUserid}
+              handleLogin={this.login}
             />
           </Dialog>
         </Toolbar>
