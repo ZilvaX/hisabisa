@@ -52,7 +52,6 @@ class LoginDialog extends React.Component {
       headers,
       credentials: 'include',
     }).then(result => {
-      // console.log(result)
       if (result.status === 200) {
         return this.props.handleLogin(username, result)
       } else if (result.status === 400) {
@@ -80,7 +79,6 @@ class LoginDialog extends React.Component {
   }
 
   resetErrors() {
-    console.log('reset!')
     this.setState({
       errorMessage: '',
       usernameError: false,

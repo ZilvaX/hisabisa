@@ -34,6 +34,7 @@ class App2 extends React.Component {
   }
 
   render() {
+    console.log(this.state.userid)
     return (
       <div>
         <MuiThemeProvider theme={hisabisaTheme}>

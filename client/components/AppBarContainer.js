@@ -51,10 +51,14 @@ class AppBarContainer extends React.Component {
   }
 
   logout() {
-    this.setState({
-      username: null,
+    fetch('api/authentication/logout', {
+      method: 'POST',
+    }).then(() => {
+      this.setState({
+        username: null,
+      })
+      this.props.updateUserid(null)
     })
-    this.props.updateUserid(null)
   }
 
   render() {
