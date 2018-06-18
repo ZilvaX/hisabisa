@@ -8,8 +8,9 @@ import CardContent from '@material-ui/core/CardContent'
 import CardActions from '@material-ui/core/CardActions'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
-
 import Add from '@material-ui/icons/Add'
+
+import AddEntriesDialog from './AddEntriesDialog'
 
 const styles = {
   cardHolder: {
@@ -41,6 +42,7 @@ class EntriesContainer extends React.Component {
       open: false,
     }
     this.handleClickAdd = this.handleClickAdd.bind(this)
+    this.handleCloseDialog = this.handleCloseDialog.bind(this)
   }
 
   updateEntries() {
@@ -63,8 +65,13 @@ class EntriesContainer extends React.Component {
     this.setState({ open: true })
   }
 
+  handleCloseDialog() {
+    this.setState({ open: false })
+  }
+
   render() {
     const { classes } = this.props
+    //TODO Extract card to own component
     const cards = _.map(this.state.entries, entry => {
       return (
         <Card className={classes.card} key={entry.entryid}>
@@ -99,6 +106,10 @@ class EntriesContainer extends React.Component {
             </div>
           )}
         </div>
+        <AddEntriesDialog
+          open={this.state.open}
+          handleClose={this.handleCloseDialog}
+        />
       </React.Fragment>
     )
   }
