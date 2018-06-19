@@ -3,14 +3,11 @@ import PropTypes from 'prop-types'
 import _ from 'lodash'
 
 import { withStyles } from '@material-ui/core/styles'
-import Card from '@material-ui/core/Card'
-import CardContent from '@material-ui/core/CardContent'
-import CardActions from '@material-ui/core/CardActions'
 import Button from '@material-ui/core/Button'
-import Typography from '@material-ui/core/Typography'
 import Add from '@material-ui/icons/Add'
 
 import AddEntriesDialog from './AddEntriesDialog'
+import EntryCard from './EntryCard'
 
 const styles = {
   cardHolder: {
@@ -44,6 +41,7 @@ class EntriesContainer extends React.Component {
     this.handleClickAdd = this.handleClickAdd.bind(this)
     this.handleCloseDialog = this.handleCloseDialog.bind(this)
     this.addEntry = this.addEntry.bind(this)
+    this.removeEntry = this.removeEntry.bind(this)
   }
 
   updateEntries() {
@@ -74,25 +72,24 @@ class EntriesContainer extends React.Component {
     this.setState({ entries: [...this.state.entries, entry] })
   }
 
+  removeEntry(entryid) {
+    this.setState({
+      entries: _.filter(this.state.entries, x => x.entryid !== entryid),
+    })
+  }
+
   render() {
     const { classes } = this.props
     //TODO Extract card to own component
     const cards = _.map(this.state.entries, entry => {
       return (
-        <Card className={classes.card} key={entry.entryid}>
-          <CardContent>
-            <Typography variant="headline" component="h2">
-              {entry.event}
-            </Typography>
-            <Typography color="textSecondary">
-              {entry.lastoccurrence}
-            </Typography>
-          </CardContent>
-          <CardActions>
-            <Button size="small">Done Today</Button>
-            <Button size="small">Done</Button>
-          </CardActions>
-        </Card>
+        <EntryCard
+          entryid={entry.entryid}
+          event={entry.event}
+          lastoccurrence={entry.lastoccurrence}
+          removeEntry={this.removeEntry}
+          userid={this.props.userid}
+        />
       )
     })
     return (
