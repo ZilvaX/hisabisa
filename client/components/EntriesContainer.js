@@ -80,7 +80,6 @@ class EntriesContainer extends React.Component {
 
   render() {
     const { classes } = this.props
-    //TODO Extract card to own component
     const cards = _.map(this.state.entries, entry => {
       return (
         <EntryCard
