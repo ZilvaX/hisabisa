@@ -43,6 +43,7 @@ class EntriesContainer extends React.Component {
     }
     this.handleClickAdd = this.handleClickAdd.bind(this)
     this.handleCloseDialog = this.handleCloseDialog.bind(this)
+    this.addEntry = this.addEntry.bind(this)
   }
 
   updateEntries() {
@@ -69,6 +70,10 @@ class EntriesContainer extends React.Component {
     this.setState({ open: false })
   }
 
+  addEntry(entry) {
+    this.setState({ entries: [...this.state.entries, entry] })
+  }
+
   render() {
     const { classes } = this.props
     //TODO Extract card to own component
@@ -79,7 +84,9 @@ class EntriesContainer extends React.Component {
             <Typography variant="headline" component="h2">
               {entry.event}
             </Typography>
-            <Typography color="textSecondary">{entry.lastoccurence}</Typography>
+            <Typography color="textSecondary">
+              {entry.lastoccurrence}
+            </Typography>
           </CardContent>
           <CardActions>
             <Button size="small">Done Today</Button>
@@ -109,6 +116,8 @@ class EntriesContainer extends React.Component {
         <AddEntriesDialog
           open={this.state.open}
           handleClose={this.handleCloseDialog}
+          addEntry={this.addEntry}
+          userid={this.props.userid}
         />
       </React.Fragment>
     )

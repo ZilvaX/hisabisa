@@ -18,12 +18,37 @@ export default class AddEntriesDialog extends React.Component {
       frequency: '',
     }
     this.handleFormChange = this.handleFormChange.bind(this)
+    this.handleFormSubmit = this.handleFormSubmit.bind(this)
   }
 
   handleFormChange(event) {
     const { target } = event
     this.setState({
       [target.id]: target.value,
+    })
+  }
+
+  handleFormSubmit() {
+    const body = {
+      event: this.state.event,
+      lastoccurrence: this.state.lastoccurrence,
+      frequency: this.state.frequency,
+    }
+    const headers = {
+      'content-type': 'application/json',
+    }
+    fetch(`/api/users/${this.props.userid}/entries`, {
+      method: 'POST',
+      body: JSON.stringify(body),
+      headers,
+      credentials: 'include',
+    }).then(result => {
+      if (result.status === 201) {
+        result.json().then(json => {
+          this.props.addEntry(json)
+          this.props.handleClose()
+        })
+      }
     })
   }
 
@@ -71,7 +96,7 @@ export default class AddEntriesDialog extends React.Component {
           <Button onClick={this.props.handleClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={this.props.handleClose} color="primary">
+          <Button onClick={this.handleFormSubmit} color="primary">
             Create
           </Button>
         </DialogActions>
@@ -83,4 +108,6 @@ export default class AddEntriesDialog extends React.Component {
 AddEntriesDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
+  addEntry: PropTypes.func.isRequired,
+  userid: PropTypes.number,
 }

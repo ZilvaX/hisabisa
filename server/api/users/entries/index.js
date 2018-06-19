@@ -27,12 +27,12 @@ router.get('/', async (req, res) => {
 })
 
 router.post('/', async (req, res) => {
-  const { event, lastoccurence, frequency } = req.body
+  const { event, lastoccurrence, frequency } = req.body
   if (
     !event ||
-    !lastoccurence ||
+    !lastoccurrence ||
     !frequency ||
-    !isISO8601(lastoccurence + '') ||
+    !isISO8601(lastoccurrence + '') ||
     !isInt(frequency + '')
   ) {
     res.status(400).send()
@@ -42,13 +42,13 @@ router.post('/', async (req, res) => {
     const results = await insertEntry(
       req.params.id,
       event,
-      lastoccurence,
+      lastoccurrence,
       frequency,
     )
     const entry = {
       entryid: results.entryid,
       event,
-      lastoccurence: results.lastoccurence,
+      lastoccurrence: results.lastoccurrence,
       frequency: results.frequency,
     }
     res.status(201).send(entry)
@@ -60,7 +60,7 @@ router.post('/', async (req, res) => {
 router.delete('/:entryid(\\d+)', (req, res) => {
   removeEntry(req.params.entryid)
     .then(() => res.status(204).send())
-    .catch(e => {
+    .catch(() => {
       res.status(500).send()
     })
 })
