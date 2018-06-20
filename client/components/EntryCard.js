@@ -36,9 +36,9 @@ class EntryCard extends React.Component {
   }
 
   render() {
-    const { classes, entryid, event, lastoccurrence } = this.props
+    const { classes, event, lastoccurrence } = this.props
     return (
-      <Card className={classes.card} key={entryid}>
+      <Card className={classes.card}>
         <CardContent>
           <Typography variant="headline" component="h2">
             {event}
@@ -59,7 +59,7 @@ EntryCard.propTypes = {
   classes: PropTypes.object.isRequired,
   entryid: PropTypes.number.isRequired,
   event: PropTypes.string.isRequired,
-  lastoccurrence: PropTypes.object.isRequired,
+  lastoccurrence: PropTypes.string.isRequired,
   removeEntry: PropTypes.func.isRequired,
   userid: PropTypes.number,
 }

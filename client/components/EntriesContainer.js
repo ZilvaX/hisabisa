@@ -55,8 +55,14 @@ class EntriesContainer extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (!prevProps.userid) {
+    // If previously we weren't logged in but now we are
+    if (!prevProps.userid && this.props.userid) {
       this.updateEntries()
+    }
+
+    // If previously we were logged in but now we aren't
+    if (prevProps.userid && !this.props.userid) {
+      this.setState({ entries: [] })
     }
   }
 
@@ -88,6 +94,7 @@ class EntriesContainer extends React.Component {
           lastoccurrence={entry.lastoccurrence}
           removeEntry={this.removeEntry}
           userid={this.props.userid}
+          key={entry.entryid}
         />
       )
     })
