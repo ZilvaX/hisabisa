@@ -76,7 +76,7 @@ export default class AddEntriesDialog extends React.Component {
           <TextField
             margin="normal"
             id="lastoccurrence"
-            label="Last Occurence"
+            label="Last Occurrence"
             fullWidth
             type="date"
             value={this.state.lastoccurrence}
