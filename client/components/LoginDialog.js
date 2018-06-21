@@ -5,6 +5,7 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogContent from '@material-ui/core/DialogContent'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
+import Dialog from '@material-ui/core/Dialog'
 
 const style = {
   flexTitle: {
@@ -35,7 +36,6 @@ class LoginDialog extends React.Component {
 
   handleChange(event) {
     const target = event.target
-    // const value = target.value
     const id = target.id
     this.setState({ [id]: target.value })
   }
@@ -89,7 +89,7 @@ class LoginDialog extends React.Component {
   render() {
     const { classes } = this.props
     return (
-      <div>
+      <Dialog open={this.props.open} onClose={this.props.onClose}>
         <DialogTitle>Login</DialogTitle>
         <DialogContent className={classes.container}>
           <TextField
@@ -109,7 +109,7 @@ class LoginDialog extends React.Component {
           />
           <Button onClick={this.handleSubmit}>Submit</Button>
         </DialogContent>
-      </div>
+      </Dialog>
     )
   }
 }
@@ -119,6 +119,8 @@ LoginDialog.propTypes = {
   handleLogin: PropTypes.func,
   updateUserid: PropTypes.func.isRequired,
   userid: PropTypes.number,
+  open: PropTypes.bool,
+  onClose: PropTypes.func.isRequired,
 }
 
 export default withStyles(style)(LoginDialog)

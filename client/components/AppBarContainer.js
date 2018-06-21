@@ -5,7 +5,6 @@ import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
-import Dialog from '@material-ui/core/Dialog'
 import LoginDialog from './LoginDialog'
 
 const style = theme => ({
@@ -87,16 +86,13 @@ class AppBarContainer extends React.Component {
               </Button>
             </div>
           )}
-          <Dialog
+          <LoginDialog
+            className={classes.container}
+            updateUserid={this.props.updateUserid}
+            handleLogin={this.login}
             open={this.state.LoginDialogOpen}
             onClose={this.handleLoginClose}
-          >
-            <LoginDialog
-              className={classes.container}
-              updateUserid={this.props.updateUserid}
-              handleLogin={this.login}
-            />
-          </Dialog>
+          />
         </Toolbar>
       </AppBar>
     )
