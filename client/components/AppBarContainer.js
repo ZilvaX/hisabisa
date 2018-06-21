@@ -7,23 +7,19 @@ import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import LoginDialog from './LoginDialog'
 
-const style = theme => ({
+const style = {
   flexTitle: {
     flex: 1,
     marginLeft: 30,
   },
-  button: {
-    position: 'end', /////////////////////////////////////////////
-    margin: theme.spacing.unit,
-  },
-})
+}
 
 class AppBarContainer extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       username: null,
-      LoginDialogOpen: false,
+      loginDialogOpen: false,
     }
     this.handleLoginOpen = this.handleLoginOpen.bind(this)
     this.handleLoginClose = this.handleLoginClose.bind(this)
@@ -32,18 +28,18 @@ class AppBarContainer extends React.Component {
   }
 
   handleLoginOpen() {
-    this.setState({ LoginDialogOpen: true })
+    this.setState({ loginDialogOpen: true })
   }
 
   handleLoginClose() {
-    this.setState({ LoginDialogOpen: false })
+    this.setState({ loginDialogOpen: false })
   }
 
   login(username, result) {
     result.json().then(r => {
       this.setState({
         username,
-        LoginDialogOpen: false,
+        loginDialogOpen: false,
       })
       this.props.updateUserid(r.userid)
     })
@@ -62,39 +58,39 @@ class AppBarContainer extends React.Component {
 
   render() {
     const { classes } = this.props
+    const loginStatus = !this.props.userid ? (
+      <Button color="inherit" onClick={this.handleLoginOpen}>
+        <Typography color="default">Login</Typography>
+      </Button>
+    ) : (
+      <React.Fragment>
+        <Typography>Hello, {this.state.username}</Typography>
+        <Button onClick={this.logout}>
+          <Typography>Logout</Typography>
+        </Button>
+      </React.Fragment>
+    )
     return (
-      <AppBar position="static" color="primary">
-        <Toolbar>
-          <Typography
-            variant="title"
-            color="default"
-            className={classes.flexTitle}
-          >
-            Hisabisa
-          </Typography>
-          {!this.props.userid ? (
-            <Button color="inherit" onClick={this.handleLoginOpen}>
-              <Typography color="default">Login</Typography>
-            </Button>
-          ) : (
-            <div>
-              <Typography color="default">
-                Hello, {this.state.username}
-              </Typography>
-              <Button color="inherit" onClick={this.logout}>
-                <Typography color="default">Logout</Typography>
-              </Button>
-            </div>
-          )}
-          <LoginDialog
-            className={classes.container}
-            updateUserid={this.props.updateUserid}
-            handleLogin={this.login}
-            open={this.state.LoginDialogOpen}
-            onClose={this.handleLoginClose}
-          />
-        </Toolbar>
-      </AppBar>
+      <React.Fragment>
+        <AppBar position="static" color="primary">
+          <Toolbar>
+            <Typography
+              variant="title"
+              color="default"
+              className={classes.flexTitle}
+            >
+              Hisabisa
+            </Typography>
+            {loginStatus}
+          </Toolbar>
+        </AppBar>
+        <LoginDialog
+          updateUserid={this.props.updateUserid}
+          handleLogin={this.login}
+          open={this.state.loginDialogOpen}
+          onClose={this.handleLoginClose}
+        />
+      </React.Fragment>
     )
   }
 }
