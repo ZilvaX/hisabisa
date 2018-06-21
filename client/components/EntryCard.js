@@ -46,7 +46,7 @@ class EntryCard extends React.Component {
           <Typography color="textSecondary">{lastoccurrence}</Typography>
         </CardContent>
         <CardActions>
-          <Button size="small" aria-label="add" onClick={this.handleRemove}>
+          <Button size="small" aria-label="remove" onClick={this.handleRemove}>
             Remove
           </Button>
         </CardActions>

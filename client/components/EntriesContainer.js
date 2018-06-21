@@ -36,7 +36,7 @@ class EntriesContainer extends React.Component {
     super(props)
     this.state = {
       entries: [],
-      open: false,
+      openAddEntriesDialog: false,
     }
     this.handleClickAdd = this.handleClickAdd.bind(this)
     this.handleCloseDialog = this.handleCloseDialog.bind(this)
@@ -67,11 +67,11 @@ class EntriesContainer extends React.Component {
   }
 
   handleClickAdd() {
-    this.setState({ open: true })
+    this.setState({ openAddEntriesDialog: true })
   }
 
   handleCloseDialog() {
-    this.setState({ open: false })
+    this.setState({ openAddEntriesDialog: false })
   }
 
   addEntry(entry) {
@@ -117,7 +117,7 @@ class EntriesContainer extends React.Component {
           )}
         </div>
         <AddEntriesDialog
-          open={this.state.open}
+          open={this.state.openAddEntriesDialog}
           handleClose={this.handleCloseDialog}
           addEntry={this.addEntry}
           userid={this.props.userid}
