@@ -6,6 +6,10 @@ import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
+import Snackbar from '@material-ui/core/Snackbar'
+import IconButton from '@material-ui/core/IconButton'
+
+import CloseIcon from '@material-ui/icons/Close'
 
 export default class LoginDialog extends React.Component {
   constructor(props) {
@@ -13,15 +17,17 @@ export default class LoginDialog extends React.Component {
     this.state = {
       username: null,
       password: null,
-      errorMessage: '',
       usernameError: '',
       passwordError: '',
+      openErrorSnackbar: false,
+      errorMessage: '',
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.resetErrors = this.resetErrors.bind(this)
     this.resetFields = this.resetFields.bind(this)
     this.onClose = this.onClose.bind(this)
+    this.onErrorSnackbarClose = this.onErrorSnackbarClose.bind(this)
   }
 
   handleChange(event) {
@@ -64,10 +70,10 @@ export default class LoginDialog extends React.Component {
           })
           break
         default:
-        // TODO Pop up dialog for error
-        // this.setState({
-        //   errorMessage: 'An error has occurred. Please try again later',
-        //})
+          this.setState({
+            openErrorSnackbar: true,
+            errorMessage: 'An error has occurred. Please try again later',
+          })
       }
     })
   }
@@ -83,6 +89,8 @@ export default class LoginDialog extends React.Component {
     this.setState({
       username: null,
       password: null,
+      usernameError: '',
+      passwordError: '',
     })
   }
 
@@ -91,8 +99,14 @@ export default class LoginDialog extends React.Component {
     this.props.onClose()
   }
 
+  onErrorSnackbarClose() {
+    this.setState({
+      openErrorSnackbar: false,
+    })
+  }
+
   render() {
-    return (
+    const dialog = (
       <Dialog open={this.props.open} onClose={this.onClose}>
         <DialogTitle>Login</DialogTitle>
         <DialogContent>
@@ -121,6 +135,37 @@ export default class LoginDialog extends React.Component {
           <Button onClick={this.handleSubmit}>Login</Button>
         </DialogActions>
       </Dialog>
+    )
+    const snackbar = (
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        open={this.state.openErrorSnackbar}
+        autoHideDuration={4000}
+        onClose={this.onErrorSnackbarClose}
+        ContentProps={{
+          'aria-describedby': 'message-id',
+        }}
+        message={<span id="message-id">{this.state.errorMessage}</span>}
+        action={[
+          <IconButton
+            key="close"
+            aria-label="Close"
+            color="inherit"
+            onClick={this.onErrorSnackbarClose}
+          >
+            <CloseIcon />
+          </IconButton>,
+        ]}
+      />
+    )
+    return (
+      <React.Fragment>
+        {dialog}
+        {snackbar}
+      </React.Fragment>
     )
   }
 }
