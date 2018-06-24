@@ -1,37 +1,27 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { withStyles } from '@material-ui/core/styles'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogContent from '@material-ui/core/DialogContent'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
 
-const style = {
-  flexTitle: {
-    flex: 1,
-    marginLeft: 30,
-  },
-  container: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    width: 200,
-  },
-}
-
-class LoginDialog extends React.Component {
+export default class LoginDialog extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       username: null,
       password: null,
       errorMessage: '',
-      usernameError: false,
-      passwordError: false,
+      usernameError: '',
+      passwordError: '',
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.resetErrors = this.resetErrors.bind(this)
+    this.resetFields = this.resetFields.bind(this)
+    this.onClose = this.onClose.bind(this)
   }
 
   handleChange(event) {
@@ -52,63 +42,84 @@ class LoginDialog extends React.Component {
       headers,
       credentials: 'include',
     }).then(result => {
-      if (result.status === 200) {
-        return this.props.handleLogin(username, result)
-      } else if (result.status === 400) {
-        this.setState({
-          errorMessage: 'Field is empty',
-          usernameError: !this.state.username,
-          passwordError: !this.state.password,
-        })
-      } else if (result.status === 401) {
-        this.setState({
-          errorMessage: 'Incorrect password',
-          passwordError: true,
-        })
-      } else if (result.status === 404) {
-        this.setState({
-          errorMessage: 'This user does not exist',
-          usernameError: true,
-        })
-      } else {
-        this.setState({
-          errorMessage: 'An error has occurred. Please try again later', //
-        })
+      switch (result.status) {
+        case 200:
+          this.props.handleLogin(username, result)
+          this.resetFields()
+          break
+        case 400:
+          this.setState({
+            usernameError: username ? '' : 'Field is empty',
+            passwordError: password ? '' : 'Field is empty',
+          })
+          break
+        case 401:
+          this.setState({
+            passwordError: 'Incorrect password',
+          })
+          break
+        case 404:
+          this.setState({
+            usernameError: 'This user does not exist',
+          })
+          break
+        default:
+        // TODO Pop up dialog for error
+        // this.setState({
+        //   errorMessage: 'An error has occurred. Please try again later',
+        //})
       }
     })
   }
 
   resetErrors() {
     this.setState({
-      errorMessage: '',
-      usernameError: false,
-      passwordError: false,
+      usernameError: '',
+      passwordError: '',
     })
   }
 
+  resetFields() {
+    this.setState({
+      username: null,
+      password: null,
+    })
+  }
+
+  onClose() {
+    this.resetFields()
+    this.props.onClose()
+  }
+
   render() {
-    const { classes } = this.props
     return (
-      <Dialog open={this.props.open} onClose={this.props.onClose}>
+      <Dialog open={this.props.open} onClose={this.onClose}>
         <DialogTitle>Login</DialogTitle>
-        <DialogContent className={classes.container}>
+        <DialogContent>
           <TextField
             id="username"
             label="Username"
+            margin="normal"
             onChange={this.handleChange}
-            error={this.state.usernameError}
-            helperText={this.state.usernameError ? this.state.errorMessage : ''}
+            error={!!this.state.usernameError}
+            fullWidth
+            autoFocus
+            helperText={this.state.usernameError}
           />
           <TextField
             id="password"
             label="Password"
             type="password"
+            margin="normal"
             onChange={this.handleChange}
-            error={this.state.passwordError}
-            helperText={this.state.passwordError ? this.state.errorMessage : ''}
+            error={!!this.state.passwordError}
+            fullWidth
+            helperText={this.state.passwordError}
           />
-          <Button onClick={this.handleSubmit}>Submit</Button>
         </DialogContent>
+        <DialogActions>
+          <Button onClick={this.handleSubmit}>Login</Button>
+        </DialogActions>
       </Dialog>
     )
   }
@@ -122,5 +133,3 @@ LoginDialog.propTypes = {
   open: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
 }
-
-export default withStyles(style)(LoginDialog)
