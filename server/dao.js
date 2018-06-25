@@ -1,11 +1,11 @@
 // Define Database Queries
 const db = require('./db')
 
-const insertEntry = (userid, event, lastoccurence, frequency) => {
+const insertEntry = (userid, event, lastoccurrence, frequency) => {
   return db
     .query(
-      'INSERT INTO entries VALUES (DEFAULT, $1, $2, $3, $4) RETURNING entryid, lastoccurence, frequency',
-      [userid, event, lastoccurence, frequency + 'days'],
+      'INSERT INTO entries VALUES (DEFAULT, $1, $2, $3, $4) RETURNING entryid, lastoccurrence, frequency',
+      [userid, event, lastoccurrence, frequency + 'days'],
     )
     .then(res => res.rows[0])
 }
@@ -13,7 +13,7 @@ const insertEntry = (userid, event, lastoccurence, frequency) => {
 const getEntries = user => {
   return db
     .query(
-      'SELECT entryid, event, lastoccurence, frequency FROM entries WHERE userid=$1',
+      'SELECT entryid, event, lastoccurrence, frequency FROM entries WHERE userid=$1',
       [user],
     )
     .then(res => res.rows)
@@ -22,7 +22,7 @@ const getEntries = user => {
 const getOverdueEntries = user => {
   return db
     .query(
-      'SELECT * FROM entries WHERE userid=$1 AND lastoccurence + frequency > CURRENT_DATE',
+      'SELECT * FROM entries WHERE userid=$1 AND lastoccurrence + frequency > CURRENT_DATE',
       [user],
     )
     .then(res => res.rows)

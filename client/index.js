@@ -1,5 +1,7 @@
 import React from 'react'
 import { render } from 'react-dom'
-import App from './components/App.js'
+import App2 from './components/App2.js'
 
-render(<App />, document.getElementById('root'))
+import 'typeface-roboto'
+
+render(<App2 />, document.getElementById('root'))
