@@ -1,11 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import { withStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import LoginDialog from './LoginDialog'
+import { updateUserid } from '../actions'
 
 const style = {
   flexTitle: {
@@ -35,13 +37,10 @@ class AppBarContainer extends React.Component {
     this.setState({ loginDialogOpen: false })
   }
 
-  login(username, result) {
-    result.json().then(r => {
-      this.setState({
-        username,
-        loginDialogOpen: false,
-      })
-      this.props.updateUserid(r.userid)
+  login(username) {
+    this.setState({
+      username,
+      loginDialogOpen: false,
     })
   }
 
@@ -52,7 +51,7 @@ class AppBarContainer extends React.Component {
       this.setState({
         username: null,
       })
-      this.props.updateUserid(null)
+      this.props.dispatch(updateUserid(null))
     })
   }
 
@@ -85,7 +84,6 @@ class AppBarContainer extends React.Component {
           </Toolbar>
         </AppBar>
         <LoginDialog
-          updateUserid={this.props.updateUserid}
           handleLogin={this.login}
           open={this.state.loginDialogOpen}
           onClose={this.handleLoginClose}
@@ -97,8 +95,12 @@ class AppBarContainer extends React.Component {
 
 AppBarContainer.propTypes = {
   classes: PropTypes.object,
-  updateUserid: PropTypes.func.isRequired,
   userid: PropTypes.number,
+  dispatch: PropTypes.func.isRequired,
 }
 
-export default withStyles(style)(AppBarContainer)
+const mapStateToProps = state => ({
+  userid: state.userid,
+})
+
+export default connect(mapStateToProps)(withStyles(style)(AppBarContainer))
