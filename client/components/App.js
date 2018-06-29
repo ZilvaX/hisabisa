@@ -20,12 +20,10 @@ const hisabisaTheme = createMuiTheme({
 class App extends React.Component {
   render() {
     return (
-      <div>
-        <MuiThemeProvider theme={hisabisaTheme}>
-          <AppBarContainer />
-          <EntriesContainer />
-        </MuiThemeProvider>
-      </div>
+      <MuiThemeProvider theme={hisabisaTheme}>
+        <AppBarContainer />
+        <EntriesContainer />
+      </MuiThemeProvider>
     )
   }
 }

@@ -1,6 +1,6 @@
 import React from 'react'
 import { render } from 'react-dom'
-import App2 from './components/App2.js'
+import App from './components/App.js'
 import { applyMiddleware, createStore } from 'redux'
 import logger from 'redux-logger'
 import hisabisaApp from './reducers'
@@ -12,7 +12,7 @@ const store = createStore(hisabisaApp, applyMiddleware(logger))
 
 render(
   <Provider store={store}>
-    <App2 />
+    <App />
   </Provider>,
   document.getElementById('root'),
 )
