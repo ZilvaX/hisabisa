@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
+import { connect } from 'react-redux'
 
 import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
@@ -130,6 +131,11 @@ class EntriesContainer extends React.Component {
 EntriesContainer.propTypes = {
   classes: PropTypes.object.isRequired,
   userid: PropTypes.number,
+  dispatch: PropTypes.func.isRequired,
 }
 
-export default withStyles(styles)(EntriesContainer)
+const mapStateToProps = state => ({
+  userid: state.userid,
+})
+
+export default connect(mapStateToProps)(withStyles(styles)(EntriesContainer))

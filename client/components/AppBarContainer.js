@@ -1,11 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import { withStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import LoginDialog from './LoginDialog'
+import { updateUserid, updateUsername } from '../actions'
 
 const style = {
   flexTitle: {
@@ -18,7 +20,6 @@ class AppBarContainer extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      username: null,
       loginDialogOpen: false,
     }
     this.handleLoginOpen = this.handleLoginOpen.bind(this)
@@ -35,24 +36,19 @@ class AppBarContainer extends React.Component {
     this.setState({ loginDialogOpen: false })
   }
 
-  login(username, result) {
-    result.json().then(r => {
-      this.setState({
-        username,
-        loginDialogOpen: false,
-      })
-      this.props.updateUserid(r.userid)
+  login(username) {
+    this.setState({
+      loginDialogOpen: false,
     })
+    this.props.dispatch(updateUsername(username))
   }
 
   logout() {
     fetch('api/authentication/logout', {
       method: 'POST',
     }).then(() => {
-      this.setState({
-        username: null,
-      })
-      this.props.updateUserid(null)
+      this.props.dispatch(updateUsername(null))
+      this.props.dispatch(updateUserid(null))
     })
   }
 
@@ -64,7 +60,7 @@ class AppBarContainer extends React.Component {
       </Button>
     ) : (
       <React.Fragment>
-        <Typography>Hello, {this.state.username}</Typography>
+        <Typography>Hello, {this.props.username}</Typography>
         <Button onClick={this.logout}>
           <Typography>Logout</Typography>
         </Button>
@@ -85,7 +81,6 @@ class AppBarContainer extends React.Component {
           </Toolbar>
         </AppBar>
         <LoginDialog
-          updateUserid={this.props.updateUserid}
           handleLogin={this.login}
           open={this.state.loginDialogOpen}
           onClose={this.handleLoginClose}
@@ -97,8 +92,14 @@ class AppBarContainer extends React.Component {
 
 AppBarContainer.propTypes = {
   classes: PropTypes.object,
-  updateUserid: PropTypes.func.isRequired,
   userid: PropTypes.number,
+  dispatch: PropTypes.func.isRequired,
+  username: PropTypes.string,
 }
 
-export default withStyles(style)(AppBarContainer)
+const mapStateToProps = state => ({
+  userid: state.userid,
+  username: state.username,
+})
+
+export default connect(mapStateToProps)(withStyles(style)(AppBarContainer))

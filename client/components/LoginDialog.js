@@ -9,9 +9,12 @@ import DialogActions from '@material-ui/core/DialogActions'
 import Snackbar from '@material-ui/core/Snackbar'
 import IconButton from '@material-ui/core/IconButton'
 
+import { updateUserid } from '../actions/'
+import { connect } from 'react-redux'
+
 import CloseIcon from '@material-ui/icons/Close'
 
-export default class LoginDialog extends React.Component {
+class LoginDialog extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -50,7 +53,10 @@ export default class LoginDialog extends React.Component {
     }).then(result => {
       switch (result.status) {
         case 200:
-          this.props.handleLogin(username, result)
+          this.props.handleLogin(username)
+          result.json().then(r => {
+            this.props.dispatch(updateUserid(r.userid))
+          })
           this.resetFields()
           break
         case 400:
@@ -173,8 +179,9 @@ export default class LoginDialog extends React.Component {
 LoginDialog.propTypes = {
   classes: PropTypes.object,
   handleLogin: PropTypes.func,
-  updateUserid: PropTypes.func.isRequired,
-  userid: PropTypes.number,
   open: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
+  dispatch: PropTypes.func.isRequired,
 }
+
+export default connect()(LoginDialog)

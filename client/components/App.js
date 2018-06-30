@@ -17,39 +17,19 @@ const hisabisaTheme = createMuiTheme({
   },
 })
 
-class App2 extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      LoginDialogOpen: false,
-      userid: null,
-    }
-    this.updateUserid = this.updateUserid.bind(this)
-  }
-
-  updateUserid(userid) {
-    this.setState({
-      userid,
-    })
-  }
-
+class App extends React.Component {
   render() {
     return (
-      <div>
-        <MuiThemeProvider theme={hisabisaTheme}>
-          <AppBarContainer
-            userid={this.state.userid}
-            updateUserid={this.updateUserid}
-          />
-          <EntriesContainer userid={this.state.userid} />
-        </MuiThemeProvider>
-      </div>
+      <MuiThemeProvider theme={hisabisaTheme}>
+        <AppBarContainer />
+        <EntriesContainer />
+      </MuiThemeProvider>
     )
   }
 }
 
-App2.propTypes = {
+App.propTypes = {
   classes: PropTypes.object,
 }
 
-export default hot(module)(App2)
+export default hot(module)(App)
