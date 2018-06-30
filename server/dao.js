@@ -29,7 +29,7 @@ const getOverdueEntries = user => {
     .then(res => res.rows)
 }
 
-const removeEntry = entryid => {
+const deleteEntry = entryid => {
   return db.query('DELETE FROM entries where entryid=$1', [entryid])
 }
 
@@ -60,6 +60,6 @@ module.exports = {
   insertUser,
   getOverdueEntries,
   checkUserExists,
-  removeEntry,
+  deleteEntry,
   getUserIdAndHash,
 }

@@ -1,7 +1,6 @@
 const express = require('express')
 const { isISO8601, isInt } = require('validator')
 
-const { removeEntry } = require('../../../dao')
 const hisabisaService = require('../../../hisabisaService')
 const router = express.Router({ mergeParams: true })
 
@@ -54,11 +53,10 @@ router.post('/', async (req, res) => {
 })
 
 router.delete('/:entryid(\\d+)', (req, res) => {
-  removeEntry(req.params.entryid)
+  hisabisaService
+    .removeEntry(req.params.entryid)
     .then(() => res.status(204).send())
-    .catch(() => {
-      res.status(500).send()
-    })
+    .catch(() => res.status(500).send())
 })
 
 module.exports = router
