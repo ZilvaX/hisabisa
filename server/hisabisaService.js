@@ -1,4 +1,4 @@
-const { insertEntry } = require('./dao')
+const { getEntries, insertEntry } = require('./dao')
 
 async function addEntry(entry) {
   const results = await insertEntry(entry)
@@ -6,6 +6,11 @@ async function addEntry(entry) {
   return results
 }
 
+async function getAllEntries(userid) {
+  return await getEntries(userid)
+}
+
 module.exports = {
   addEntry,
+  getAllEntries,
 }

@@ -1,7 +1,7 @@
 const express = require('express')
 const { isISO8601, isInt } = require('validator')
 
-const { getEntries, removeEntry } = require('../../../dao')
+const { removeEntry } = require('../../../dao')
 const hisabisaService = require('../../../hisabisaService')
 const router = express.Router({ mergeParams: true })
 
@@ -19,7 +19,7 @@ router.use(authorize)
 
 router.get('/', async (req, res) => {
   try {
-    const entries = await getEntries(req.params.id)
+    const entries = await hisabisaService.getAllEntries(req.params.id)
     res.send(entries)
   } catch (e) {
     res.status(500).send('Failed to obtain entries')
