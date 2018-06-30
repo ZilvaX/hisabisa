@@ -1,13 +1,14 @@
 // Define Database Queries
 const db = require('./db')
 
-const insertEntry = (userid, event, lastoccurrence, frequency) => {
+const insertEntry = entry => {
+  const { userid, event, lastoccurrence, frequency } = entry
   return db
     .query(
       'INSERT INTO entries VALUES (DEFAULT, $1, $2, $3, $4) RETURNING entryid, lastoccurrence, frequency',
-      [userid, event, lastoccurrence, frequency + 'days'],
+      [userid, event, lastoccurrence, frequency],
     )
-    .then(res => res.rows[0])
+    .then(res => Object.assign({}, res.rows[0], { event }))
 }
 
 const getEntries = user => {
