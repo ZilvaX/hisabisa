@@ -6,7 +6,7 @@ const insertEntry = entry => {
   return db
     .query(
       'INSERT INTO entries VALUES (DEFAULT, $1, $2, $3, $4) RETURNING entryid, lastoccurrence, frequency',
-      [userid, event, lastoccurrence, frequency],
+      [userid, event, lastoccurrence, frequency.toString()],
     )
     .then(res => Object.assign({}, res.rows[0], { event }))
 }
