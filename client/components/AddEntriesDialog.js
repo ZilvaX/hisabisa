@@ -32,7 +32,7 @@ export default class AddEntriesDialog extends React.Component {
     const body = {
       event: this.state.event,
       lastoccurrence: this.state.lastoccurrence,
-      frequency: this.state.frequency,
+      frequency: { days: this.state.frequency },
     }
     const headers = {
       'content-type': 'application/json',
@@ -85,7 +85,7 @@ export default class AddEntriesDialog extends React.Component {
           <TextField
             margin="normal"
             id="frequency"
-            label="Frequency"
+            label="Frequency (in Days)"
             fullWidth
             type="number"
             value={this.state.frequency}
