@@ -1,8 +1,7 @@
 const { getEntries, insertEntry, deleteEntry } = require('./dao')
 
 async function addEntry(entry) {
-  const results = await insertEntry(entry)
-  return results
+  return await insertEntry(entry)
 }
 
 async function getAllEntries(userid) {

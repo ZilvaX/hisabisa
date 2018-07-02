@@ -29,14 +29,13 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
   const { event, lastoccurrence, frequency } = req.body
-  const { days } = frequency
   if (
     !event ||
     !lastoccurrence ||
     !frequency ||
-    !days ||
+    !frequency.days ||
     !isISO8601(lastoccurrence + '') ||
-    !isInt(days + '')
+    !isInt(frequency.days + '')
   ) {
     res.status(400).send()
     return
@@ -46,7 +45,7 @@ router.post('/', async (req, res) => {
     userid: parseInt(req.params.id, 10),
     event,
     lastoccurrence,
-    frequency: Duration.fromObject(frequency),
+    frequency: Duration.fromObject({ days: frequency.days }),
   }
   try {
     const newEntry = await hisabisaService.addEntry(entry)
