@@ -36,11 +36,10 @@ class AppBarContainer extends React.Component {
     this.setState({ loginDialogOpen: false })
   }
 
-  login(username) {
+  login() {
     this.setState({
       loginDialogOpen: false,
     })
-    this.props.dispatch(updateUsername(username))
   }
 
   logout() {

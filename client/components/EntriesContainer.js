@@ -10,6 +10,7 @@ import Add from '@material-ui/icons/Add'
 import AddEntriesDialog from './AddEntriesDialog'
 import EntryCard from './EntryCard'
 import { convertEntriesFromApi } from '../helpers/EntriesHelper'
+import { fetchEntries } from '../actions'
 
 const styles = {
   cardHolder: {
@@ -55,6 +56,7 @@ class EntriesContainer extends React.Component {
         const convertedEntries = convertEntriesFromApi(data)
         this.setState({ entries: convertedEntries })
       })
+    this.props.dispatch(fetchEntries(this.props.userid))
   }
 
   componentDidUpdate(prevProps) {
