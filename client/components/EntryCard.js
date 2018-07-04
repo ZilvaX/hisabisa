@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { DateTime } from 'luxon'
 
 import { withStyles } from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
@@ -43,7 +44,9 @@ class EntryCard extends React.Component {
           <Typography variant="headline" component="h2">
             {event}
           </Typography>
-          <Typography color="textSecondary">{lastoccurrence}</Typography>
+          <Typography color="textSecondary">
+            Last occurred on {lastoccurrence.toLocaleString(DateTime.DATE_FULL)}
+          </Typography>
         </CardContent>
         <CardActions>
           <Button size="small" aria-label="remove" onClick={this.handleRemove}>
@@ -59,7 +62,7 @@ EntryCard.propTypes = {
   classes: PropTypes.object.isRequired,
   entryid: PropTypes.number.isRequired,
   event: PropTypes.string.isRequired,
-  lastoccurrence: PropTypes.string.isRequired,
+  lastoccurrence: PropTypes.object.isRequired,
   removeEntry: PropTypes.func.isRequired,
   userid: PropTypes.number,
 }

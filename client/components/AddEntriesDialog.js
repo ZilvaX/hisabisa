@@ -9,6 +9,8 @@ import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import Button from '@material-ui/core/Button'
 
+import { convertEntriesFromApi } from '../helpers/EntriesHelper'
+
 export default class AddEntriesDialog extends React.Component {
   constructor(props) {
     super(props)
@@ -32,7 +34,7 @@ export default class AddEntriesDialog extends React.Component {
     const body = {
       event: this.state.event,
       lastoccurrence: this.state.lastoccurrence,
-      frequency: { days: this.state.frequency },
+      frequency: { days: parseInt(this.state.frequency, 10) },
     }
     const headers = {
       'content-type': 'application/json',
@@ -45,7 +47,8 @@ export default class AddEntriesDialog extends React.Component {
     }).then(result => {
       if (result.status === 201) {
         result.json().then(json => {
-          this.props.addEntry(json)
+          const convertedEntry = convertEntriesFromApi([json])[0]
+          this.props.addEntry(convertedEntry)
           this.props.handleClose()
         })
       }
