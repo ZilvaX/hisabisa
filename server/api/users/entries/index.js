@@ -1,4 +1,5 @@
 const express = require('express')
+const _ = require('lodash')
 const { isISO8601, isInt } = require('validator')
 const { Duration } = require('luxon')
 
@@ -15,12 +16,25 @@ const authorize = function(req, res, next) {
   }
 }
 
+const convertEntries = function(entries) {
+  return _.map(entries, x => {
+    const { entryid, event, lastoccurrence, frequency } = x
+    return {
+      entryid,
+      event,
+      lastoccurrence: lastoccurrence.toISODate(),
+      frequency,
+    }
+  })
+}
+
 router.use(authorize)
 
 router.get('/', async (req, res) => {
   try {
     const entries = await hisabisaService.getAllEntries(req.params.id)
-    res.send(entries)
+    const convertedEntries = convertEntries(entries)
+    res.send(convertedEntries)
   } catch (e) {
     console.error(e)
     res.status(500).send('Failed to obtain entries')
@@ -49,7 +63,8 @@ router.post('/', async (req, res) => {
   }
   try {
     const newEntry = await hisabisaService.addEntry(entry)
-    res.status(201).send(newEntry)
+    const convertedEntry = convertEntries([newEntry])[0]
+    res.status(201).send(convertedEntry)
   } catch (e) {
     console.error(e)
     res.status(500).send('Failed to store entry')
