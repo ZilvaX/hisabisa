@@ -9,6 +9,7 @@ import Add from '@material-ui/icons/Add'
 
 import AddEntriesDialog from './AddEntriesDialog'
 import EntryCard from './EntryCard'
+import { convertEntriesFromApi } from '../helpers/EntriesHelper'
 
 const styles = {
   cardHolder: {
@@ -51,7 +52,8 @@ class EntriesContainer extends React.Component {
     })
       .then(results => results.json())
       .then(data => {
-        this.setState({ entries: data })
+        const convertedEntries = convertEntriesFromApi(data)
+        this.setState({ entries: convertedEntries })
       })
   }
 

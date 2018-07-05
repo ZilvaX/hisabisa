@@ -1,5 +1,5 @@
 const pgInterval = require('postgres-interval')
-const { Duration } = require('luxon')
+const { Duration, DateTime } = require('luxon')
 // Setup Database Pool
 const { Pool, types } = require('pg')
 // Database Configuration
@@ -13,6 +13,8 @@ types.setTypeParser(INTERVAL_OID, value => {
   const { days } = Duration.fromISO(pgInterval(value).toISO())
   return { days }
 })
+const DATE_OID = 1082
+types.setTypeParser(DATE_OID, value => DateTime.fromISO(value))
 
 module.exports = {
   query: (text, params) => {
