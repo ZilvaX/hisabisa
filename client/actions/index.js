@@ -12,12 +12,10 @@ export const updateUsername = username => {
 }
 
 export function requestEntries(userid) {
-  // use userid?
   return { type: REQUEST_ENTRIES, userid }
 }
 
 export function receiveEntries(entries) {
-  // how to use json?
   return { type: RECEIVE_ENTRIES, entries }
 }
 
@@ -32,26 +30,5 @@ export function fetchEntries(userid) {
         error => console.log('an error has occurred.', error),
       )
       .then(json => dispatch(receiveEntries(json)))
-  }
-}
-
-function shouldFetchEntries(state, userid) {
-  const entries = state.entries
-  //if previously not logged in, but now is logged in
-  if (!entries) {
-    return true
-  } else if (state.isFetching) {
-    return false
-  } else {
-    //if previously logged in, but has logged out?
-    return !userid
-  }
-}
-
-export function fetchEntriesIfNeeded(userid) {
-  return (dispatch, getState) => {
-    if (shouldFetchEntries(getState(), userid)) {
-      return dispatch(fetchEntries(userid))
-    }
   }
 }

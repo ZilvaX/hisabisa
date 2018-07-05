@@ -9,7 +9,7 @@ import { Provider } from 'react-redux'
 
 import 'typeface-roboto'
 
-const store = createStore(hisabisaApp, applyMiddleware(logger, thunk))
+const store = createStore(hisabisaApp, applyMiddleware(thunk, logger))
 
 render(
   <Provider store={store}>

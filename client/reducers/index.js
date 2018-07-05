@@ -1,3 +1,4 @@
+import { combineReducers } from 'redux'
 import {
   UPDATE_USERID,
   UPDATE_USERNAME,
@@ -5,31 +6,26 @@ import {
   RECEIVE_ENTRIES,
 } from '../actions'
 
-const initialState = {
-  userid: null,
-  username: null,
-  entries: [],
-  isFetching: false,
-}
-
-// ?
-function entries(state = [], action) {
+function userid(state = null, action) {
   switch (action.type) {
-    case REQUEST_ENTRIES:
-      return [{ isFetching: true }]
-    case RECEIVE_ENTRIES:
-      return [{ isFetching: false, entries: [] }] ///////
+    case UPDATE_USERID:
+      return action.userid
     default:
       return state
   }
 }
 
-export default function hisabisaApp(state = initialState, action) {
+function username(state = null, action) {
   switch (action.type) {
-    case UPDATE_USERID:
-      return Object.assign({}, state, { userid: action.userid })
     case UPDATE_USERNAME:
-      return Object.assign({}, state, { username: action.username })
+      return action.username
+    default:
+      return state
+  }
+}
+
+function entries(state = { isFetching: false, entries: [] }, action) {
+  switch (action.type) {
     case REQUEST_ENTRIES:
       return Object.assign({}, state, { isFetching: true })
     case RECEIVE_ENTRIES:
@@ -41,3 +37,11 @@ export default function hisabisaApp(state = initialState, action) {
       return state
   }
 }
+
+const rootReducer = combineReducers({
+  userid,
+  username,
+  entries,
+})
+
+export default rootReducer
