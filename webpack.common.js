@@ -1,7 +1,9 @@
 const path = require('path')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 const DIST_DIR = path.resolve(__dirname, 'dist')
 const APP_DIR = path.resolve(__dirname, 'client')
+const TEMPLATE_DIR = path.resolve(APP_DIR, 'index.html')
 
 const config = {
   entry: APP_DIR,
@@ -35,6 +37,12 @@ const config = {
       },
     ],
   },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: TEMPLATE_DIR,
+      inject: 'body',
+    }),
+  ],
 }
 
 module.exports = config
