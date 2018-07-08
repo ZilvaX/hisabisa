@@ -2,8 +2,9 @@ import { combineReducers } from 'redux'
 import {
   UPDATE_USERID,
   UPDATE_USERNAME,
-  REQUEST_ENTRIES,
   RECEIVE_ENTRIES,
+  ADD_ENTRY,
+  REMOVE_ENTRY,
 } from '../actions'
 
 function userid(state = null, action) {
@@ -24,15 +25,14 @@ function username(state = null, action) {
   }
 }
 
-function entries(state = { isFetching: false, entries: [] }, action) {
+function entries(state = [], action) {
   switch (action.type) {
-    case REQUEST_ENTRIES:
-      return Object.assign({}, state, { isFetching: true })
     case RECEIVE_ENTRIES:
-      return Object.assign({}, state, {
-        isFetching: false,
-        entries: action.entries,
-      })
+      return action.entries
+    case ADD_ENTRY:
+      return [...state, action.entry]
+    case REMOVE_ENTRY:
+      return state // TODO add the remove entry reducer
     default:
       return state
   }
