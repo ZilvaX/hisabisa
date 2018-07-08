@@ -32,7 +32,7 @@ function entries(state = [], action) {
     case ADD_ENTRY:
       return [...state, action.entry]
     case REMOVE_ENTRY:
-      return state // TODO add the remove entry reducer
+      return state.filter(e => e.entryid !== action.entryid)
     default:
       return state
   }

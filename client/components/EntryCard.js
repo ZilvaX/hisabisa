@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { DateTime } from 'luxon'
+import { connect } from 'react-redux'
 
 import { withStyles } from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
@@ -8,6 +9,9 @@ import CardContent from '@material-ui/core/CardContent'
 import CardActions from '@material-ui/core/CardActions'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
+
+import { removeEntry } from '../actions'
+
 const styles = {
   card: {
     flex: '1',
@@ -32,7 +36,7 @@ class EntryCard extends React.Component {
       headers,
       credentials: 'include',
     }).then(() => {
-      this.props.removeEntry(entryid)
+      this.props.dispatch(removeEntry(entryid))
     })
   }
 
@@ -63,8 +67,8 @@ EntryCard.propTypes = {
   entryid: PropTypes.number.isRequired,
   event: PropTypes.string.isRequired,
   lastoccurrence: PropTypes.object.isRequired,
-  removeEntry: PropTypes.func.isRequired,
   userid: PropTypes.number,
+  dispatch: PropTypes.func.isRequired,
 }
 
-export default withStyles(styles)(EntryCard)
+export default connect()(withStyles(styles)(EntryCard))

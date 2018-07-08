@@ -22,13 +22,12 @@ export function addEntry(entry) {
   return { type: ADD_ENTRY, entry }
 }
 
-export function removeEntry(entry) {
-  return { type: REMOVE_ENTRY, entry } // TODO fix this
+export function removeEntry(entryid) {
+  return { type: REMOVE_ENTRY, entryid }
 }
 
 export function fetchEntries(userid) {
   return dispatch => {
-    // dispatch(requestEntries(userid))
     return fetch(`/api/users/${userid}/entries/`, {
       credentials: 'include',
     })

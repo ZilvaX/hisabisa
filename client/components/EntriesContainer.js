@@ -41,7 +41,6 @@ class EntriesContainer extends React.Component {
     }
     this.handleClickAdd = this.handleClickAdd.bind(this)
     this.handleCloseDialog = this.handleCloseDialog.bind(this)
-    this.removeEntry = this.removeEntry.bind(this)
   }
 
   updateEntries() {
@@ -68,12 +67,6 @@ class EntriesContainer extends React.Component {
     this.setState({ openAddEntriesDialog: false })
   }
 
-  removeEntry(entryid) {
-    this.setState({
-      entries: _.filter(this.state.entries, x => x.entryid !== entryid), // TODO remove
-    })
-  }
-
   render() {
     const { classes } = this.props
     const cards = _.map(this.props.entries, entry => {
@@ -82,7 +75,6 @@ class EntriesContainer extends React.Component {
           entryid={entry.entryid}
           event={entry.event}
           lastoccurrence={entry.lastoccurrence}
-          removeEntry={this.removeEntry}
           userid={this.props.userid}
           key={entry.entryid}
         />
