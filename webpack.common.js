@@ -1,5 +1,6 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const CleanWebpackPlugin = require('clean-webpack-plugin')
 
 const DIST_DIR = path.resolve(__dirname, 'dist')
 const APP_DIR = path.resolve(__dirname, 'client')
@@ -42,6 +43,7 @@ const config = {
       template: TEMPLATE_DIR,
       inject: 'body',
     }),
+    new CleanWebpackPlugin('dist'),
   ],
 }
 
