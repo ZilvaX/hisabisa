@@ -64,4 +64,4 @@ typings/
 ### hisabisa ###
 
 # Webpack
-/dist/bundle.js
+/dist
