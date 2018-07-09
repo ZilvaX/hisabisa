@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 
 import TextField from '@material-ui/core/TextField'
 import Dialog from '@material-ui/core/Dialog'
@@ -10,8 +11,9 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import Button from '@material-ui/core/Button'
 
 import { convertEntriesFromApi } from '../helpers/EntriesHelper'
+import { addEntry } from '../actions'
 
-export default class AddEntriesDialog extends React.Component {
+class AddEntriesDialog extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -48,7 +50,7 @@ export default class AddEntriesDialog extends React.Component {
       if (result.status === 201) {
         result.json().then(json => {
           const convertedEntry = convertEntriesFromApi([json])[0]
-          this.props.addEntry(convertedEntry)
+          this.props.dispatch(addEntry(convertedEntry))
           this.props.handleClose()
         })
       }
@@ -111,6 +113,8 @@ export default class AddEntriesDialog extends React.Component {
 AddEntriesDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
-  addEntry: PropTypes.func.isRequired,
   userid: PropTypes.number,
+  dispatch: PropTypes.func.isRequired,
 }
+
+export default connect()(AddEntriesDialog)

@@ -9,7 +9,7 @@ import Add from '@material-ui/icons/Add'
 
 import AddEntriesDialog from './AddEntriesDialog'
 import EntryCard from './EntryCard'
-import { convertEntriesFromApi } from '../helpers/EntriesHelper'
+import { fetchEntries, receiveEntries } from '../actions'
 
 const styles = {
   cardHolder: {
@@ -37,24 +37,14 @@ class EntriesContainer extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      entries: [],
       openAddEntriesDialog: false,
     }
     this.handleClickAdd = this.handleClickAdd.bind(this)
     this.handleCloseDialog = this.handleCloseDialog.bind(this)
-    this.addEntry = this.addEntry.bind(this)
-    this.removeEntry = this.removeEntry.bind(this)
   }
 
   updateEntries() {
-    fetch(`/api/users/${this.props.userid}/entries/`, {
-      credentials: 'include',
-    })
-      .then(results => results.json())
-      .then(data => {
-        const convertedEntries = convertEntriesFromApi(data)
-        this.setState({ entries: convertedEntries })
-      })
+    this.props.dispatch(fetchEntries(this.props.userid))
   }
 
   componentDidUpdate(prevProps) {
@@ -65,7 +55,7 @@ class EntriesContainer extends React.Component {
 
     // If previously we were logged in but now we aren't
     if (prevProps.userid && !this.props.userid) {
-      this.setState({ entries: [] })
+      this.props.dispatch(receiveEntries([]))
     }
   }
 
@@ -77,25 +67,14 @@ class EntriesContainer extends React.Component {
     this.setState({ openAddEntriesDialog: false })
   }
 
-  addEntry(entry) {
-    this.setState({ entries: [...this.state.entries, entry] })
-  }
-
-  removeEntry(entryid) {
-    this.setState({
-      entries: _.filter(this.state.entries, x => x.entryid !== entryid),
-    })
-  }
-
   render() {
     const { classes } = this.props
-    const cards = _.map(this.state.entries, entry => {
+    const cards = _.map(this.props.entries, entry => {
       return (
         <EntryCard
           entryid={entry.entryid}
           event={entry.event}
           lastoccurrence={entry.lastoccurrence}
-          removeEntry={this.removeEntry}
           userid={this.props.userid}
           key={entry.entryid}
         />
@@ -122,7 +101,6 @@ class EntriesContainer extends React.Component {
         <AddEntriesDialog
           open={this.state.openAddEntriesDialog}
           handleClose={this.handleCloseDialog}
-          addEntry={this.addEntry}
           userid={this.props.userid}
         />
       </React.Fragment>
@@ -133,11 +111,13 @@ class EntriesContainer extends React.Component {
 EntriesContainer.propTypes = {
   classes: PropTypes.object.isRequired,
   userid: PropTypes.number,
+  entries: PropTypes.array,
   dispatch: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
   userid: state.userid,
+  entries: state.entries,
 })
 
 export default connect(mapStateToProps)(withStyles(styles)(EntriesContainer))

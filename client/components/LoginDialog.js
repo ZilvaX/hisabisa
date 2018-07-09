@@ -9,7 +9,7 @@ import DialogActions from '@material-ui/core/DialogActions'
 import Snackbar from '@material-ui/core/Snackbar'
 import IconButton from '@material-ui/core/IconButton'
 
-import { updateUserid } from '../actions/'
+import { updateUserid, updateUsername } from '../actions/'
 import { connect } from 'react-redux'
 
 import CloseIcon from '@material-ui/icons/Close'
@@ -56,6 +56,7 @@ class LoginDialog extends React.Component {
           this.props.handleLogin(username)
           result.json().then(r => {
             this.props.dispatch(updateUserid(r.userid))
+            this.props.dispatch(updateUsername(username))
           })
           this.resetFields()
           break
