@@ -51,7 +51,6 @@ class AddEntriesDialog extends React.Component {
         result.json().then(json => {
           const convertedEntry = convertEntriesFromApi([json])[0]
           this.props.dispatch(addEntry(convertedEntry))
-          console.log('added entry')
           this.props.handleClose()
         })
       }
