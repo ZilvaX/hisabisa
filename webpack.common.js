@@ -30,7 +30,6 @@ const config = {
   plugins: [
     new HtmlWebpackPlugin({
       template: TEMPLATE,
-      inject: 'body',
     }),
   ],
 }
