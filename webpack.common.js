@@ -1,14 +1,15 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const CleanWebpackPlugin = require('clean-webpack-plugin')
 
 const DIST_DIR = path.resolve(__dirname, 'dist')
 const APP_DIR = path.resolve(__dirname, 'client')
-const TEMPLATE_DIR = path.resolve(APP_DIR, 'index.html')
+const TEMPLATE = path.resolve(APP_DIR, 'index.html')
+const ENTRY = path.resolve(APP_DIR, 'index.js')
 
 const config = {
-  entry: APP_DIR,
+  entry: ENTRY,
   target: 'web',
+  context: APP_DIR,
   output: {
     filename: 'bundle.js',
     path: DIST_DIR,
@@ -17,20 +18,8 @@ const config = {
     rules: [
       {
         test: /\.js$/,
-        include: [APP_DIR],
+        include: APP_DIR,
         loader: 'babel-loader',
-      },
-      {
-        test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              name: '[name].[ext]',
-              outputPath: 'fonts/',
-            },
-          },
-        ],
       },
       {
         test: /\.css$/,
@@ -40,10 +29,9 @@ const config = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: TEMPLATE_DIR,
+      template: TEMPLATE,
       inject: 'body',
     }),
-    new CleanWebpackPlugin('dist'),
   ],
 }
 

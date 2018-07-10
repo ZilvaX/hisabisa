@@ -7,8 +7,6 @@ import thunk from 'redux-thunk'
 import hisabisaApp from './reducers'
 import { Provider } from 'react-redux'
 
-import 'typeface-roboto'
-
 const store = createStore(hisabisaApp, applyMiddleware(thunk, logger))
 
 render(
