@@ -5,6 +5,7 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import cyan from '@material-ui/core/colors/cyan'
 import teal from '@material-ui/core/colors/teal'
 import deepOrange from '@material-ui/core/colors/deepOrange'
+import CssBaseline from '@material-ui/core/CssBaseline'
 
 import AppBarContainer from './AppBarContainer'
 import EntriesContainer from './EntriesContainer'
@@ -17,15 +18,16 @@ const hisabisaTheme = createMuiTheme({
   },
 })
 
-class App extends React.Component {
-  render() {
-    return (
+function App() {
+  return (
+    <React.Fragment>
+      <CssBaseline />
       <MuiThemeProvider theme={hisabisaTheme}>
         <AppBarContainer />
         <EntriesContainer />
       </MuiThemeProvider>
-    )
-  }
+    </React.Fragment>
+  )
 }
 
 App.propTypes = {
