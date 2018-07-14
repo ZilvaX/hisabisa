@@ -2,14 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
-import TextField from '@material-ui/core/TextField'
-import Dialog from '@material-ui/core/Dialog'
-import DialogActions from '@material-ui/core/DialogActions'
-import DialogContent from '@material-ui/core/DialogContent'
-import DialogContentText from '@material-ui/core/DialogContentText'
-import DialogTitle from '@material-ui/core/DialogTitle'
-import Button from '@material-ui/core/Button'
-
+import EntryDialog from './EntryDialog'
 import { convertEntriesFromApi } from '../helpers/EntriesHelper'
 import { addEntry } from '../actions'
 
@@ -59,53 +52,17 @@ class AddEntriesDialog extends React.Component {
 
   render() {
     return (
-      <Dialog
+      <EntryDialog
         open={this.props.open}
-        aria-labelledby="add-entry-form-dialog-title"
-      >
-        <DialogTitle id="add-entry-form-dialog-title">Add Entry</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Create a reminder with an event name, when this event last occurred
-            and how often you want to be reminded
-          </DialogContentText>
-          <TextField
-            autoFocus
-            margin="normal"
-            id="event"
-            label="Event"
-            fullWidth
-            value={this.state.event}
-            onChange={this.handleFormChange}
-          />
-          <TextField
-            margin="normal"
-            id="lastoccurrence"
-            label="Last Occurrence"
-            fullWidth
-            type="date"
-            value={this.state.lastoccurrence}
-            onChange={this.handleFormChange}
-          />
-          <TextField
-            margin="normal"
-            id="frequency"
-            label="Frequency (in Days)"
-            fullWidth
-            type="number"
-            value={this.state.frequency}
-            onChange={this.handleFormChange}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={this.props.handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={this.handleFormSubmit} color="primary">
-            Create
-          </Button>
-        </DialogActions>
-      </Dialog>
+        handleClose={this.props.handleClose}
+        handleFormChange={this.handleFormChange}
+        handleFormSubmit={this.handleFormSubmit}
+        event={this.state.event}
+        lastoccurrence={this.state.lastoccurrence}
+        frequency={this.state.frequency}
+        title="Add Entry"
+        contenttext="Create a reminder with an event name, when this event last occurred and how often you want to be reminded"
+      />
     )
   }
 }
