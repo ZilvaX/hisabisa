@@ -9,6 +9,7 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 
 import AppBarContainer from './AppBarContainer'
 import EntriesContainer from './EntriesContainer'
+import SnackbarContainer from './SnackbarContainer'
 
 const hisabisaTheme = createMuiTheme({
   palette: {
@@ -25,6 +26,7 @@ function App() {
       <MuiThemeProvider theme={hisabisaTheme}>
         <AppBarContainer />
         <EntriesContainer />
+        <SnackbarContainer />
       </MuiThemeProvider>
     </React.Fragment>
   )

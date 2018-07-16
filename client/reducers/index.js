@@ -6,6 +6,8 @@ import {
   ADD_ENTRY,
   UPDATE_ENTRY,
   REMOVE_ENTRY,
+  SHOW_ERROR,
+  HIDE_ERROR,
 } from '../actions'
 
 function userid(state = null, action) {
@@ -46,10 +48,25 @@ function entries(state = [], action) {
   }
 }
 
+function errors(
+  state = { showSnackbar: false, errorMessage: undefined },
+  action,
+) {
+  switch (action.type) {
+    case SHOW_ERROR:
+      return { showSnackbar: true, errorMessage: action.errorMessage }
+    case HIDE_ERROR:
+      return { showSnackbar: false, errorMessage: state.errorMessage }
+    default:
+      return state
+  }
+}
+
 const rootReducer = combineReducers({
   userid,
   username,
   entries,
+  errors,
 })
 
 export default rootReducer

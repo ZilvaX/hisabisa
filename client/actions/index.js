@@ -6,6 +6,8 @@ export const RECEIVE_ENTRIES = 'RECEIVE_ENTRIES'
 export const ADD_ENTRY = 'ADD_ENTRY'
 export const UPDATE_ENTRY = 'UPDATE_ENTRY'
 export const REMOVE_ENTRY = 'REMOVE_ENTRY'
+export const SHOW_ERROR = 'SHOW_ERROR'
+export const HIDE_ERROR = 'HIDE_ERROR'
 
 export const updateUserid = userid => {
   return { type: UPDATE_USERID, userid }
@@ -45,4 +47,12 @@ export function fetchEntries(userid) {
         dispatch(receiveEntries(convertedEntries))
       })
   }
+}
+
+export function showError(errorMessage) {
+  return { type: SHOW_ERROR, errorMessage }
+}
+
+export function hideError() {
+  return { type: HIDE_ERROR }
 }

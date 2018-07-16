@@ -6,13 +6,9 @@ import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
-import Snackbar from '@material-ui/core/Snackbar'
-import IconButton from '@material-ui/core/IconButton'
 
-import { updateUserid, updateUsername } from '../actions/'
+import { updateUserid, updateUsername, showError } from '../actions/'
 import { connect } from 'react-redux'
-
-import CloseIcon from '@material-ui/icons/Close'
 
 class LoginDialog extends React.Component {
   constructor(props) {
@@ -22,15 +18,12 @@ class LoginDialog extends React.Component {
       password: null,
       usernameError: '',
       passwordError: '',
-      openErrorSnackbar: false,
-      errorMessage: '',
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.resetErrors = this.resetErrors.bind(this)
     this.resetFields = this.resetFields.bind(this)
     this.onClose = this.onClose.bind(this)
-    this.onErrorSnackbarClose = this.onErrorSnackbarClose.bind(this)
   }
 
   handleChange(event) {
@@ -77,10 +70,9 @@ class LoginDialog extends React.Component {
           })
           break
         default:
-          this.setState({
-            openErrorSnackbar: true,
-            errorMessage: 'An error has occurred. Please try again later',
-          })
+          this.props.dispatch(
+            showError('An error has occurred. Please try again later.'),
+          )
       }
     })
   }
@@ -104,12 +96,6 @@ class LoginDialog extends React.Component {
   onClose() {
     this.resetFields()
     this.props.onClose()
-  }
-
-  onErrorSnackbarClose() {
-    this.setState({
-      openErrorSnackbar: false,
-    })
   }
 
   render() {
@@ -143,37 +129,7 @@ class LoginDialog extends React.Component {
         </DialogActions>
       </Dialog>
     )
-    const snackbar = (
-      <Snackbar
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center',
-        }}
-        open={this.state.openErrorSnackbar}
-        autoHideDuration={4000}
-        onClose={this.onErrorSnackbarClose}
-        ContentProps={{
-          'aria-describedby': 'message-id',
-        }}
-        message={<span id="message-id">{this.state.errorMessage}</span>}
-        action={[
-          <IconButton
-            key="close"
-            aria-label="Close"
-            color="inherit"
-            onClick={this.onErrorSnackbarClose}
-          >
-            <CloseIcon />
-          </IconButton>,
-        ]}
-      />
-    )
-    return (
-      <React.Fragment>
-        {dialog}
-        {snackbar}
-      </React.Fragment>
-    )
+    return <React.Fragment>{dialog}</React.Fragment>
   }
 }
 
