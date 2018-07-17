@@ -6,8 +6,7 @@ import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
-import LoginDialog from './LoginDialog'
-import { updateUserid, updateUsername } from '../actions'
+import { updateUserid, updateUsername, showLogin } from '../actions'
 
 const style = {
   flexTitle: {
@@ -19,27 +18,12 @@ const style = {
 class AppBarContainer extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {
-      loginDialogOpen: false,
-    }
     this.handleLoginOpen = this.handleLoginOpen.bind(this)
-    this.handleLoginClose = this.handleLoginClose.bind(this)
-    this.login = this.login.bind(this)
     this.logout = this.logout.bind(this)
   }
 
   handleLoginOpen() {
-    this.setState({ loginDialogOpen: true })
-  }
-
-  handleLoginClose() {
-    this.setState({ loginDialogOpen: false })
-  }
-
-  login() {
-    this.setState({
-      loginDialogOpen: false,
-    })
+    this.props.dispatch(showLogin(true))
   }
 
   logout() {
@@ -66,25 +50,18 @@ class AppBarContainer extends React.Component {
       </React.Fragment>
     )
     return (
-      <React.Fragment>
-        <AppBar position="static" color="primary">
-          <Toolbar>
-            <Typography
-              variant="title"
-              color="default"
-              className={classes.flexTitle}
-            >
-              Hisabisa
-            </Typography>
-            {loginStatus}
-          </Toolbar>
-        </AppBar>
-        <LoginDialog
-          handleLogin={this.login}
-          open={this.state.loginDialogOpen}
-          onClose={this.handleLoginClose}
-        />
-      </React.Fragment>
+      <AppBar position="static" color="primary">
+        <Toolbar>
+          <Typography
+            variant="title"
+            color="default"
+            className={classes.flexTitle}
+          >
+            Hisabisa
+          </Typography>
+          {loginStatus}
+        </Toolbar>
+      </AppBar>
     )
   }
 }

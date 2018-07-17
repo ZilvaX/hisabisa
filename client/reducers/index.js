@@ -8,6 +8,7 @@ import {
   REMOVE_ENTRY,
   SHOW_ERROR,
   HIDE_ERROR,
+  SHOW_LOGIN,
 } from '../actions'
 
 function userid(state = null, action) {
@@ -62,11 +63,21 @@ function errors(
   }
 }
 
+function loginDialog(state = { open: false }, action) {
+  switch (action.type) {
+    case SHOW_LOGIN:
+      return { open: action.open }
+    default:
+      return state
+  }
+}
+
 const rootReducer = combineReducers({
   userid,
   username,
   entries,
   errors,
+  loginDialog,
 })
 
 export default rootReducer

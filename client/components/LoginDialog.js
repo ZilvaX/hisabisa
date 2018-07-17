@@ -7,7 +7,7 @@ import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 
-import { updateUserid, updateUsername, showError } from '../actions/'
+import { updateUserid, updateUsername, showError, showLogin } from '../actions/'
 import { connect } from 'react-redux'
 
 class LoginDialog extends React.Component {
@@ -46,11 +46,11 @@ class LoginDialog extends React.Component {
     }).then(result => {
       switch (result.status) {
         case 200:
-          this.props.handleLogin(username)
           result.json().then(r => {
             this.props.dispatch(updateUserid(r.userid))
             this.props.dispatch(updateUsername(username))
           })
+          this.props.dispatch(showLogin(false))
           this.resetFields()
           break
         case 400:
@@ -95,7 +95,7 @@ class LoginDialog extends React.Component {
 
   onClose() {
     this.resetFields()
-    this.props.onClose()
+    this.props.dispatch(showLogin(false))
   }
 
   render() {
@@ -134,11 +134,12 @@ class LoginDialog extends React.Component {
 }
 
 LoginDialog.propTypes = {
-  classes: PropTypes.object,
-  handleLogin: PropTypes.func,
-  open: PropTypes.bool,
-  onClose: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired,
   dispatch: PropTypes.func.isRequired,
 }
 
-export default connect()(LoginDialog)
+const mapStateToProps = state => ({
+  open: state.loginDialog.open,
+})
+
+export default connect(mapStateToProps)(LoginDialog)

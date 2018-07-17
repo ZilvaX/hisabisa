@@ -8,6 +8,7 @@ export const UPDATE_ENTRY = 'UPDATE_ENTRY'
 export const REMOVE_ENTRY = 'REMOVE_ENTRY'
 export const SHOW_ERROR = 'SHOW_ERROR'
 export const HIDE_ERROR = 'HIDE_ERROR'
+export const SHOW_LOGIN = 'SHOW_LOGIN'
 
 export const updateUserid = userid => {
   return { type: UPDATE_USERID, userid }
@@ -55,4 +56,8 @@ export function showError(errorMessage) {
 
 export function hideError() {
   return { type: HIDE_ERROR }
+}
+
+export function showLogin(open) {
+  return { type: SHOW_LOGIN, open }
 }

@@ -10,6 +10,7 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 import AppBarContainer from './AppBarContainer'
 import EntriesContainer from './EntriesContainer'
 import SnackbarContainer from './SnackbarContainer'
+import LoginDialog from './LoginDialog'
 
 const hisabisaTheme = createMuiTheme({
   palette: {
@@ -27,6 +28,7 @@ function App() {
         <AppBarContainer />
         <EntriesContainer />
         <SnackbarContainer />
+        <LoginDialog />
       </MuiThemeProvider>
     </React.Fragment>
   )
