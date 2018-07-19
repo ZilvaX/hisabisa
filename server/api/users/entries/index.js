@@ -71,6 +71,42 @@ router.post('/', async (req, res) => {
   }
 })
 
+router.put('/:entryid(\\d+)', (req, res) => {
+  const { event, lastoccurrence, frequency } = req.body
+  if (
+    !event ||
+    !lastoccurrence ||
+    !frequency ||
+    !frequency.days ||
+    !isISO8601(lastoccurrence + '') ||
+    !isInt(frequency.days + '')
+  ) {
+    res.status(400).send()
+    return
+  }
+
+  const entryid = req.params.entryid
+  if (hisabisaService.checkEntry(entryid)) {
+    // Convert to Object
+    const entry = {
+      entryid,
+      event,
+      lastoccurrence,
+      frequency: Duration.fromObject({ days: frequency.days }),
+    }
+    try {
+      hisabisaService.editEntry(entry)
+      res.status(200).send('Successful edit')
+    } catch (e) {
+      console.error(e)
+      res.status(500).send('Failed to update entry')
+    }
+  } else {
+    res.status(404).send('Cannot find entry')
+    return
+  }
+})
+
 router.delete('/:entryid(\\d+)', (req, res) => {
   hisabisaService
     .removeEntry(req.params.entryid)

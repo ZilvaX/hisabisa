@@ -48,7 +48,7 @@ function EntryDialog(props) {
           Cancel
         </Button>
         <Button onClick={props.handleFormSubmit} color="primary">
-          Create
+          {props.submitbutton}
         </Button>
       </DialogActions>
     </Dialog>
@@ -65,6 +65,7 @@ EntryDialog.propTypes = {
   frequency: PropTypes.string,
   title: PropTypes.string,
   contenttext: PropTypes.string,
+  submitbutton: PropTypes.string,
 }
 
 export default EntryDialog

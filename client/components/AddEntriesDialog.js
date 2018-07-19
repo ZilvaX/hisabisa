@@ -59,9 +59,10 @@ class AddEntriesDialog extends React.Component {
         handleFormSubmit={this.handleFormSubmit}
         event={this.state.event}
         lastoccurrence={this.state.lastoccurrence}
-        frequency={this.state.frequency}
+        frequency={this.state.frequency.days}
         title="Add Entry"
         contenttext="Create a reminder with an event name, when this event last occurred and how often you want to be reminded"
+        submitbutton="Create"
       />
     )
   }
