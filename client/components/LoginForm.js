@@ -1,12 +1,21 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import DialogContent from '@material-ui/core/DialogContent'
-import DialogActions from '@material-ui/core/DialogActions'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
+import { withStyles } from '@material-ui/core/styles'
 
 import { updateUserid, updateUsername, showError, showLogin } from '../actions/'
+
+const classes = {
+  div: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  button: {
+    alignSelf: 'flex-end',
+  },
+}
 
 class LoginForm extends React.Component {
   constructor(props) {
@@ -93,40 +102,40 @@ class LoginForm extends React.Component {
   }
 
   render() {
+    const { classes } = this.props
     const form = (
-      <React.Fragment>
-        <DialogContent>
-          <TextField
-            id="username"
-            label="Username"
-            margin="normal"
-            onChange={this.handleChange}
-            error={!!this.state.usernameError}
-            fullWidth
-            autoFocus
-            helperText={this.state.usernameError}
-          />
-          <TextField
-            id="password"
-            label="Password"
-            type="password"
-            margin="normal"
-            onChange={this.handleChange}
-            error={!!this.state.passwordError}
-            fullWidth
-            helperText={this.state.passwordError}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={this.handleSubmit}>Login</Button>
-        </DialogActions>
-      </React.Fragment>
+      <div className={classes.div}>
+        <TextField
+          id="username"
+          label="Username"
+          margin="normal"
+          onChange={this.handleChange}
+          error={!!this.state.usernameError}
+          fullWidth
+          autoFocus
+          helperText={this.state.usernameError}
+        />
+        <TextField
+          id="password"
+          label="Password"
+          type="password"
+          margin="normal"
+          onChange={this.handleChange}
+          error={!!this.state.passwordError}
+          fullWidth
+          helperText={this.state.passwordError}
+        />
+        <Button className={classes.button} onClick={this.handleSubmit}>
+          Login
+        </Button>
+      </div>
     )
     return form
   }
 }
 LoginForm.propTypes = {
   dispatch: PropTypes.func.isRequired,
+  classes: PropTypes.object.isRequired,
 }
 
-export default connect()(LoginForm)
+export default connect()(withStyles(classes)(LoginForm))

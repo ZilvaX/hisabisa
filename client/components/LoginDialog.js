@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import Dialog from '@material-ui/core/Dialog'
+import DialogContent from '@material-ui/core/DialogContent'
 
 import { showLogin } from '../actions/'
 import { connect } from 'react-redux'
@@ -20,7 +21,6 @@ class LoginDialog extends React.Component {
   }
 
   onClose() {
-    this.resetFields()
     this.props.dispatch(showLogin(false))
   }
 
@@ -28,7 +28,9 @@ class LoginDialog extends React.Component {
     const dialog = (
       <Dialog open={this.props.open} onClose={this.onClose}>
         <DialogTitle>Login</DialogTitle>
-        <LoginForm />
+        <DialogContent>
+          <LoginForm />
+        </DialogContent>
       </Dialog>
     )
     return dialog
