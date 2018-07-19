@@ -25,8 +25,6 @@ class LoginForm extends React.Component {
       password: null,
       usernameError: '',
       passwordError: '',
-      openErrorSnackbar: false,
-      errorMessage: '',
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
