@@ -7,16 +7,11 @@ import DialogContent from '@material-ui/core/DialogContent'
 import { showLogin } from '../actions/'
 import { connect } from 'react-redux'
 import LoginForm from './LoginForm'
+import RegisterForm from './RegisterForm'
 
 class LoginDialog extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {
-      username: null,
-      password: null,
-      usernameError: '',
-      passwordError: '',
-    }
     this.onClose = this.onClose.bind(this)
   }
 
