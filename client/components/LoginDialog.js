@@ -7,7 +7,6 @@ import DialogContent from '@material-ui/core/DialogContent'
 import { showLogin } from '../actions/'
 import { connect } from 'react-redux'
 import LoginForm from './LoginForm'
-import RegisterForm from './RegisterForm'
 
 class LoginDialog extends React.Component {
   constructor(props) {
@@ -20,8 +19,9 @@ class LoginDialog extends React.Component {
   }
 
   render() {
+    const { open } = this.props
     const dialog = (
-      <Dialog open={this.props.open} onClose={this.onClose}>
+      <Dialog open={open} onClose={this.onClose}>
         <DialogTitle>Login</DialogTitle>
         <DialogContent>
           <LoginForm />

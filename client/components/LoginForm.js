@@ -11,6 +11,7 @@ const classes = {
   div: {
     display: 'flex',
     flexDirection: 'column',
+    width: '400px',
   },
   button: {
     alignSelf: 'flex-end',
