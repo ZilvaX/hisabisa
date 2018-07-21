@@ -11,6 +11,7 @@ import AppBarContainer from './AppBarContainer'
 import EntriesContainer from './EntriesContainer'
 import SnackbarContainer from './SnackbarContainer'
 import LoginDialog from './LoginDialog'
+import RegisterDialog from './RegisterDialog'
 
 const hisabisaTheme = createMuiTheme({
   palette: {
@@ -29,6 +30,7 @@ function App() {
         <EntriesContainer />
         <SnackbarContainer />
         <LoginDialog />
+        <RegisterDialog />
       </MuiThemeProvider>
     </React.Fragment>
   )
