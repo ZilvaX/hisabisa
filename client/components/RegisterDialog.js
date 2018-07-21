@@ -11,6 +11,7 @@ import RegisterForm from './RegisterForm'
 class RegisterDialog extends React.Component {
   constructor(props) {
     super(props)
+    this.onClose = this.onClose.bind(this)
   }
 
   onClose() {
@@ -21,7 +22,7 @@ class RegisterDialog extends React.Component {
     const { open } = this.props
     const dialog = (
       <Dialog open={open} onClose={this.onClose}>
-        <DialogTitle>Login</DialogTitle>
+        <DialogTitle>Register</DialogTitle>
         <DialogContent>
           <RegisterForm />
         </DialogContent>
