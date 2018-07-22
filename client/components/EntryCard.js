@@ -98,4 +98,8 @@ EntryCard.propTypes = {
   dispatch: PropTypes.func.isRequired,
 }
 
-export default connect()(withStyles(styles)(EntryCard))
+const mapStateToProps = state => ({
+  userid: state.userid,
+})
+
+export default connect(mapStateToProps)(withStyles(styles)(EntryCard))
