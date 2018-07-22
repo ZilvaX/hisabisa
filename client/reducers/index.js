@@ -4,6 +4,7 @@ import {
   UPDATE_USERNAME,
   RECEIVE_ENTRIES,
   ADD_ENTRY,
+  UPDATE_ENTRY,
   REMOVE_ENTRY,
 } from '../actions'
 
@@ -31,6 +32,13 @@ function entries(state = [], action) {
       return action.entries
     case ADD_ENTRY:
       return [...state, action.entry]
+    case UPDATE_ENTRY:
+      return state.map(e => {
+        if (e.entryid !== action.entry.entryid) {
+          return e
+        }
+        return Object.assign({}, action.entry)
+      })
     case REMOVE_ENTRY:
       return state.filter(e => e.entryid !== action.entryid)
     default:

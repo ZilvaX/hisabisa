@@ -15,10 +15,10 @@ const updateEntry = entry => {
   const { event, lastoccurrence, frequency, entryid } = entry
   return db
     .query(
-      'UPDATE entries SET event=$1, lastoccurrence=$2, frequency=$3 WHERE entryid=$4',
+      'UPDATE entries SET event=$1, lastoccurrence=$2, frequency=$3 WHERE entryid=$4 RETURNING entryid, event, lastoccurrence, frequency',
       [event, lastoccurrence, frequency.toString(), entryid],
     )
-    .then(res => res.rows)
+    .then(res => res.rows[0])
 }
 
 const checkEntryExists = entryid => {

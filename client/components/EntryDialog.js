@@ -62,7 +62,7 @@ EntryDialog.propTypes = {
   handleFormSubmit: PropTypes.func.isRequired,
   event: PropTypes.string,
   lastoccurrence: PropTypes.string,
-  frequency: PropTypes.string,
+  frequency: PropTypes.number,
   title: PropTypes.string,
   contenttext: PropTypes.string,
   submitbutton: PropTypes.string,

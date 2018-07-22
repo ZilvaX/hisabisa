@@ -75,6 +75,7 @@ class EntriesContainer extends React.Component {
           entryid={entry.entryid}
           event={entry.event}
           lastoccurrence={entry.lastoccurrence}
+          frequency={entry.frequency}
           userid={this.props.userid}
           key={entry.entryid}
         />

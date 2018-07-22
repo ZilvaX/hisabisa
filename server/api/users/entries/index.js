@@ -71,7 +71,7 @@ router.post('/', async (req, res) => {
   }
 })
 
-router.put('/:entryid(\\d+)', (req, res) => {
+router.put('/:entryid(\\d+)', async (req, res) => {
   const { event, lastoccurrence, frequency } = req.body
   if (
     !event ||
@@ -95,8 +95,9 @@ router.put('/:entryid(\\d+)', (req, res) => {
       frequency: Duration.fromObject({ days: frequency.days }),
     }
     try {
-      hisabisaService.editEntry(entry)
-      res.status(200).send('Successful edit')
+      const editedEntry = await hisabisaService.editEntry(entry)
+      const convertedEntry = convertEntries([editedEntry])[0]
+      res.status(200).send(convertedEntry)
     } catch (e) {
       console.error(e)
       res.status(500).send('Failed to update entry')

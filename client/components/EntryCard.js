@@ -11,6 +11,7 @@ import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 
 import { removeEntry } from '../actions'
+import EditEntryDialog from './EditEntryDialog'
 
 const styles = {
   card: {
@@ -23,7 +24,20 @@ const styles = {
 class EntryCard extends React.Component {
   constructor(props) {
     super(props)
+    this.state = {
+      openEditEntryDialog: false,
+    }
+    this.handleClickEdit = this.handleClickEdit.bind(this)
+    this.handleCloseDialog = this.handleCloseDialog.bind(this)
     this.handleRemove = this.handleRemove.bind(this)
+  }
+
+  handleClickEdit() {
+    this.setState({ openEditEntryDialog: true })
+  }
+
+  handleCloseDialog() {
+    this.setState({ openEditEntryDialog: false })
   }
 
   handleRemove() {
@@ -41,7 +55,7 @@ class EntryCard extends React.Component {
   }
 
   render() {
-    const { classes, event, lastoccurrence } = this.props
+    const { classes, event, lastoccurrence, frequency } = this.props
     return (
       <Card className={classes.card}>
         <CardContent>
@@ -53,6 +67,18 @@ class EntryCard extends React.Component {
           </Typography>
         </CardContent>
         <CardActions>
+          <Button size="small" aria-label="edit" onClick={this.handleClickEdit}>
+            Edit
+          </Button>
+          <EditEntryDialog
+            open={this.state.openEditEntryDialog}
+            handleClose={this.handleCloseDialog}
+            userid={this.props.userid}
+            entryid={this.props.entryid}
+            event={event}
+            lastoccurrence={lastoccurrence}
+            frequency={frequency}
+          />
           <Button size="small" aria-label="remove" onClick={this.handleRemove}>
             Remove
           </Button>
@@ -67,6 +93,7 @@ EntryCard.propTypes = {
   entryid: PropTypes.number.isRequired,
   event: PropTypes.string.isRequired,
   lastoccurrence: PropTypes.object.isRequired,
+  frequency: PropTypes.object,
   userid: PropTypes.number,
   dispatch: PropTypes.func.isRequired,
 }
