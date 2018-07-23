@@ -4,6 +4,7 @@ export const UPDATE_USERID = 'UPDATE_USERID'
 export const UPDATE_USERNAME = 'UPDATE_USERNAME'
 export const RECEIVE_ENTRIES = 'RECEIVE_ENTRIES'
 export const ADD_ENTRY = 'ADD_ENTRY'
+export const UPDATE_ENTRY = 'UPDATE_ENTRY'
 export const REMOVE_ENTRY = 'REMOVE_ENTRY'
 
 export const updateUserid = userid => {
@@ -20,6 +21,10 @@ export function receiveEntries(entries) {
 
 export function addEntry(entry) {
   return { type: ADD_ENTRY, entry }
+}
+
+export function updateEntry(entry) {
+  return { type: UPDATE_ENTRY, entry }
 }
 
 export function removeEntry(entryid) {

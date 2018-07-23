@@ -11,6 +11,22 @@ const insertEntry = entry => {
     .then(res => Object.assign({}, res.rows[0], { event }))
 }
 
+const updateEntry = entry => {
+  const { event, lastoccurrence, frequency, entryid } = entry
+  return db
+    .query(
+      'UPDATE entries SET event=$1, lastoccurrence=$2, frequency=$3 WHERE entryid=$4 RETURNING entryid, event, lastoccurrence, frequency',
+      [event, lastoccurrence, frequency.toString(), entryid],
+    )
+    .then(res => res.rows[0])
+}
+
+const checkEntryExists = entryid => {
+  return db
+    .query('SELECT EXISTS(SELECT 1 FROM entries WHERE entryid=$1)', [entryid])
+    .then(res => res.rows[0].exists)
+}
+
 const getEntries = user => {
   return db
     .query(
@@ -62,4 +78,6 @@ module.exports = {
   checkUserExists,
   deleteEntry,
   getUserIdAndHash,
+  updateEntry,
+  checkEntryExists,
 }

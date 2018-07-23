@@ -75,7 +75,7 @@ class EntriesContainer extends React.Component {
           entryid={entry.entryid}
           event={entry.event}
           lastoccurrence={entry.lastoccurrence}
-          userid={this.props.userid}
+          frequency={entry.frequency}
           key={entry.entryid}
         />
       )
@@ -86,7 +86,7 @@ class EntriesContainer extends React.Component {
           <div className={classes.cardHolder}>{cards}</div>
           {this.props.userid && (
             <div className={classes.addDiv}>
-              <Button
+              <Button // TODO make button into floating action button
                 variant="fab"
                 color="secondary"
                 aria-label="add"
