@@ -32,6 +32,11 @@ const styles = {
     display: 'flex',
     flexFlow: 'column',
   },
+  fab: {
+    position: 'fixed',
+    bottom: '20px',
+    right: '20px',
+  },
 }
 class EntriesContainer extends React.Component {
   constructor(props) {
@@ -86,11 +91,11 @@ class EntriesContainer extends React.Component {
           <div className={classes.cardHolder}>{cards}</div>
           {this.props.userid && (
             <div className={classes.addDiv}>
-              <Button // TODO make button into floating action button
+              <Button
                 variant="fab"
                 color="secondary"
                 aria-label="add"
-                className={classes.addDiv}
+                className={classes.fab}
                 onClick={this.handleClickAdd}
               >
                 <Add />
