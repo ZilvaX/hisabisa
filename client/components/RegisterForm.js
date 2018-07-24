@@ -28,6 +28,32 @@ class RegisterForm extends React.Component {
       openErrorSnackbar: false,
       errorMessage: '',
     }
+    this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleChange = this.handleChange.bind(this)
+  }
+
+  componentDidUpdate() {
+    const { password, repeatedPassword, repeatedPasswordError } = this.state
+    if (repeatedPasswordError && password === repeatedPassword) {
+      this.setState({ repeatedPasswordError: '' })
+    }
+  }
+
+  handleChange(event) {
+    const target = event.target
+    const id = target.id
+    this.setState({ [id]: target.value })
+  }
+
+  handleSubmit() {
+    if (this.state.password !== this.state.repeatedPassword) {
+      this.setState({
+        repeatedPasswordError: 'The repeated password does not match.',
+      })
+      return
+    }
+    // handle register
+    //event.preventDefault()
   }
   render() {
     const { classes } = this.props
@@ -59,9 +85,9 @@ class RegisterForm extends React.Component {
           type="password"
           margin="normal"
           onChange={this.handleChange}
-          error={!!this.state.passwordError}
+          error={!!this.state.repeatedPasswordError}
           fullWidth
-          helperText={this.state.passwordError}
+          helperText={this.state.repeatedPasswordError}
         />
         <Button onClick={this.handleSubmit} className={classes.button}>
           Register
