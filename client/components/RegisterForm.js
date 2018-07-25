@@ -15,6 +15,22 @@ const classes = {
     alignSelf: 'flex-end',
   },
 }
+class ErrorType {
+  constructor(message, error) {
+    this.message = message
+    this.error = error
+  }
+
+  toString() {
+    return this.message
+  }
+}
+const NO_ERROR = new ErrorType('', false)
+const EMPTY_FIELD = new ErrorType('Field is empty', true)
+const NON_EQUAL_PASS = new ErrorType(
+  'The repeated password does not match',
+  true,
+)
 class RegisterForm extends React.Component {
   constructor(props) {
     super(props)
@@ -22,20 +38,47 @@ class RegisterForm extends React.Component {
       username: null,
       password: null,
       repeatedPassword: null,
-      usernameError: '',
-      passwordError: '',
-      repeatedPasswordError: '',
+      usernameError: NO_ERROR,
+      passwordError: NO_ERROR,
+      repeatedPasswordError: NO_ERROR,
       openErrorSnackbar: false,
-      errorMessage: '',
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleChange = this.handleChange.bind(this)
   }
 
   componentDidUpdate() {
-    const { password, repeatedPassword, repeatedPasswordError } = this.state
-    if (repeatedPasswordError && password === repeatedPassword) {
-      this.setState({ repeatedPasswordError: '' })
+    const {
+      username,
+      usernameError,
+      password,
+      passwordError,
+      repeatedPassword,
+      repeatedPasswordError,
+    } = this.state
+    const fieldError = [
+      [username, usernameError, 'usernameError'],
+      [password, passwordError, 'passwordError'],
+      [repeatedPassword, repeatedPasswordError, 'repeatedPasswordError'],
+    ]
+    const errorsToUpdate = fieldError.reduce(
+      (acc, [field, error, errorVariable]) => {
+        if (error === EMPTY_FIELD && field) {
+          return [...acc, { [errorVariable]: NO_ERROR }]
+        }
+        return acc
+      },
+      [],
+    )
+    if (errorsToUpdate.length) {
+      this.setState(Object.assign({}, ...errorsToUpdate))
+    }
+
+    if (
+      repeatedPasswordError === NON_EQUAL_PASS &&
+      password === repeatedPassword
+    ) {
+      this.setState({ repeatedPasswordError: NO_ERROR })
     }
   }
 
@@ -46,14 +89,22 @@ class RegisterForm extends React.Component {
   }
 
   handleSubmit() {
-    if (this.state.password !== this.state.repeatedPassword) {
+    const { username, password, repeatedPassword } = this.state
+    if (!username || !password || !repeatedPassword) {
       this.setState({
-        repeatedPasswordError: 'The repeated password does not match.',
+        usernameError: username ? NO_ERROR : EMPTY_FIELD,
+        passwordError: password ? NO_ERROR : EMPTY_FIELD,
+        repeatedPasswordError: repeatedPassword ? NO_ERROR : EMPTY_FIELD,
+      })
+      return
+    }
+    if (password !== repeatedPassword) {
+      this.setState({
+        repeatedPasswordError: NON_EQUAL_PASS,
       })
       return
     }
     // handle register
-    //event.preventDefault()
   }
   render() {
     const { classes } = this.props
@@ -64,10 +115,10 @@ class RegisterForm extends React.Component {
           label="Username"
           margin="normal"
           onChange={this.handleChange}
-          error={!!this.state.usernameError}
+          error={this.state.usernameError.error}
           fullWidth
           autoFocus
-          helperText={this.state.usernameError}
+          helperText={this.state.usernameError.toString()}
         />
         <TextField
           id="password"
@@ -75,9 +126,9 @@ class RegisterForm extends React.Component {
           type="password"
           margin="normal"
           onChange={this.handleChange}
-          error={!!this.state.passwordError}
+          error={this.state.passwordError.error}
           fullWidth
-          helperText={this.state.passwordError}
+          helperText={this.state.passwordError.toString()}
         />
         <TextField
           id="repeatedPassword"
@@ -85,9 +136,9 @@ class RegisterForm extends React.Component {
           type="password"
           margin="normal"
           onChange={this.handleChange}
-          error={!!this.state.repeatedPasswordError}
+          error={this.state.repeatedPasswordError.error}
           fullWidth
-          helperText={this.state.repeatedPasswordError}
+          helperText={this.state.repeatedPasswordError.toString()}
         />
         <Button onClick={this.handleSubmit} className={classes.button}>
           Register
