@@ -6,7 +6,12 @@ import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import { withStyles } from '@material-ui/core/styles'
 
-import { updateUserid, updateUsername, showRegister } from '../actions/'
+import {
+  updateUserid,
+  updateUsername,
+  showRegister,
+  showError,
+} from '../actions/'
 
 const classes = {
   div: {
@@ -34,6 +39,10 @@ const NON_EQUAL_PASS = new ErrorType(
   'The repeated password does not match',
   true,
 )
+const USER_EXISTS = new ErrorType(
+  'A user with the same username already exists',
+  true,
+)
 class RegisterForm extends React.Component {
   constructor(props) {
     super(props)
@@ -50,7 +59,7 @@ class RegisterForm extends React.Component {
     this.handleChange = this.handleChange.bind(this)
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProp, prevState) {
     const {
       username,
       usernameError,
@@ -75,6 +84,10 @@ class RegisterForm extends React.Component {
     )
     if (errorsToUpdate.length) {
       this.setState(Object.assign({}, ...errorsToUpdate))
+    }
+
+    if (usernameError === USER_EXISTS && prevState.username !== username) {
+      this.setState({ usernameError: NO_ERROR })
     }
 
     if (
@@ -124,6 +137,13 @@ class RegisterForm extends React.Component {
           })
           this.props.dispatch(showRegister(false))
           break
+        case 409:
+          this.setState({ usernameError: USER_EXISTS })
+          break
+        default:
+          this.props.dispatch(
+            showError('An error has occurred. Please try again later.'),
+          )
       }
     })
   }
