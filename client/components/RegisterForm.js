@@ -12,6 +12,12 @@ import {
   showRegister,
   showError,
 } from '../actions/'
+import {
+  NO_ERROR,
+  EMPTY_FIELD,
+  NON_EQUAL_PASS,
+  USER_EXISTS,
+} from '../helpers/ErrorTypes/'
 
 const classes = {
   div: {
@@ -23,26 +29,6 @@ const classes = {
     alignSelf: 'flex-end',
   },
 }
-class ErrorType {
-  constructor(message, error) {
-    this.message = message
-    this.error = error
-  }
-
-  toString() {
-    return this.message
-  }
-}
-const NO_ERROR = new ErrorType('', false)
-const EMPTY_FIELD = new ErrorType('Field is empty', true)
-const NON_EQUAL_PASS = new ErrorType(
-  'The repeated password does not match',
-  true,
-)
-const USER_EXISTS = new ErrorType(
-  'A user with the same username already exists',
-  true,
-)
 class RegisterForm extends React.Component {
   constructor(props) {
     super(props)
