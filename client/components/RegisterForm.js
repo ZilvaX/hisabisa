@@ -1,9 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import { withStyles } from '@material-ui/core/styles'
+
+import { updateUserid, updateUsername, showRegister } from '../actions/'
 
 const classes = {
   div: {
@@ -105,6 +108,24 @@ class RegisterForm extends React.Component {
       return
     }
     // handle register
+    const headers = { 'content-type': 'application/json' }
+    const body = { username, password }
+    fetch('/api/users', {
+      method: 'POST',
+      body: JSON.stringify(body),
+      headers,
+      credentials: 'include',
+    }).then(result => {
+      switch (result.status) {
+        case 201:
+          result.json().then(r => {
+            this.props.dispatch(updateUserid(r.userid))
+            this.props.dispatch(updateUsername(username))
+          })
+          this.props.dispatch(showRegister(false))
+          break
+      }
+    })
   }
   render() {
     const { classes } = this.props
@@ -149,8 +170,8 @@ class RegisterForm extends React.Component {
   }
 }
 RegisterForm.propTypes = {
-  //dispatch: PropTypes.func.isRequired,
+  dispatch: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
 }
 
-export default withStyles(classes)(RegisterForm)
+export default connect()(withStyles(classes)(RegisterForm))
