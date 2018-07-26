@@ -17,7 +17,7 @@ import {
   EMPTY_FIELD,
   NON_EQUAL_PASS,
   USER_EXISTS,
-} from '../helpers/ErrorTypes/'
+} from '../helpers/ErrorTypes'
 
 const classes = {
   div: {
