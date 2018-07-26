@@ -10,7 +10,8 @@ import CardActions from '@material-ui/core/CardActions'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 
-import { removeEntry } from '../actions'
+import { updateEntry, removeEntry } from '../actions'
+import { convertEntriesFromApi } from '../helpers/EntriesHelper'
 import EditEntryDialog from './EditEntryDialog'
 
 const styles = {
@@ -27,9 +28,34 @@ class EntryCard extends React.Component {
     this.state = {
       openEditEntryDialog: false,
     }
+    this.handleDoneToday = this.handleDoneToday.bind(this)
     this.handleClickEdit = this.handleClickEdit.bind(this)
     this.handleCloseDialog = this.handleCloseDialog.bind(this)
     this.handleRemove = this.handleRemove.bind(this)
+  }
+
+  handleDoneToday() {
+    const body = {
+      event: this.props.event,
+      lastoccurrence: DateTime.local().toISODate(),
+      frequency: this.props.frequency,
+    }
+    const headers = {
+      'content-type': 'application/json',
+    }
+    fetch(`/api/users/${this.props.userid}/entries/${this.props.entryid}`, {
+      method: 'PUT',
+      body: JSON.stringify(body),
+      headers,
+      credentials: 'include',
+    }).then(result => {
+      if (result.status === 200) {
+        result.json().then(json => {
+          const convertedEntry = convertEntriesFromApi([json])[0]
+          this.props.dispatch(updateEntry(convertedEntry))
+        })
+      }
+    })
   }
 
   handleClickEdit() {
@@ -67,6 +93,13 @@ class EntryCard extends React.Component {
           </Typography>
         </CardContent>
         <CardActions>
+          <Button
+            size="small"
+            aria-label="done today"
+            onClick={this.handleDoneToday}
+          >
+            Done Today
+          </Button>
           <Button size="small" aria-label="edit" onClick={this.handleClickEdit}>
             Edit
           </Button>
