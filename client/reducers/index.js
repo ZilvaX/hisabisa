@@ -6,6 +6,10 @@ import {
   ADD_ENTRY,
   UPDATE_ENTRY,
   REMOVE_ENTRY,
+  SHOW_ERROR,
+  HIDE_ERROR,
+  SHOW_LOGIN,
+  SHOW_REGISTER,
 } from '../actions'
 
 function userid(state = null, action) {
@@ -46,10 +50,45 @@ function entries(state = [], action) {
   }
 }
 
+function errors(
+  state = { showSnackbar: false, errorMessage: undefined },
+  action,
+) {
+  switch (action.type) {
+    case SHOW_ERROR:
+      return { showSnackbar: true, errorMessage: action.errorMessage }
+    case HIDE_ERROR:
+      return { showSnackbar: false, errorMessage: state.errorMessage }
+    default:
+      return state
+  }
+}
+
+function loginDialog(state = { open: false }, action) {
+  switch (action.type) {
+    case SHOW_LOGIN:
+      return { open: action.open }
+    default:
+      return state
+  }
+}
+
+function registerDialog(state = { open: false }, action) {
+  switch (action.type) {
+    case SHOW_REGISTER:
+      return { open: action.open }
+    default:
+      return state
+  }
+}
+
 const rootReducer = combineReducers({
   userid,
   username,
   entries,
+  errors,
+  loginDialog,
+  registerDialog,
 })
 
 export default rootReducer

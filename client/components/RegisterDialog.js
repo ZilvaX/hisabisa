@@ -4,27 +4,27 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import Dialog from '@material-ui/core/Dialog'
 import DialogContent from '@material-ui/core/DialogContent'
 
-import { showLogin } from '../actions/'
+import { showRegister } from '../actions/'
 import { connect } from 'react-redux'
-import LoginForm from './LoginForm'
+import RegisterForm from './RegisterForm'
 
-class LoginDialog extends React.Component {
+class RegisterDialog extends React.Component {
   constructor(props) {
     super(props)
     this.onClose = this.onClose.bind(this)
   }
 
   onClose() {
-    this.props.dispatch(showLogin(false))
+    this.props.dispatch(showRegister(false))
   }
 
   render() {
     const { open } = this.props
     const dialog = (
       <Dialog open={open} onClose={this.onClose}>
-        <DialogTitle>Login</DialogTitle>
+        <DialogTitle>Register</DialogTitle>
         <DialogContent>
-          <LoginForm />
+          <RegisterForm />
         </DialogContent>
       </Dialog>
     )
@@ -32,13 +32,12 @@ class LoginDialog extends React.Component {
   }
 }
 
-LoginDialog.propTypes = {
+RegisterDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   dispatch: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
-  open: state.loginDialog.open,
+  open: state.registerDialog.open,
 })
-
-export default connect(mapStateToProps)(LoginDialog)
+export default connect(mapStateToProps)(RegisterDialog)

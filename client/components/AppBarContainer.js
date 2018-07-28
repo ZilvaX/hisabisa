@@ -6,8 +6,12 @@ import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
-import LoginDialog from './LoginDialog'
-import { updateUserid, updateUsername } from '../actions'
+import {
+  updateUserid,
+  updateUsername,
+  showLogin,
+  showRegister,
+} from '../actions'
 
 const style = {
   flexTitle: {
@@ -19,27 +23,17 @@ const style = {
 class AppBarContainer extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {
-      loginDialogOpen: false,
-    }
     this.handleLoginOpen = this.handleLoginOpen.bind(this)
-    this.handleLoginClose = this.handleLoginClose.bind(this)
-    this.login = this.login.bind(this)
+    this.handleRegisterOpen = this.handleRegisterOpen.bind(this)
     this.logout = this.logout.bind(this)
   }
 
   handleLoginOpen() {
-    this.setState({ loginDialogOpen: true })
+    this.props.dispatch(showLogin(true))
   }
 
-  handleLoginClose() {
-    this.setState({ loginDialogOpen: false })
-  }
-
-  login() {
-    this.setState({
-      loginDialogOpen: false,
-    })
+  handleRegisterOpen() {
+    this.props.dispatch(showRegister(true))
   }
 
   logout() {
@@ -52,39 +46,48 @@ class AppBarContainer extends React.Component {
   }
 
   render() {
-    const { classes } = this.props
-    const loginStatus = !this.props.userid ? (
-      <Button color="inherit" onClick={this.handleLoginOpen}>
-        <Typography color="default">Login</Typography>
-      </Button>
-    ) : (
-      <React.Fragment>
-        <Typography>Hello, {this.props.username}</Typography>
-        <Button onClick={this.logout}>
-          <Typography>Logout</Typography>
+    const { classes, userid } = this.props
+    let loginStatus
+    if (userid) {
+      loginStatus = (
+        <React.Fragment>
+          <Typography>Hello, {this.props.username}</Typography>
+          <Button onClick={this.logout}>
+            <Typography>Logout</Typography>
+          </Button>
+        </React.Fragment>
+      )
+    } else {
+      const loginButton = (
+        <Button color="inherit" onClick={this.handleLoginOpen}>
+          <Typography color="default">Login</Typography>
         </Button>
-      </React.Fragment>
-    )
+      )
+      const registerButton = (
+        <Button color="inherit" onClick={this.handleRegisterOpen}>
+          <Typography color="default">Register</Typography>
+        </Button>
+      )
+      loginStatus = (
+        <React.Fragment>
+          {loginButton}
+          {registerButton}
+        </React.Fragment>
+      )
+    }
     return (
-      <React.Fragment>
-        <AppBar position="static" color="primary">
-          <Toolbar>
-            <Typography
-              variant="title"
-              color="default"
-              className={classes.flexTitle}
-            >
-              Hisabisa
-            </Typography>
-            {loginStatus}
-          </Toolbar>
-        </AppBar>
-        <LoginDialog
-          handleLogin={this.login}
-          open={this.state.loginDialogOpen}
-          onClose={this.handleLoginClose}
-        />
-      </React.Fragment>
+      <AppBar position="static" color="primary">
+        <Toolbar>
+          <Typography
+            variant="title"
+            color="default"
+            className={classes.flexTitle}
+          >
+            Hisabisa
+          </Typography>
+          {loginStatus}
+        </Toolbar>
+      </AppBar>
     )
   }
 }
