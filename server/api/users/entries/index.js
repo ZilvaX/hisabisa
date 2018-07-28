@@ -16,6 +16,17 @@ const authorize = function(req, res, next) {
   }
 }
 
+const checkBody = function(event, lastoccurrence, frequency) {
+  return (
+    !event ||
+    !lastoccurrence ||
+    !frequency ||
+    !frequency.days ||
+    !isISO8601(lastoccurrence + '') ||
+    !isInt(frequency.days + '')
+  )
+}
+
 const convertEntries = function(entries) {
   return _.map(entries, x => {
     const { entryid, event, lastoccurrence, frequency } = x
@@ -43,17 +54,12 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
   const { event, lastoccurrence, frequency } = req.body
-  if (
-    !event ||
-    !lastoccurrence ||
-    !frequency ||
-    !frequency.days ||
-    !isISO8601(lastoccurrence + '') ||
-    !isInt(frequency.days + '')
-  ) {
+
+  if (checkBody(event, lastoccurrence, frequency)) {
     res.status(400).send()
     return
   }
+
   // Convert to Object
   const entry = {
     userid: parseInt(req.params.id, 10),
@@ -73,14 +79,8 @@ router.post('/', async (req, res) => {
 
 router.put('/:entryid(\\d+)', async (req, res) => {
   const { event, lastoccurrence, frequency } = req.body
-  if (
-    !event ||
-    !lastoccurrence ||
-    !frequency ||
-    !frequency.days ||
-    !isISO8601(lastoccurrence + '') ||
-    !isInt(frequency.days + '')
-  ) {
+
+  if (checkBody(event, lastoccurrence, frequency)) {
     res.status(400).send()
     return
   }
