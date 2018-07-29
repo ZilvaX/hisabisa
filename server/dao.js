@@ -30,7 +30,7 @@ const checkEntryExists = entryid => {
 const getEntries = user => {
   return db
     .query(
-      'SELECT entryid, event, lastoccurrence, frequency FROM entries WHERE userid=$1',
+      'SELECT entryid, event, lastoccurrence, frequency FROM entries WHERE userid=$1 ORDER BY lastoccurrence ASC',
       [user],
     )
     .then(res => res.rows)
