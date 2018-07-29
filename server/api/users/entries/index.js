@@ -16,7 +16,7 @@ const authorize = function(req, res, next) {
   }
 }
 
-const checkBody = function(event, lastoccurrence, frequency) {
+function checkBody(event, lastoccurrence, frequency) {
   return (
     !event ||
     !lastoccurrence ||
@@ -27,7 +27,7 @@ const checkBody = function(event, lastoccurrence, frequency) {
   )
 }
 
-const convertEntries = function(entries) {
+function convertEntries(entries) {
   return _.map(entries, x => {
     const { entryid, event, lastoccurrence, frequency } = x
     return {
