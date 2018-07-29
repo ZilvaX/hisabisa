@@ -6,6 +6,7 @@ import {
   ADD_ENTRY,
   UPDATE_ENTRY,
   REMOVE_ENTRY,
+  MOVE_ENTRY_TO_BACK,
   SHOW_ERROR,
   HIDE_ERROR,
   SHOW_LOGIN,
@@ -45,6 +46,10 @@ function entries(state = [], action) {
       })
     case REMOVE_ENTRY:
       return state.filter(e => e.entryid !== action.entryid)
+    case MOVE_ENTRY_TO_BACK: {
+      const otherEntries = state.filter(e => e.entryid !== action.entry.entryid)
+      return [...otherEntries, action.entry]
+    }
     default:
       return state
   }
