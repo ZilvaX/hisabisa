@@ -6,6 +6,7 @@ export const RECEIVE_ENTRIES = 'RECEIVE_ENTRIES'
 export const ADD_ENTRY = 'ADD_ENTRY'
 export const UPDATE_ENTRY = 'UPDATE_ENTRY'
 export const REMOVE_ENTRY = 'REMOVE_ENTRY'
+export const MOVE_ENTRY_TO_BACK = 'MOVE_ENTRY_TO_BACK'
 export const SHOW_ERROR = 'SHOW_ERROR'
 export const HIDE_ERROR = 'HIDE_ERROR'
 export const SHOW_LOGIN = 'SHOW_LOGIN'
@@ -49,6 +50,10 @@ export function fetchEntries(userid) {
         dispatch(receiveEntries(convertedEntries))
       })
   }
+}
+
+export function moveEntryToBack(entry) {
+  return { type: MOVE_ENTRY_TO_BACK, entry }
 }
 
 export function showError(errorMessage) {
