@@ -1,7 +1,7 @@
 const express = require('express')
 const _ = require('lodash')
 const { isISO8601, isInt } = require('validator')
-const { Duration } = require('luxon')
+const { DateTime, Duration } = require('luxon')
 
 const hisabisaService = require('../../../hisabisaService')
 const router = express.Router({ mergeParams: true })
@@ -64,7 +64,7 @@ router.post('/', async (req, res) => {
   const entry = {
     userid: parseInt(req.params.id, 10),
     event,
-    lastoccurrence,
+    lastoccurrence: DateTime.fromISO(lastoccurrence),
     frequency: Duration.fromObject({ days: frequency.days }),
   }
   try {
@@ -91,7 +91,7 @@ router.put('/:entryid(\\d+)', async (req, res) => {
     const entry = {
       entryid,
       event,
-      lastoccurrence,
+      lastoccurrence: DateTime.fromISO(lastoccurrence),
       frequency: Duration.fromObject({ days: frequency.days }),
     }
     try {
