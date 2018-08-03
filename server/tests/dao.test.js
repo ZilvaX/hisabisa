@@ -38,7 +38,7 @@ test('Insert and get inserted entry', async () => {
   const entryToInsert = {
     userid: 1,
     event: 'Hello World',
-    lastoccurrence: '2018-08-03',
+    lastoccurrence: DateTime.fromISO('2018-08-03'),
     frequency: Duration.fromObject({ days: 1 }),
   }
   await dao.insertEntry(entryToInsert)
