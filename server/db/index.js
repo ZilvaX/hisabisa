@@ -9,10 +9,9 @@ const pool = new Pool({
 })
 // Type Parsers
 const INTERVAL_OID = 1186
-types.setTypeParser(INTERVAL_OID, value => {
-  const { days } = Duration.fromISO(pgInterval(value).toISO())
-  return { days }
-})
+types.setTypeParser(INTERVAL_OID, value =>
+  Duration.fromObject(pgInterval(value)),
+)
 const DATE_OID = 1082
 types.setTypeParser(DATE_OID, value => DateTime.fromISO(value))
 

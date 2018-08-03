@@ -34,7 +34,7 @@ function convertEntries(entries) {
       entryid,
       event,
       lastoccurrence: lastoccurrence.toISODate(),
-      frequency,
+      frequency: { days: frequency.days },
     }
   })
 }
