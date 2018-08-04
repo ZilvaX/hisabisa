@@ -47,4 +47,15 @@ router.post('/', async (req, res) => {
   }
 })
 
+// Check if session cookie
+router.get('/', async (req, res) => {
+  if (req.session) {
+    const username = req.session.username
+    const userid = req.session.userid
+    res.status(200).send({ username, userid }) // status code?
+  } else {
+    res.status(401).send()
+  }
+})
+
 module.exports = router
