@@ -52,7 +52,7 @@ router.get('/', async (req, res) => {
   if (req.session) {
     const username = req.session.username
     const userid = req.session.userid
-    res.status(200).send({ username, userid }) // status code?
+    res.status(200).send({ username, userid })
   } else {
     res.status(401).send()
   }
