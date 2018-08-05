@@ -49,7 +49,7 @@ router.post('/', async (req, res) => {
 
 // Check if session cookie
 router.get('/', async (req, res) => {
-  if (req.session) {
+  if (req.session && req.session.userid) {
     const username = req.session.username
     const userid = req.session.userid
     res.status(200).send({ username, userid })
