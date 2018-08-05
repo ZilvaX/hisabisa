@@ -57,3 +57,20 @@ test('Insert and delete entry', async () => {
   const entries = await dao.getEntries('1')
   expect(entries).toEqual([])
 })
+test('Insert and update entry', async () => {
+  const entryToInsert = {
+    userid: 1,
+    event: 'Hello World',
+    lastoccurrence: DateTime.fromISO('2018-08-03'),
+    frequency: Duration.fromObject({ days: 1 }),
+  }
+  const { entryid } = await dao.insertEntry(entryToInsert)
+  const updatedEntry = {
+    entryid,
+    event: 'Hello World updated',
+    lastoccurrence: DateTime.fromISO('2018-08-05'),
+    frequency: Duration.fromObject({ days: 30 }),
+  }
+  const update = await dao.updateEntry(updatedEntry)
+  expect(update).toEqual(updatedEntry)
+})
