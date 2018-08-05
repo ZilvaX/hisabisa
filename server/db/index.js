@@ -19,4 +19,5 @@ module.exports = {
   query: (text, params) => {
     return pool.query(text, params)
   },
+  pool,
 }
