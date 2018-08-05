@@ -47,8 +47,16 @@ class LoginForm extends React.Component {
   }
 
   handleSubmit() {
-    this.resetErrors()
     const { username, password, usernameError, passwordError } = this.state
+    // Validate username and password
+    if (!username || !password) {
+      this.setState({
+        usernameError: username ? NO_ERROR : EMPTY_FIELD,
+        passwordError: password ? NO_ERROR : EMPTY_FIELD,
+      })
+      return
+    }
+    // handle login
     const headers = { 'content-type': 'application/json' }
     const body = { username, password }
     fetch('/api/authentication/', {
