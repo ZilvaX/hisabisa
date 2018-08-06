@@ -18,6 +18,7 @@ import {
   NON_EQUAL_PASS,
   USER_EXISTS,
 } from '../helpers/ErrorTypes'
+import { constructErrorsToUpdate } from '../helpers/ErrorsToUpdate'
 
 const classes = {
   div: {
@@ -54,20 +55,14 @@ class RegisterForm extends React.Component {
       repeatedPassword,
       repeatedPasswordError,
     } = this.state
-    const fieldError = [
+
+    // Check if previously empty fields have been updated
+    const fieldErrors = [
       [username, usernameError, 'usernameError'],
       [password, passwordError, 'passwordError'],
       [repeatedPassword, repeatedPasswordError, 'repeatedPasswordError'],
     ]
-    const errorsToUpdate = fieldError.reduce(
-      (acc, [field, error, errorVariable]) => {
-        if (error === EMPTY_FIELD && field) {
-          return [...acc, { [errorVariable]: NO_ERROR }]
-        }
-        return acc
-      },
-      [],
-    )
+    const errorsToUpdate = constructErrorsToUpdate(fieldErrors)
     if (errorsToUpdate.length) {
       this.setState(Object.assign({}, ...errorsToUpdate))
     }
