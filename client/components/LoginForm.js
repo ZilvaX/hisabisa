@@ -14,6 +14,8 @@ import {
   USER_NOT_EXISTS,
 } from '../helpers/ErrorTypes'
 
+import { constructErrorsToUpdate } from '../helpers/ErrorsToUpdate'
+
 const classes = {
   div: {
     display: 'flex',
@@ -36,8 +38,25 @@ class LoginForm extends React.Component {
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
-    this.resetErrors = this.resetErrors.bind(this)
     this.resetFields = this.resetFields.bind(this)
+  }
+
+  componentDidUpdate(prevProp, prevState) {
+    const { username, password, usernameError, passwordError } = this.state
+
+    // Check if previously empty fields have been updated
+    const fieldErrors = [
+      [username, usernameError, 'usernameError'],
+      [password, passwordError, 'passwordError'],
+    ]
+    const errorsToUpdate = constructErrorsToUpdate(fieldErrors)
+    if (errorsToUpdate.length) {
+      this.setState(Object.assign({}, ...errorsToUpdate))
+    }
+
+    if (usernameError === USER_NOT_EXISTS && prevState.username !== username) {
+      this.setState({ usernameError: NO_ERROR })
+    }
   }
 
   handleChange(event) {
@@ -95,13 +114,6 @@ class LoginForm extends React.Component {
             showError('An error has occurred. Please try again later.'),
           )
       }
-    })
-  }
-
-  resetErrors() {
-    this.setState({
-      usernameError: NO_ERROR,
-      passwordError: NO_ERROR,
     })
   }
 
