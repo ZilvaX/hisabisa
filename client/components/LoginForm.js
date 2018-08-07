@@ -7,6 +7,15 @@ import { withStyles } from '@material-ui/core/styles'
 
 import { updateUserid, updateUsername, showError, showLogin } from '../actions/'
 
+import {
+  NO_ERROR,
+  EMPTY_FIELD,
+  INCORRECT_PASS,
+  USER_NOT_EXISTS,
+} from '../helpers/ErrorTypes'
+
+import { constructErrorsToUpdate } from '../helpers/ErrorsToUpdate'
+
 const classes = {
   div: {
     display: 'flex',
@@ -24,13 +33,30 @@ class LoginForm extends React.Component {
     this.state = {
       username: null,
       password: null,
-      usernameError: '',
-      passwordError: '',
+      usernameError: NO_ERROR,
+      passwordError: NO_ERROR,
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
-    this.resetErrors = this.resetErrors.bind(this)
     this.resetFields = this.resetFields.bind(this)
+  }
+
+  componentDidUpdate(prevProp, prevState) {
+    const { username, password, usernameError, passwordError } = this.state
+
+    // Check if previously empty fields have been updated
+    const fieldErrors = [
+      [username, usernameError, 'usernameError'],
+      [password, passwordError, 'passwordError'],
+    ]
+    const errorsToUpdate = constructErrorsToUpdate(fieldErrors)
+    if (errorsToUpdate.length) {
+      this.setState(Object.assign({}, ...errorsToUpdate))
+    }
+
+    if (usernameError === USER_NOT_EXISTS && prevState.username !== username) {
+      this.setState({ usernameError: NO_ERROR })
+    }
   }
 
   handleChange(event) {
@@ -40,9 +66,16 @@ class LoginForm extends React.Component {
   }
 
   handleSubmit() {
-    this.resetErrors()
-    const username = this.state.username
-    const password = this.state.password
+    const { username, password, usernameError, passwordError } = this.state
+    // Validate username and password
+    if (!username || !password) {
+      this.setState({
+        usernameError: username ? NO_ERROR : EMPTY_FIELD,
+        passwordError: password ? NO_ERROR : EMPTY_FIELD,
+      })
+      return
+    }
+    // handle login
     const headers = { 'content-type': 'application/json' }
     const body = { username, password }
     fetch('/api/authentication/', {
@@ -62,18 +95,18 @@ class LoginForm extends React.Component {
           break
         case 400:
           this.setState({
-            usernameError: username ? '' : 'Field is empty',
-            passwordError: password ? '' : 'Field is empty',
+            usernameError: username ? usernameError : EMPTY_FIELD,
+            passwordError: password ? passwordError : EMPTY_FIELD,
           })
           break
         case 401:
           this.setState({
-            passwordError: 'Incorrect password',
+            passwordError: INCORRECT_PASS,
           })
           break
         case 404:
           this.setState({
-            usernameError: 'This user does not exist',
+            usernameError: USER_NOT_EXISTS,
           })
           break
         default:
@@ -84,19 +117,12 @@ class LoginForm extends React.Component {
     })
   }
 
-  resetErrors() {
-    this.setState({
-      usernameError: '',
-      passwordError: '',
-    })
-  }
-
   resetFields() {
     this.setState({
       username: null,
       password: null,
-      usernameError: '',
-      passwordError: '',
+      usernameError: NO_ERROR,
+      passwordError: NO_ERROR,
     })
   }
 
@@ -109,10 +135,10 @@ class LoginForm extends React.Component {
           label="Username"
           margin="normal"
           onChange={this.handleChange}
-          error={!!this.state.usernameError}
+          error={this.state.usernameError.error}
           fullWidth
           autoFocus
-          helperText={this.state.usernameError}
+          helperText={this.state.usernameError.toString()}
         />
         <TextField
           id="password"
@@ -120,9 +146,9 @@ class LoginForm extends React.Component {
           type="password"
           margin="normal"
           onChange={this.handleChange}
-          error={!!this.state.passwordError}
+          error={this.state.passwordError.error}
           fullWidth
-          helperText={this.state.passwordError}
+          helperText={this.state.passwordError.toString()}
         />
         <Button className={classes.button} onClick={this.handleSubmit}>
           Login

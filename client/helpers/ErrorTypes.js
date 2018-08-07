@@ -18,5 +18,18 @@ const USER_EXISTS = new ErrorType(
   'A user with the given username already exists',
   true,
 )
+const INCORRECT_PASS = new ErrorType('Incorrect password', true)
 
-export { NO_ERROR, EMPTY_FIELD, NON_EQUAL_PASS, USER_EXISTS }
+const USER_NOT_EXISTS = new ErrorType(
+  'A user with this username does not exist',
+  true,
+)
+
+export {
+  NO_ERROR,
+  EMPTY_FIELD,
+  NON_EQUAL_PASS,
+  USER_EXISTS,
+  INCORRECT_PASS,
+  USER_NOT_EXISTS,
+}
