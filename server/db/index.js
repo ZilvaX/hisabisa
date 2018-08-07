@@ -1,5 +1,4 @@
-const pgInterval = require('postgres-interval')
-const { Duration, DateTime } = require('luxon')
+const typeConfigurer = require('./typeConfigurer')
 // Setup Database Pool
 const { Pool, types } = require('pg')
 // Database Configuration
@@ -8,12 +7,7 @@ const pool = new Pool({
   database: 'hisabisa',
 })
 // Type Parsers
-const INTERVAL_OID = 1186
-types.setTypeParser(INTERVAL_OID, value =>
-  Duration.fromObject(pgInterval(value)),
-)
-const DATE_OID = 1082
-types.setTypeParser(DATE_OID, value => DateTime.fromISO(value))
+typeConfigurer(types)
 
 module.exports = {
   query: (text, params) => {
