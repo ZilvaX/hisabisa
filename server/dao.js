@@ -37,9 +37,15 @@ const updateEntry = entry => {
 }
 
 const checkEntryExists = entryid => {
-  return db
-    .query('SELECT EXISTS(SELECT 1 FROM entries WHERE entryid=$1)', [entryid])
-    .then(res => res.rows[0].exists)
+  const query = sql
+    .select(
+      entries
+        .subQuery()
+        .where(entries.entryid.equals(entryid))
+        .exists(),
+    )
+    .toQuery()
+  return db.query(query.text, query.values).then(res => res.rows[0].exists)
 }
 
 const getEntries = user => {
