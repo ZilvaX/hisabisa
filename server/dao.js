@@ -93,9 +93,15 @@ const insertUser = (user, hashedPassword) => {
 }
 
 const checkUserExists = username => {
-  return db
-    .query('SELECT EXISTS(SELECT 1 FROM users WHERE username=$1 )', [username])
-    .then(res => res.rows[0].exists)
+  const query = sql
+    .select(
+      users
+        .subQuery()
+        .where(users.username.equals(username))
+        .exists(),
+    )
+    .toQuery()
+  return db.query(query.text, query.values).then(res => res.rows[0].exists)
 }
 
 const getUserIdAndHash = username => {
