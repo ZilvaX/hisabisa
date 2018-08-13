@@ -49,12 +49,18 @@ const checkEntryExists = entryid => {
 }
 
 const getEntries = user => {
-  return db
-    .query(
-      'SELECT entryid, event, lastoccurrence, frequency FROM entries WHERE userid=$1 ORDER BY lastoccurrence ASC',
-      [user],
+  const query = entries
+    .select(
+      entries.entryid,
+      entries.event,
+      entries.lastoccurrence,
+      entries.frequency,
     )
-    .then(res => res.rows)
+    .from(entries)
+    .where(entries.userid.equals(user))
+    .order(entries.lastoccurrence.ascending)
+    .toQuery()
+  return db.query(query.text, query.values).then(res => res.rows)
 }
 
 const getOverdueEntries = user => {
