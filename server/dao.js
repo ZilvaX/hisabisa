@@ -105,9 +105,11 @@ const checkUserExists = username => {
 }
 
 const getUserIdAndHash = username => {
-  return db
-    .query('SELECT userid, password FROM users WHERE username=$1', [username])
-    .then(res => res.rows[0])
+  const query = users
+    .select('userid', 'password')
+    .where(users.username.equals(username))
+    .toQuery()
+  return db.query(query.text, query.values).then(res => res.rows[0])
 }
 
 module.exports = {
