@@ -8,6 +8,11 @@ const entries = sql.define({
   columns: ['entryid', 'userid', 'event', 'lastoccurrence', 'frequency'],
 })
 
+const users = sql.define({
+  name: 'users',
+  columns: ['userid', 'username', 'password'],
+})
+
 const insertEntry = entry => {
   const { event, frequency } = entry
   const entryToInsert = Object.assign({}, entry, {
@@ -50,12 +55,7 @@ const checkEntryExists = entryid => {
 
 const getEntries = user => {
   const query = entries
-    .select(
-      entries.entryid,
-      entries.event,
-      entries.lastoccurrence,
-      entries.frequency,
-    )
+    .select('entryid', 'event', 'lastoccurrence', 'frequency')
     .from(entries)
     .where(entries.userid.equals(user))
     .order(entries.lastoccurrence.ascending)
@@ -81,12 +81,15 @@ const deleteEntry = entryid => {
 }
 
 const insertUser = (user, hashedPassword) => {
-  return db
-    .query('INSERT INTO users VALUES (DEFAULT, $1, $2) RETURNING userid', [
-      user,
-      hashedPassword,
-    ])
-    .then(res => res.rows[0].userid)
+  const userToInsert = {
+    username: user,
+    password: hashedPassword,
+  }
+  const query = users
+    .insert(userToInsert)
+    .returning('userid')
+    .toQuery()
+  return db.query(query.text, query.values).then(res => res.rows[0].userid)
 }
 
 const checkUserExists = username => {
