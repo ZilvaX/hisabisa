@@ -73,7 +73,11 @@ const getOverdueEntries = user => {
 }
 
 const deleteEntry = entryid => {
-  return db.query('DELETE FROM entries where entryid=$1', [entryid])
+  const query = entries
+    .delete()
+    .where(entries.entryid.equals(entryid))
+    .toQuery()
+  return db.query(query.text, query.values)
 }
 
 const insertUser = (user, hashedPassword) => {
