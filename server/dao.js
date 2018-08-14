@@ -27,6 +27,17 @@ const insertEntry = entry => {
     .then(res => Object.assign({}, res.rows[0], { event }))
 }
 
+const insertEntries = entriesArray => {
+  const entriesToInsert = entriesArray.map(entry => {
+    return Object.assign({}, entry, { frequency: entry.frequency.toString() })
+  })
+  const query = entries
+    .insert(entriesToInsert)
+    .returning('entryid', 'event', 'lastoccurrence', 'frequency')
+    .toQuery()
+  return db.query(query.text, query.values).then(res => res.rows)
+}
+
 const updateEntry = entry => {
   const { event, lastoccurrence, frequency, entryid } = entry
   const query = entries
@@ -122,4 +133,5 @@ module.exports = {
   getUserIdAndHash,
   updateEntry,
   checkEntryExists,
+  insertEntries,
 }
