@@ -105,3 +105,32 @@ test('Insert and get user', async () => {
   const expected = { userid, password: user.password }
   expect(getUser).toEqual(expected)
 })
+test('Insert multiple and get entries', async () => {
+  const entryToExpect1 = {
+    entryid: 1,
+    event: 'Hello World',
+    lastoccurrence: DateTime.fromISO('2018-08-03'),
+    frequency: Duration.fromObject({ days: 1 }),
+  }
+  const entryToInsert1 = {
+    userid: 1,
+    event: 'Hello World',
+    lastoccurrence: DateTime.fromISO('2018-08-03'),
+    frequency: Duration.fromObject({ days: 1 }),
+  }
+  const entryToExpect2 = {
+    entryid: 2,
+    event: 'Hello World 2',
+    lastoccurrence: DateTime.fromISO('2018-08-03'),
+    frequency: Duration.fromObject({ days: 1 }),
+  }
+  const entryToInsert2 = {
+    userid: 1,
+    event: 'Hello World 2',
+    lastoccurrence: DateTime.fromISO('2018-08-03'),
+    frequency: Duration.fromObject({ days: 1 }),
+  }
+  await dao.insertEntries([entryToInsert1, entryToInsert2])
+  const entries = await dao.getEntries('1')
+  expect(entries).toEqual([entryToExpect1, entryToExpect2])
+})
