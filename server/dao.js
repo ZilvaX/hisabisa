@@ -14,17 +14,7 @@ const users = sql.define({
 })
 
 const insertEntry = entry => {
-  const { event, frequency } = entry
-  const entryToInsert = Object.assign({}, entry, {
-    frequency: frequency.toString(),
-  })
-  const query = entries
-    .insert(entryToInsert)
-    .returning('entryid', 'lastoccurrence', 'frequency')
-    .toQuery()
-  return db
-    .query(query.text, query.values)
-    .then(res => Object.assign({}, res.rows[0], { event }))
+  return insertEntries([entry]).then(res => res[0])
 }
 
 const insertEntries = entriesArray => {

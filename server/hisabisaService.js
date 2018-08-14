@@ -4,10 +4,15 @@ const {
   updateEntry,
   checkEntryExists,
   deleteEntry,
+  insertEntries,
 } = require('./dao')
 
 async function addEntry(entry) {
   return await insertEntry(entry)
+}
+
+async function addEntries(entries) {
+  return await insertEntries(entries)
 }
 
 async function editEntry(entry) {
@@ -32,4 +37,5 @@ module.exports = {
   getAllEntries,
   removeEntry,
   checkEntry,
+  addEntries,
 }
