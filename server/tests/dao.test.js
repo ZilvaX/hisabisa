@@ -43,7 +43,8 @@ test('Insert and get inserted entry', async () => {
     lastoccurrence: DateTime.fromISO('2018-08-03'),
     frequency: Duration.fromObject({ days: 1 }),
   }
-  await dao.insertEntry(entryToInsert)
+  const insertedEntry = await dao.insertEntry(entryToInsert)
+  expect(insertedEntry).toEqual(expectedEntry)
   const entries = await dao.getEntries('1')
   expect(entries).toEqual([expectedEntry])
 })
@@ -130,7 +131,12 @@ test('Insert multiple and get entries', async () => {
     lastoccurrence: DateTime.fromISO('2018-08-03'),
     frequency: Duration.fromObject({ days: 1 }),
   }
-  await dao.insertEntries([entryToInsert1, entryToInsert2])
+  const entriesToExpect = [entryToExpect1, entryToExpect2]
+  const insertedEntries = await dao.insertEntries([
+    entryToInsert1,
+    entryToInsert2,
+  ])
+  expect(insertedEntries).toEqual(entriesToExpect)
   const entries = await dao.getEntries('1')
-  expect(entries).toEqual([entryToExpect1, entryToExpect2])
+  expect(entries).toEqual(entriesToExpect)
 })
