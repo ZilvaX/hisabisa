@@ -14,17 +14,18 @@ const users = sql.define({
 })
 
 const insertEntry = entry => {
-  const { event, frequency } = entry
-  const entryToInsert = Object.assign({}, entry, {
-    frequency: frequency.toString(),
+  return insertEntries([entry]).then(res => res[0])
+}
+
+const insertEntries = entriesArray => {
+  const entriesToInsert = entriesArray.map(entry => {
+    return Object.assign({}, entry, { frequency: entry.frequency.toString() })
   })
   const query = entries
-    .insert(entryToInsert)
-    .returning('entryid', 'lastoccurrence', 'frequency')
+    .insert(entriesToInsert)
+    .returning('entryid', 'event', 'lastoccurrence', 'frequency')
     .toQuery()
-  return db
-    .query(query.text, query.values)
-    .then(res => Object.assign({}, res.rows[0], { event }))
+  return db.query(query.text, query.values).then(res => res.rows)
 }
 
 const updateEntry = entry => {
@@ -122,4 +123,5 @@ module.exports = {
   getUserIdAndHash,
   updateEntry,
   checkEntryExists,
+  insertEntries,
 }

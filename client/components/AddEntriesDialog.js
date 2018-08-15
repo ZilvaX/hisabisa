@@ -26,11 +26,13 @@ class AddEntriesDialog extends React.Component {
   }
 
   handleFormSubmit() {
-    const body = {
-      event: this.state.event,
-      lastoccurrence: this.state.lastoccurrence,
-      frequency: { days: parseInt(this.state.frequency, 10) },
-    }
+    const body = [
+      {
+        event: this.state.event,
+        lastoccurrence: this.state.lastoccurrence,
+        frequency: { days: parseInt(this.state.frequency, 10) },
+      },
+    ]
     const headers = {
       'content-type': 'application/json',
     }
@@ -42,7 +44,7 @@ class AddEntriesDialog extends React.Component {
     }).then(result => {
       if (result.status === 201) {
         result.json().then(json => {
-          const convertedEntry = convertEntriesFromApi([json])[0]
+          const convertedEntry = convertEntriesFromApi(json)[0] // Returns an array of size 1
           this.props.dispatch(addEntry(convertedEntry))
           this.props.handleClose()
         })

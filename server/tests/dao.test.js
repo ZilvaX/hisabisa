@@ -43,7 +43,8 @@ test('Insert and get inserted entry', async () => {
     lastoccurrence: DateTime.fromISO('2018-08-03'),
     frequency: Duration.fromObject({ days: 1 }),
   }
-  await dao.insertEntry(entryToInsert)
+  const insertedEntry = await dao.insertEntry(entryToInsert)
+  expect(insertedEntry).toEqual(expectedEntry)
   const entries = await dao.getEntries('1')
   expect(entries).toEqual([expectedEntry])
 })
@@ -104,4 +105,38 @@ test('Insert and get user', async () => {
   const getUser = await dao.getUserIdAndHash(user.username)
   const expected = { userid, password: user.password }
   expect(getUser).toEqual(expected)
+})
+test('Insert multiple and get entries', async () => {
+  const entryToExpect1 = {
+    entryid: 1,
+    event: 'Hello World',
+    lastoccurrence: DateTime.fromISO('2018-08-03'),
+    frequency: Duration.fromObject({ days: 1 }),
+  }
+  const entryToInsert1 = {
+    userid: 1,
+    event: 'Hello World',
+    lastoccurrence: DateTime.fromISO('2018-08-03'),
+    frequency: Duration.fromObject({ days: 1 }),
+  }
+  const entryToExpect2 = {
+    entryid: 2,
+    event: 'Hello World 2',
+    lastoccurrence: DateTime.fromISO('2018-08-03'),
+    frequency: Duration.fromObject({ days: 1 }),
+  }
+  const entryToInsert2 = {
+    userid: 1,
+    event: 'Hello World 2',
+    lastoccurrence: DateTime.fromISO('2018-08-03'),
+    frequency: Duration.fromObject({ days: 1 }),
+  }
+  const entriesToExpect = [entryToExpect1, entryToExpect2]
+  const insertedEntries = await dao.insertEntries([
+    entryToInsert1,
+    entryToInsert2,
+  ])
+  expect(insertedEntries).toEqual(entriesToExpect)
+  const entries = await dao.getEntries('1')
+  expect(entries).toEqual(entriesToExpect)
 })
