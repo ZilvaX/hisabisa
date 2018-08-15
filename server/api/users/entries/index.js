@@ -53,24 +53,31 @@ router.get('/', async (req, res) => {
 })
 
 router.post('/', async (req, res) => {
-  const { event, lastoccurrence, frequency } = req.body
+  const { body } = req
 
-  if (checkBody(event, lastoccurrence, frequency)) {
-    res.status(400).send()
-    return
+  // Validate the entries in the body
+  for (const entry of body) {
+    const { event, lastoccurrence, frequency } = entry
+    if (checkBody(event, lastoccurrence, frequency)) {
+      res.status(400).send()
+      return
+    }
   }
 
-  // Convert to Object
-  const entry = {
-    userid: parseInt(req.params.id, 10),
-    event,
-    lastoccurrence: DateTime.fromISO(lastoccurrence),
-    frequency: Duration.fromObject({ days: frequency.days }),
-  }
+  // Convert to Entries object
+  const entries = _.map(body, entry => {
+    const { event, lastoccurrence, frequency } = entry
+    return {
+      userid: parseInt(req.params.id, 10),
+      event,
+      lastoccurrence: DateTime.fromISO(lastoccurrence),
+      frequency: Duration.fromObject({ days: frequency.days }),
+    }
+  })
   try {
-    const newEntry = await hisabisaService.addEntry(entry)
-    const convertedEntry = convertEntries([newEntry])[0]
-    res.status(201).send(convertedEntry)
+    const newEntries = await hisabisaService.addEntries(entries)
+    const convertedEntries = convertEntries(newEntries)
+    res.status(201).send(convertedEntries)
   } catch (e) {
     console.error(e)
     res.status(500).send('Failed to store entry')
