@@ -9,6 +9,7 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 import { connect } from 'react-redux'
 
 import AppBarContainer from './AppBarContainer'
+import ToggleContainer from './ToggleContainer'
 import EntriesContainer from './EntriesContainer'
 import SnackbarContainer from './SnackbarContainer'
 import LoginDialog from './LoginDialog'
@@ -41,6 +42,7 @@ function App(props) {
       <CssBaseline />
       <MuiThemeProvider theme={hisabisaTheme}>
         <AppBarContainer />
+        <ToggleContainer />
         <EntriesContainer />
         <SnackbarContainer />
         <LoginDialog />
