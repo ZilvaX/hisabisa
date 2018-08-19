@@ -11,6 +11,12 @@ export const SHOW_ERROR = 'SHOW_ERROR'
 export const HIDE_ERROR = 'HIDE_ERROR'
 export const SHOW_LOGIN = 'SHOW_LOGIN'
 export const SHOW_REGISTER = 'SHOW_REGISTER'
+export const SET_ENTRY_FILTER = 'SET_ENTRY_FILTER'
+
+export const EntryFilters = {
+  SHOW_ALL: 'SHOW_ALL',
+  SHOW_OVERDUE: 'SHOW_OVERDUE',
+}
 
 export const updateUserid = userid => {
   return { type: UPDATE_USERID, userid }
@@ -70,4 +76,8 @@ export function showLogin(open) {
 
 export function showRegister(open) {
   return { type: SHOW_REGISTER, open }
+}
+
+export function setEntryFilter(filter) {
+  return { type: SET_ENTRY_FILTER, filter }
 }
