@@ -11,7 +11,20 @@ import {
   HIDE_ERROR,
   SHOW_LOGIN,
   SHOW_REGISTER,
+  SET_ENTRY_FILTER,
+  EntryFilters,
 } from '../actions'
+
+const { SHOW_ALL } = EntryFilters
+
+function entryFilter(state = SHOW_ALL, action) {
+  switch (action.type) {
+    case SET_ENTRY_FILTER:
+      return action.filter
+    default:
+      return state
+  }
+}
 
 function userid(state = null, action) {
   switch (action.type) {
@@ -94,6 +107,7 @@ const rootReducer = combineReducers({
   errors,
   loginDialog,
   registerDialog,
+  entryFilter,
 })
 
 export default rootReducer

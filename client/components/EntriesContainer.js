@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
+import { DateTime } from 'luxon'
 import { connect } from 'react-redux'
 
 import { withStyles } from '@material-ui/core/styles'
@@ -9,7 +10,7 @@ import Add from '@material-ui/icons/Add'
 
 import AddEntriesDialog from './AddEntriesDialog'
 import EntryCard from './EntryCard'
-import { fetchEntries, receiveEntries } from '../actions'
+import { fetchEntries, receiveEntries, EntryFilters } from '../actions'
 
 const styles = {
   cardHolder: {
@@ -73,7 +74,15 @@ class EntriesContainer extends React.Component {
   }
 
   render() {
-    const { classes } = this.props
+    const { classes, entries, entryFilter } = this.props
+    //Filter overdue entries
+    const filteredEntries = _.filter(entries, entry => {
+      const today = DateTime.local()
+      const nextOccurrence = entry.lastoccurrence.plus(entry.frequency)
+      if (entryFilter === EntryFilters.SHOW_OVERDUE && nextOccurrence < today) {
+        return entry
+      }
+    })
     const cards = _.map(this.props.entries, entry => {
       return (
         <EntryCard
@@ -117,12 +126,14 @@ EntriesContainer.propTypes = {
   classes: PropTypes.object.isRequired,
   userid: PropTypes.number,
   entries: PropTypes.array,
+  entryFilter: PropTypes.string,
   dispatch: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
   userid: state.userid,
   entries: state.entries,
+  entryFilter: state.entryFilter,
 })
 
 export default connect(mapStateToProps)(withStyles(styles)(EntriesContainer))
