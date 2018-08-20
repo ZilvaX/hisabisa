@@ -3,7 +3,7 @@ import {
   UPDATE_USERID,
   UPDATE_USERNAME,
   RECEIVE_ENTRIES,
-  ADD_ENTRY,
+  ADD_ENTRIES,
   UPDATE_ENTRY,
   REMOVE_ENTRY,
   MOVE_ENTRY_TO_BACK,
@@ -47,8 +47,8 @@ function entries(state = [], action) {
   switch (action.type) {
     case RECEIVE_ENTRIES:
       return action.entries
-    case ADD_ENTRY:
-      return [...state, action.entry]
+    case ADD_ENTRIES:
+      return state.concat(action.entries)
     case UPDATE_ENTRY:
       return state.map(e => {
         if (e.entryid !== action.entry.entryid) {

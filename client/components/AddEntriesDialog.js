@@ -3,8 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 import EntryDialog from './EntryDialog'
-import { convertEntriesFromApi } from '../helpers/EntriesHelper'
-import { addEntry } from '../actions'
+import { submitEntries } from '../actions'
 
 class AddEntriesDialog extends React.Component {
   constructor(props) {
@@ -33,23 +32,8 @@ class AddEntriesDialog extends React.Component {
         frequency: { days: parseInt(this.state.frequency, 10) },
       },
     ]
-    const headers = {
-      'content-type': 'application/json',
-    }
-    fetch(`/api/users/${this.props.userid}/entries`, {
-      method: 'POST',
-      body: JSON.stringify(body),
-      headers,
-      credentials: 'include',
-    }).then(result => {
-      if (result.status === 201) {
-        result.json().then(json => {
-          const convertedEntry = convertEntriesFromApi(json)[0] // Returns an array of size 1
-          this.props.dispatch(addEntry(convertedEntry))
-          this.props.handleClose()
-        })
-      }
-    })
+    const { dispatch, userid, handleClose } = this.props
+    dispatch(submitEntries(userid, body)).then(() => handleClose())
   }
 
   render() {
