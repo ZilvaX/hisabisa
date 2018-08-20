@@ -75,15 +75,20 @@ class EntriesContainer extends React.Component {
 
   render() {
     const { classes, entries, entryFilter } = this.props
-    //Filter overdue entries
     const filteredEntries = _.filter(entries, entry => {
       const today = DateTime.local()
       const nextOccurrence = entry.lastoccurrence.plus(entry.frequency)
-      if (entryFilter === EntryFilters.SHOW_OVERDUE && nextOccurrence < today) {
-        return entry
+      switch (entryFilter) {
+        case EntryFilters.SHOW_OVERDUE:
+          if (nextOccurrence < today) {
+            return entry
+          }
+          break
+        case EntryFilters.SHOW_ALL:
+          return entry
       }
     })
-    const cards = _.map(this.props.entries, entry => {
+    const cards = _.map(filteredEntries, entry => {
       return (
         <EntryCard
           entryid={entry.entryid}
