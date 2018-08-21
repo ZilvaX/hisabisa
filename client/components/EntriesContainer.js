@@ -40,6 +40,7 @@ const styles = {
     right: '20px',
   },
 }
+
 class EntriesContainer extends React.Component {
   constructor(props) {
     super(props)
@@ -48,6 +49,7 @@ class EntriesContainer extends React.Component {
     }
     this.handleClickAdd = this.handleClickAdd.bind(this)
     this.handleCloseDialog = this.handleCloseDialog.bind(this)
+    this.filterEntries = this.filterEntries.bind(this)
   }
 
   updateEntries() {
@@ -74,21 +76,24 @@ class EntriesContainer extends React.Component {
     this.setState({ openAddEntriesDialog: false })
   }
 
-  render() {
-    const { classes, entries, entryFilter } = this.props
-    const filteredEntries = _.filter(entries, entry => {
-      const today = DateTime.local()
-      const nextOccurrence = entry.lastoccurrence.plus(entry.frequency)
-      switch (entryFilter) {
-        case SHOW_OVERDUE:
-          if (nextOccurrence < today) {
-            return entry
-          }
-          break
-        case SHOW_ALL:
+  filterEntries(entry) {
+    switch (this.props.entryFilter) {
+      case SHOW_OVERDUE: {
+        const today = DateTime.local()
+        const nextOccurrence = entry.lastoccurrence.plus(entry.frequency)
+        if (nextOccurrence < today) {
           return entry
+        }
+        break
       }
-    })
+      case SHOW_ALL:
+        return entry
+    }
+  }
+
+  render() {
+    const { classes, entries } = this.props
+    const filteredEntries = _.filter(entries, this.filterEntries)
     const cards = _.map(filteredEntries, entry => {
       return (
         <EntryCard
