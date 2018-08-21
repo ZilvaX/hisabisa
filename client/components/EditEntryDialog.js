@@ -1,9 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import EntryDialog from './EntryDialog'
-import { convertEntriesFromApi } from '../helpers/EntriesHelper'
 import { connect } from 'react-redux'
-import { updateEntry } from '../actions'
+import { submitEntryUpdate } from '../actions'
 
 class EditEntryDialog extends React.Component {
   constructor(props) {
@@ -25,28 +24,15 @@ class EditEntryDialog extends React.Component {
   }
 
   handleFormSubmit() {
-    const body = {
+    const entry = {
       event: this.state.event,
       lastoccurrence: this.state.lastoccurrence,
       frequency: { days: this.state.frequency },
     }
-    const headers = {
-      'content-type': 'application/json',
-    }
-    fetch(`/api/users/${this.props.userid}/entries/${this.props.entryid}`, {
-      method: 'PUT',
-      body: JSON.stringify(body),
-      headers,
-      credentials: 'include',
-    }).then(result => {
-      if (result.status === 200) {
-        result.json().then(json => {
-          const convertedEntry = convertEntriesFromApi([json])[0]
-          this.props.dispatch(updateEntry(convertedEntry))
-          this.props.handleClose()
-        })
-      }
-    })
+    const { dispatch, userid, entryid, handleClose } = this.props
+    dispatch(submitEntryUpdate(userid, entryid, entry)).then(() =>
+      handleClose(),
+    )
   }
 
   render() {

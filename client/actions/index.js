@@ -95,3 +95,22 @@ export function submitEntries(userid, entries) {
       }
     })
 }
+
+export function submitEntryUpdate(userid, entryid, entry) {
+  return dispatch =>
+    fetch(`/api/users/${userid}/entries/${entryid}`, {
+      method: 'PUT',
+      body: JSON.stringify(entry),
+      headers: {
+        'content-type': 'application/json',
+      },
+      credentials: 'include',
+    }).then(result => {
+      if (result.status === 200) {
+        result.json().then(json => {
+          const convertedEntry = convertEntriesFromApi([json])[0]
+          dispatch(updateEntry(convertedEntry))
+        })
+      }
+    })
+}
