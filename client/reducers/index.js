@@ -12,10 +12,9 @@ import {
   SHOW_LOGIN,
   SHOW_REGISTER,
   SET_ENTRY_FILTER,
-  EntryFilters,
 } from '../actions'
 
-const { SHOW_ALL } = EntryFilters
+import { SHOW_ALL } from '../helpers/EntryFilters'
 
 function entryFilter(state = SHOW_ALL, action) {
   switch (action.type) {

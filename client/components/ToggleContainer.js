@@ -5,7 +5,8 @@ import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 
-import { setEntryFilter, EntryFilters } from '../actions'
+import { setEntryFilter } from '../actions'
+import { SHOW_ALL, SHOW_OVERDUE } from '../helpers/EntryFilters'
 
 const classes = {
   containerDiv: {
@@ -25,11 +26,11 @@ class ToggleContainer extends React.Component {
   }
 
   handleShowAll() {
-    this.props.dispatch(setEntryFilter(EntryFilters.SHOW_ALL))
+    this.props.dispatch(setEntryFilter(SHOW_ALL))
   }
 
   handleShowOverdue() {
-    this.props.dispatch(setEntryFilter(EntryFilters.SHOW_OVERDUE))
+    this.props.dispatch(setEntryFilter(SHOW_OVERDUE))
   }
 
   render() {

@@ -10,7 +10,8 @@ import Add from '@material-ui/icons/Add'
 
 import AddEntriesDialog from './AddEntriesDialog'
 import EntryCard from './EntryCard'
-import { fetchEntries, receiveEntries, EntryFilters } from '../actions'
+import { fetchEntries, receiveEntries } from '../actions'
+import { SHOW_ALL, SHOW_OVERDUE } from '../helpers/EntryFilters'
 
 const styles = {
   cardHolder: {
@@ -79,12 +80,12 @@ class EntriesContainer extends React.Component {
       const today = DateTime.local()
       const nextOccurrence = entry.lastoccurrence.plus(entry.frequency)
       switch (entryFilter) {
-        case EntryFilters.SHOW_OVERDUE:
+        case SHOW_OVERDUE:
           if (nextOccurrence < today) {
             return entry
           }
           break
-        case EntryFilters.SHOW_ALL:
+        case SHOW_ALL:
           return entry
       }
     })
