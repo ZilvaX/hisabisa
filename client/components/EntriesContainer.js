@@ -131,7 +131,7 @@ EntriesContainer.propTypes = {
   classes: PropTypes.object.isRequired,
   userid: PropTypes.number,
   entries: PropTypes.array,
-  entryFilter: PropTypes.string,
+  entryFilter: PropTypes.symbol,
   dispatch: PropTypes.func.isRequired,
 }
 

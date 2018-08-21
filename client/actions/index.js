@@ -14,8 +14,8 @@ export const SHOW_REGISTER = 'SHOW_REGISTER'
 export const SET_ENTRY_FILTER = 'SET_ENTRY_FILTER'
 
 export const EntryFilters = {
-  SHOW_ALL: 'SHOW_ALL',
-  SHOW_OVERDUE: 'SHOW_OVERDUE',
+  SHOW_ALL: Symbol('SHOW_ALL'),
+  SHOW_OVERDUE: Symbol('SHOW_OVERDUE'),
 }
 
 export const updateUserid = userid => {
