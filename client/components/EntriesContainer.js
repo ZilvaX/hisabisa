@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
+import { DateTime } from 'luxon'
 import { connect } from 'react-redux'
 
 import { withStyles } from '@material-ui/core/styles'
@@ -10,6 +11,7 @@ import Add from '@material-ui/icons/Add'
 import AddEntriesDialog from './AddEntriesDialog'
 import EntryCard from './EntryCard'
 import { fetchEntries, receiveEntries } from '../actions'
+import { SHOW_ALL, SHOW_OVERDUE } from '../helpers/EntryFilters'
 
 const styles = {
   cardHolder: {
@@ -38,6 +40,7 @@ const styles = {
     right: '20px',
   },
 }
+
 class EntriesContainer extends React.Component {
   constructor(props) {
     super(props)
@@ -46,6 +49,7 @@ class EntriesContainer extends React.Component {
     }
     this.handleClickAdd = this.handleClickAdd.bind(this)
     this.handleCloseDialog = this.handleCloseDialog.bind(this)
+    this.filterEntries = this.filterEntries.bind(this)
   }
 
   updateEntries() {
@@ -72,9 +76,25 @@ class EntriesContainer extends React.Component {
     this.setState({ openAddEntriesDialog: false })
   }
 
+  filterEntries(entry) {
+    switch (this.props.entryFilter) {
+      case SHOW_OVERDUE: {
+        const today = DateTime.local()
+        const nextOccurrence = entry.lastoccurrence.plus(entry.frequency)
+        if (nextOccurrence < today) {
+          return entry
+        }
+        break
+      }
+      case SHOW_ALL:
+        return entry
+    }
+  }
+
   render() {
-    const { classes } = this.props
-    const cards = _.map(this.props.entries, entry => {
+    const { classes, entries } = this.props
+    const filteredEntries = _.filter(entries, this.filterEntries)
+    const cards = _.map(filteredEntries, entry => {
       return (
         <EntryCard
           entryid={entry.entryid}
@@ -117,12 +137,14 @@ EntriesContainer.propTypes = {
   classes: PropTypes.object.isRequired,
   userid: PropTypes.number,
   entries: PropTypes.array,
+  entryFilter: PropTypes.symbol,
   dispatch: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
   userid: state.userid,
   entries: state.entries,
+  entryFilter: state.entryFilter,
 })
 
 export default connect(mapStateToProps)(withStyles(styles)(EntriesContainer))
