@@ -115,3 +115,14 @@ export function submitEntryUpdate(userid, entryid, entry) {
       return Promise.reject()
     })
 }
+
+export function submitRemoveEntry(userid, entryid) {
+  return dispatch =>
+    fetch(`/api/users/${userid}/entries/${entryid}`, {
+      method: 'DELETE',
+      headers: {
+        'content-type': 'application/json',
+      },
+      credentials: 'include',
+    }).then(() => dispatch(removeEntry(entryid)))
+}

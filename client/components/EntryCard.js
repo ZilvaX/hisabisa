@@ -10,7 +10,11 @@ import CardActions from '@material-ui/core/CardActions'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 
-import { removeEntry, moveEntryToBack, submitEntryUpdate } from '../actions'
+import {
+  submitRemoveEntry,
+  moveEntryToBack,
+  submitEntryUpdate,
+} from '../actions'
 import EditEntryDialog from './EditEntryDialog'
 
 const styles = {
@@ -55,17 +59,8 @@ class EntryCard extends React.Component {
   }
 
   handleRemove() {
-    const headers = {
-      'content-type': 'application/json',
-    }
-    const { userid, entryid } = this.props
-    fetch(`/api/users/${userid}/entries/${entryid}`, {
-      method: 'DELETE',
-      headers,
-      credentials: 'include',
-    }).then(() => {
-      this.props.dispatch(removeEntry(entryid))
-    })
+    const { dispatch, userid, entryid } = this.props
+    dispatch(submitRemoveEntry(userid, entryid))
   }
 
   render() {
