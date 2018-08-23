@@ -60,8 +60,10 @@ function entries(state = [], action) {
     case REMOVE_ENTRY:
       return state.filter(e => e.entryid !== action.entryid)
     case MOVE_ENTRY_TO_BACK: {
-      const matchedEntries = groupBy(state, e => e.entryid === action.entryid)
-      return concat(matchedEntries.false, matchedEntries.true)
+      const groupedEntries = groupBy(state, e => e.entryid === action.entryid)
+      const otherEntries = groupedEntries.false || []
+      const matchedEntries = groupedEntries.true || [] // Should be one
+      return concat(otherEntries, matchedEntries)
     }
     default:
       return state
