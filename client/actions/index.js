@@ -53,8 +53,8 @@ export function fetchEntries(userid) {
   }
 }
 
-export function moveEntryToBack(entry) {
-  return { type: MOVE_ENTRY_TO_BACK, entry }
+export function moveEntryToBack(entryid) {
+  return { type: MOVE_ENTRY_TO_BACK, entryid }
 }
 
 export function showError(errorMessage) {
@@ -109,8 +109,9 @@ export function submitEntryUpdate(userid, entryid, entry) {
       if (result.status === 200) {
         result.json().then(json => {
           const convertedEntry = convertEntriesFromApi([json])[0]
-          dispatch(updateEntry(convertedEntry))
+          return dispatch(updateEntry(convertedEntry))
         })
       }
+      return Promise.reject()
     })
 }

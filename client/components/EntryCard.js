@@ -10,8 +10,7 @@ import CardActions from '@material-ui/core/CardActions'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 
-import { updateEntry, removeEntry, moveEntryToBack } from '../actions'
-import { convertEntriesFromApi } from '../helpers/EntriesHelper'
+import { removeEntry, moveEntryToBack, submitEntryUpdate } from '../actions'
 import EditEntryDialog from './EditEntryDialog'
 
 const styles = {
@@ -35,28 +34,16 @@ class EntryCard extends React.Component {
   }
 
   handleDoneToday() {
+    const { dispatch, userid, entryid, event, frequency } = this.props
     const body = {
-      event: this.props.event,
+      event,
       lastoccurrence: DateTime.local().toISODate(),
-      frequency: this.props.frequency,
+      frequency,
     }
-    const headers = {
-      'content-type': 'application/json',
-    }
-    fetch(`/api/users/${this.props.userid}/entries/${this.props.entryid}`, {
-      method: 'PUT',
-      body: JSON.stringify(body),
-      headers,
-      credentials: 'include',
-    }).then(result => {
-      if (result.status === 200) {
-        result.json().then(json => {
-          const convertedEntry = convertEntriesFromApi([json])[0]
-          this.props.dispatch(updateEntry(convertedEntry))
-          this.props.dispatch(moveEntryToBack(convertedEntry))
-        })
-      }
-    })
+
+    dispatch(submitEntryUpdate(userid, entryid, body)).then(
+      this.props.dispatch(moveEntryToBack(entryid)),
+    )
   }
 
   handleClickEdit() {

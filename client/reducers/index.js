@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux'
+import { groupBy, concat } from 'lodash'
 import {
   UPDATE_USERID,
   UPDATE_USERNAME,
@@ -59,8 +60,8 @@ function entries(state = [], action) {
     case REMOVE_ENTRY:
       return state.filter(e => e.entryid !== action.entryid)
     case MOVE_ENTRY_TO_BACK: {
-      const otherEntries = state.filter(e => e.entryid !== action.entry.entryid)
-      return [...otherEntries, action.entry]
+      const matchedEntries = groupBy(state, e => e.entryid === action.entryid)
+      return concat(matchedEntries.false, matchedEntries.true)
     }
     default:
       return state
