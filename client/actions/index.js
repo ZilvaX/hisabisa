@@ -111,8 +111,9 @@ export function submitEntryUpdate(userid, entryid, entry) {
           const convertedEntry = convertEntriesFromApi([json])[0]
           return dispatch(updateEntry(convertedEntry))
         })
+      } else {
+        return Promise.reject()
       }
-      return Promise.reject()
     })
 }
 

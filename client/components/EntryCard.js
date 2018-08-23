@@ -14,7 +14,10 @@ import {
   submitRemoveEntry,
   moveEntryToBack,
   submitEntryUpdate,
+  updateEntry,
+  removeEntry,
 } from '../actions'
+import { convertEntriesFromApi } from '../helpers/EntriesHelper'
 import EditEntryDialog from './EditEntryDialog'
 
 const styles = {
@@ -45,9 +48,16 @@ class EntryCard extends React.Component {
       frequency,
     }
 
-    dispatch(submitEntryUpdate(userid, entryid, body)).then(
-      this.props.dispatch(moveEntryToBack(entryid)),
-    )
+    if (userid) {
+      dispatch(submitEntryUpdate(userid, entryid, body)).then(
+        dispatch(moveEntryToBack(entryid)),
+      )
+    } else {
+      const entry = Object.assign({}, body, { entryid })
+      const convertedEntry = convertEntriesFromApi([entry])[0]
+      dispatch(updateEntry(convertedEntry))
+      dispatch(moveEntryToBack(entryid))
+    }
   }
 
   handleClickEdit() {
@@ -60,7 +70,11 @@ class EntryCard extends React.Component {
 
   handleRemove() {
     const { dispatch, userid, entryid } = this.props
-    dispatch(submitRemoveEntry(userid, entryid))
+    if (userid) {
+      dispatch(submitRemoveEntry(userid, entryid))
+    } else {
+      dispatch(removeEntry(entryid))
+    }
   }
 
   render() {
@@ -106,7 +120,7 @@ class EntryCard extends React.Component {
 
 EntryCard.propTypes = {
   classes: PropTypes.object.isRequired,
-  entryid: PropTypes.number.isRequired,
+  entryid: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   event: PropTypes.string.isRequired,
   lastoccurrence: PropTypes.object.isRequired,
   frequency: PropTypes.object,

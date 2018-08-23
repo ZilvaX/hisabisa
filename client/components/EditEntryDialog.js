@@ -2,7 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import EntryDialog from './EntryDialog'
 import { connect } from 'react-redux'
-import { submitEntryUpdate } from '../actions'
+import { submitEntryUpdate, updateEntry } from '../actions'
+import { convertEntriesFromApi } from '../helpers/EntriesHelper'
 
 class EditEntryDialog extends React.Component {
   constructor(props) {
@@ -24,15 +25,23 @@ class EditEntryDialog extends React.Component {
   }
 
   handleFormSubmit() {
+    const { event, lastoccurrence, frequency } = this.state
     const entry = {
-      event: this.state.event,
-      lastoccurrence: this.state.lastoccurrence,
-      frequency: { days: this.state.frequency },
+      event,
+      lastoccurrence,
+      frequency: { days: frequency },
     }
     const { dispatch, userid, entryid, handleClose } = this.props
-    dispatch(submitEntryUpdate(userid, entryid, entry)).then(() =>
-      handleClose(),
-    )
+    if (userid) {
+      dispatch(submitEntryUpdate(userid, entryid, entry)).then(() =>
+        handleClose(),
+      )
+    } else {
+      const entryWithId = Object.assign({}, entry, { entryid })
+      const convertedEntry = convertEntriesFromApi([entryWithId])[0]
+      dispatch(updateEntry(convertedEntry))
+      handleClose()
+    }
   }
 
   render() {
@@ -59,7 +68,7 @@ EditEntryDialog.propTypes = {
   open: PropTypes.bool,
   handleClose: PropTypes.func.isRequired,
   userid: PropTypes.number,
-  entryid: PropTypes.number,
+  entryid: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   event: PropTypes.string,
   lastoccurrence: PropTypes.object,
   frequency: PropTypes.object,

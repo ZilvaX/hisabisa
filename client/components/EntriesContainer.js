@@ -109,19 +109,17 @@ class EntriesContainer extends React.Component {
       <React.Fragment>
         <div className={classes.containerDiv}>
           <div className={classes.cardHolder}>{cards}</div>
-          {this.props.userid && (
-            <div className={classes.addDiv}>
-              <Button
-                variant="fab"
-                color="secondary"
-                aria-label="add"
-                className={classes.fab}
-                onClick={this.handleClickAdd}
-              >
-                <Add />
-              </Button>
-            </div>
-          )}
+          <div className={classes.addDiv}>
+            <Button
+              variant="fab"
+              color="secondary"
+              aria-label="add"
+              className={classes.fab}
+              onClick={this.handleClickAdd}
+            >
+              <Add />
+            </Button>
+          </div>
         </div>
         <AddEntriesDialog
           open={this.state.openAddEntriesDialog}
