@@ -127,3 +127,8 @@ export function submitRemoveEntry(userid, entryid) {
       credentials: 'include',
     }).then(() => dispatch(removeEntry(entryid)))
 }
+
+export function submitEntriesInStore(userid) {
+  return (dispatch, getState) =>
+    submitEntries(userid, getState().entries)(dispatch)
+}

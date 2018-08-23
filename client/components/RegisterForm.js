@@ -11,6 +11,7 @@ import {
   updateUsername,
   showRegister,
   showError,
+  submitEntriesInStore,
 } from '../actions/'
 import {
   NO_ERROR,
@@ -116,6 +117,7 @@ class RegisterForm extends React.Component {
           result.json().then(r => {
             dispatch(updateUserid(r.userid))
             dispatch(updateUsername(username))
+            dispatch(submitEntriesInStore(r.userid))
           })
           dispatch(showRegister(false))
           break
