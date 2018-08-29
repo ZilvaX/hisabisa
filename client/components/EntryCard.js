@@ -10,7 +10,13 @@ import CardActions from '@material-ui/core/CardActions'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 
-import { updateEntry, removeEntry, moveEntryToBack } from '../actions'
+import {
+  submitRemoveEntry,
+  moveEntryToBack,
+  submitEntryUpdate,
+  updateEntry,
+  removeEntry,
+} from '../actions'
 import { convertEntriesFromApi } from '../helpers/EntriesHelper'
 import EditEntryDialog from './EditEntryDialog'
 
@@ -35,28 +41,23 @@ class EntryCard extends React.Component {
   }
 
   handleDoneToday() {
+    const { dispatch, userid, entryid, event, frequency } = this.props
     const body = {
-      event: this.props.event,
+      event,
       lastoccurrence: DateTime.local().toISODate(),
-      frequency: this.props.frequency,
+      frequency,
     }
-    const headers = {
-      'content-type': 'application/json',
+
+    if (userid) {
+      dispatch(submitEntryUpdate(userid, entryid, body)).then(
+        dispatch(moveEntryToBack(entryid)),
+      )
+    } else {
+      const entry = Object.assign({}, body, { entryid })
+      const convertedEntry = convertEntriesFromApi([entry])[0]
+      dispatch(updateEntry(convertedEntry))
+      dispatch(moveEntryToBack(entryid))
     }
-    fetch(`/api/users/${this.props.userid}/entries/${this.props.entryid}`, {
-      method: 'PUT',
-      body: JSON.stringify(body),
-      headers,
-      credentials: 'include',
-    }).then(result => {
-      if (result.status === 200) {
-        result.json().then(json => {
-          const convertedEntry = convertEntriesFromApi([json])[0]
-          this.props.dispatch(updateEntry(convertedEntry))
-          this.props.dispatch(moveEntryToBack(convertedEntry))
-        })
-      }
-    })
   }
 
   handleClickEdit() {
@@ -68,17 +69,12 @@ class EntryCard extends React.Component {
   }
 
   handleRemove() {
-    const headers = {
-      'content-type': 'application/json',
+    const { dispatch, userid, entryid } = this.props
+    if (userid) {
+      dispatch(submitRemoveEntry(userid, entryid))
+    } else {
+      dispatch(removeEntry(entryid))
     }
-    const { userid, entryid } = this.props
-    fetch(`/api/users/${userid}/entries/${entryid}`, {
-      method: 'DELETE',
-      headers,
-      credentials: 'include',
-    }).then(() => {
-      this.props.dispatch(removeEntry(entryid))
-    })
   }
 
   render() {
@@ -124,7 +120,7 @@ class EntryCard extends React.Component {
 
 EntryCard.propTypes = {
   classes: PropTypes.object.isRequired,
-  entryid: PropTypes.number.isRequired,
+  entryid: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   event: PropTypes.string.isRequired,
   lastoccurrence: PropTypes.object.isRequired,
   frequency: PropTypes.object,

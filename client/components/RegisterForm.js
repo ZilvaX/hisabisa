@@ -11,6 +11,7 @@ import {
   updateUsername,
   showRegister,
   showError,
+  submitEntriesInStore,
 } from '../actions/'
 import {
   NO_ERROR,
@@ -102,6 +103,7 @@ class RegisterForm extends React.Component {
       return
     }
     // handle register
+    const { dispatch } = this.props
     const headers = { 'content-type': 'application/json' }
     const body = { username, password }
     fetch('/api/users', {
@@ -113,18 +115,17 @@ class RegisterForm extends React.Component {
       switch (result.status) {
         case 201:
           result.json().then(r => {
-            this.props.dispatch(updateUserid(r.userid))
-            this.props.dispatch(updateUsername(username))
+            dispatch(updateUserid(r.userid))
+            dispatch(updateUsername(username))
+            dispatch(submitEntriesInStore(r.userid))
           })
-          this.props.dispatch(showRegister(false))
+          dispatch(showRegister(false))
           break
         case 409:
           this.setState({ usernameError: USER_EXISTS })
           break
         default:
-          this.props.dispatch(
-            showError('An error has occurred. Please try again later.'),
-          )
+          dispatch(showError('An error has occurred. Please try again later.'))
       }
     })
   }

@@ -1,10 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { process } from 'uniqid'
+import { map } from 'lodash'
 
 import EntryDialog from './EntryDialog'
+import { submitEntries, addEntries } from '../actions'
 import { convertEntriesFromApi } from '../helpers/EntriesHelper'
-import { addEntry } from '../actions'
 
 class AddEntriesDialog extends React.Component {
   constructor(props) {
@@ -26,30 +28,25 @@ class AddEntriesDialog extends React.Component {
   }
 
   handleFormSubmit() {
+    const { dispatch, handleClose, userid } = this.props
+    const { event, lastoccurrence, frequency } = this.state
     const body = [
       {
-        event: this.state.event,
-        lastoccurrence: this.state.lastoccurrence,
-        frequency: { days: parseInt(this.state.frequency, 10) },
+        event: event,
+        lastoccurrence: lastoccurrence,
+        frequency: { days: parseInt(frequency, 10) },
       },
     ]
-    const headers = {
-      'content-type': 'application/json',
+    if (userid) {
+      dispatch(submitEntries(userid, body)).then(() => handleClose())
+    } else {
+      const bodiesWithIds = map(body, entry =>
+        Object.assign({}, entry, { entryid: process() }),
+      )
+      const convertedEntries = convertEntriesFromApi(bodiesWithIds)
+      dispatch(addEntries(convertedEntries))
+      handleClose()
     }
-    fetch(`/api/users/${this.props.userid}/entries`, {
-      method: 'POST',
-      body: JSON.stringify(body),
-      headers,
-      credentials: 'include',
-    }).then(result => {
-      if (result.status === 201) {
-        result.json().then(json => {
-          const convertedEntry = convertEntriesFromApi(json)[0] // Returns an array of size 1
-          this.props.dispatch(addEntry(convertedEntry))
-          this.props.handleClose()
-        })
-      }
-    })
   }
 
   render() {

@@ -3,7 +3,7 @@ import { convertEntriesFromApi } from '../helpers/EntriesHelper'
 export const UPDATE_USERID = 'UPDATE_USERID'
 export const UPDATE_USERNAME = 'UPDATE_USERNAME'
 export const RECEIVE_ENTRIES = 'RECEIVE_ENTRIES'
-export const ADD_ENTRY = 'ADD_ENTRY'
+export const ADD_ENTRIES = 'ADD_ENTRIES'
 export const UPDATE_ENTRY = 'UPDATE_ENTRY'
 export const REMOVE_ENTRY = 'REMOVE_ENTRY'
 export const MOVE_ENTRY_TO_BACK = 'MOVE_ENTRY_TO_BACK'
@@ -25,8 +25,8 @@ export function receiveEntries(entries) {
   return { type: RECEIVE_ENTRIES, entries }
 }
 
-export function addEntry(entry) {
-  return { type: ADD_ENTRY, entry }
+export function addEntries(entries) {
+  return { type: ADD_ENTRIES, entries }
 }
 
 export function updateEntry(entry) {
@@ -53,8 +53,8 @@ export function fetchEntries(userid) {
   }
 }
 
-export function moveEntryToBack(entry) {
-  return { type: MOVE_ENTRY_TO_BACK, entry }
+export function moveEntryToBack(entryid) {
+  return { type: MOVE_ENTRY_TO_BACK, entryid }
 }
 
 export function showError(errorMessage) {
@@ -75,4 +75,60 @@ export function showRegister(open) {
 
 export function setEntryFilter(filter) {
   return { type: SET_ENTRY_FILTER, filter }
+}
+
+export function submitEntries(userid, entries) {
+  return dispatch =>
+    fetch(`/api/users/${userid}/entries`, {
+      method: 'POST',
+      body: JSON.stringify(entries),
+      headers: {
+        'content-type': 'application/json',
+      },
+      credentials: 'include',
+    }).then(result => {
+      if (result.status === 201) {
+        result.json().then(json => {
+          const convertedEntry = convertEntriesFromApi(json)
+          dispatch(addEntries(convertedEntry))
+        })
+      }
+    })
+}
+
+export function submitEntryUpdate(userid, entryid, entry) {
+  return dispatch =>
+    fetch(`/api/users/${userid}/entries/${entryid}`, {
+      method: 'PUT',
+      body: JSON.stringify(entry),
+      headers: {
+        'content-type': 'application/json',
+      },
+      credentials: 'include',
+    }).then(result => {
+      if (result.status === 200) {
+        result.json().then(json => {
+          const convertedEntry = convertEntriesFromApi([json])[0]
+          return dispatch(updateEntry(convertedEntry))
+        })
+      } else {
+        return Promise.reject()
+      }
+    })
+}
+
+export function submitRemoveEntry(userid, entryid) {
+  return dispatch =>
+    fetch(`/api/users/${userid}/entries/${entryid}`, {
+      method: 'DELETE',
+      headers: {
+        'content-type': 'application/json',
+      },
+      credentials: 'include',
+    }).then(() => dispatch(removeEntry(entryid)))
+}
+
+export function submitEntriesInStore(userid) {
+  return (dispatch, getState) =>
+    submitEntries(userid, getState().entries)(dispatch)
 }
