@@ -1,5 +1,6 @@
 const { Client, types } = require('pg')
 const { Duration, DateTime } = require('luxon')
+const config = require('../config')
 const typeConfigurer = require('../db/typeConfigurer')
 const db = require('../db')
 const dao = require('../dao')
@@ -11,10 +12,7 @@ typeConfigurer(types)
 let client
 beforeEach(() => {
   // Create new client for each test
-  client = new Client({
-    user: 'admin',
-    database: 'hisabisa',
-  })
+  client = new Client(config.db)
   db.query.mockImplementation(client.query.bind(client))
   return client.connect().then(() => {
     client.query(
