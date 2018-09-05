@@ -55,6 +55,12 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   const { body } = req
 
+  // 400 if we receive an empty list of entries
+  if (!body.length) {
+    res.status(400).send()
+    return
+  }
+
   // Validate the entries in the body
   for (const entry of body) {
     const { event, lastoccurrence, frequency } = entry
@@ -74,6 +80,7 @@ router.post('/', async (req, res) => {
       frequency: Duration.fromObject({ days: frequency.days }),
     }
   })
+
   try {
     const newEntries = await hisabisaService.addEntries(entries)
     const convertedEntries = convertEntries(newEntries)
