@@ -86,7 +86,8 @@ class RegisterForm extends React.Component {
     this.setState({ [id]: target.value })
   }
 
-  handleSubmit() {
+  handleSubmit(e) {
+    e.preventDefault()
     const { username, password, repeatedPassword } = this.state
     if (!username || !password || !repeatedPassword) {
       this.setState({
@@ -132,7 +133,7 @@ class RegisterForm extends React.Component {
   render() {
     const { classes } = this.props
     const form = (
-      <div className={classes.div}>
+      <form onSubmit={this.handleSubmit} className={classes.div}>
         <TextField
           id="username"
           label="Username"
@@ -163,10 +164,10 @@ class RegisterForm extends React.Component {
           fullWidth
           helperText={this.state.repeatedPasswordError.toString()}
         />
-        <Button onClick={this.handleSubmit} className={classes.button}>
+        <Button type="submit" className={classes.button}>
           Register
         </Button>
-      </div>
+      </form>
     )
     return form
   }
