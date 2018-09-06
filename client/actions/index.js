@@ -129,6 +129,11 @@ export function submitRemoveEntry(userid, entryid) {
 }
 
 export function submitEntriesInStore(userid) {
-  return (dispatch, getState) =>
-    submitEntries(userid, getState().entries)(dispatch)
+  return (dispatch, getState) => {
+    const entries = getState().entries
+    if (entries.length) {
+      return submitEntries(userid, entries)(dispatch)
+    }
+    return Promise.resolve([])
+  }
 }
