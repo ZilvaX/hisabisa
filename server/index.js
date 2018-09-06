@@ -4,22 +4,20 @@ const session = require('express-session')
 const pgSession = require('connect-pg-simple')(session)
 
 const router = require('./api')
-const { secret } = require('./config')
+const { expressSession } = require('./config')
 const { pool } = require('./db')
 
 const app = express()
 app.use(express.json())
 app.use(helmet())
 app.use(
-  session({
-    secret,
-    cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 }, // 30 days
-    resave: false,
-    saveUninitialized: false,
-    store: new pgSession({
-      pool,
+  session(
+    Object.assign({}, expressSession, {
+      store: new pgSession({
+        pool,
+      }),
     }),
-  }),
+  ),
 )
 
 app.use('/api', router)
