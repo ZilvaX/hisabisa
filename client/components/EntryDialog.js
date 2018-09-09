@@ -48,7 +48,7 @@ function EntryDialog(props) {
           <Button onClick={props.handleClose} color="primary">
             Cancel
           </Button>
-          <Button type="sumbit" color="primary">
+          <Button type="submit" color="primary">
             {props.submitbutton}
           </Button>
         </DialogActions>
