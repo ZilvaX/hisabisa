@@ -27,7 +27,8 @@ class AddEntriesDialog extends React.Component {
     })
   }
 
-  handleFormSubmit() {
+  handleFormSubmit(e) {
+    e.preventDefault()
     const { dispatch, handleClose, userid } = this.props
     const { event, lastoccurrence, frequency } = this.state
     const body = [

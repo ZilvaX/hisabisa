@@ -13,44 +13,46 @@ function EntryDialog(props) {
   return (
     <Dialog open={props.open} aria-labelledby="entry-form-dialog-title">
       <DialogTitle id="entry-form-dialog-title">{props.title}</DialogTitle>
-      <DialogContent>
-        <DialogContentText>{props.contenttext}</DialogContentText>
-        <TextField
-          autoFocus
-          margin="normal"
-          id="event"
-          label="Event"
-          fullWidth
-          value={props.event}
-          onChange={props.handleFormChange}
-        />
-        <TextField
-          margin="normal"
-          id="lastoccurrence"
-          label="Last Occurrence"
-          fullWidth
-          type="date"
-          value={props.lastoccurrence}
-          onChange={props.handleFormChange}
-        />
-        <TextField
-          margin="normal"
-          id="frequency"
-          label="Frequency (in Days)"
-          fullWidth
-          type="number"
-          value={props.frequency}
-          onChange={props.handleFormChange}
-        />
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={props.handleClose} color="primary">
-          Cancel
-        </Button>
-        <Button onClick={props.handleFormSubmit} color="primary">
-          {props.submitbutton}
-        </Button>
-      </DialogActions>
+      <form onSubmit={props.handleFormSubmit}>
+        <DialogContent>
+          <DialogContentText>{props.contenttext}</DialogContentText>
+          <TextField
+            autoFocus
+            margin="normal"
+            id="event"
+            label="Event"
+            fullWidth
+            value={props.event}
+            onChange={props.handleFormChange}
+          />
+          <TextField
+            margin="normal"
+            id="lastoccurrence"
+            label="Last Occurrence"
+            fullWidth
+            type="date"
+            value={props.lastoccurrence}
+            onChange={props.handleFormChange}
+          />
+          <TextField
+            margin="normal"
+            id="frequency"
+            label="Frequency (in Days)"
+            fullWidth
+            type="number"
+            value={props.frequency}
+            onChange={props.handleFormChange}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={props.handleClose} color="primary">
+            Cancel
+          </Button>
+          <Button type="sumbit" color="primary">
+            {props.submitbutton}
+          </Button>
+        </DialogActions>
+      </form>
     </Dialog>
   )
 }
