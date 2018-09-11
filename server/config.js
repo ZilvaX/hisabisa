@@ -6,6 +6,7 @@ const nodeEnv = env.NODE_ENV || 'production'
 const db = {
   user: env.DB_USER || 'admin',
   database: env.DB_NAME || 'hisabisa',
+  pasword: env.DB_PASSWORD,
 }
 
 const defaultCookie = { maxAge: 30 * 24 * 60 * 60 * 1000 } // 30 days
