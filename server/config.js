@@ -9,16 +9,9 @@ const db = {
   pasword: env.DB_PASSWORD,
 }
 
-const defaultCookie = { maxAge: 30 * 24 * 60 * 60 * 1000 } // 30 days
-let cookie
-if (nodeEnv === 'production') {
-  cookie = Object.assign({}, defaultCookie, { secure: true })
-} else {
-  cookie = defaultCookie
-}
 const expressSession = {
   secret: env.HISABISA_SECRET,
-  cookie,
+  cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 }, // 30 days
   resave: false,
   saveUninitialized: false,
 }
