@@ -65,7 +65,8 @@ class LoginForm extends React.Component {
     this.setState({ [id]: target.value })
   }
 
-  handleSubmit() {
+  handleSubmit(e) {
+    e.preventDefault()
     const { username, password, usernameError, passwordError } = this.state
     // Validate username and password
     if (!username || !password) {
@@ -129,7 +130,7 @@ class LoginForm extends React.Component {
   render() {
     const { classes } = this.props
     const form = (
-      <div className={classes.div}>
+      <form onSubmit={this.handleSubmit} className={classes.div}>
         <TextField
           id="username"
           label="Username"
@@ -150,10 +151,10 @@ class LoginForm extends React.Component {
           fullWidth
           helperText={this.state.passwordError.toString()}
         />
-        <Button className={classes.button} onClick={this.handleSubmit}>
+        <Button className={classes.button} type="submit">
           Login
         </Button>
-      </div>
+      </form>
     )
     return form
   }

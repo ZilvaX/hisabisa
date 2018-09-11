@@ -24,7 +24,8 @@ class EditEntryDialog extends React.Component {
     })
   }
 
-  handleFormSubmit() {
+  handleFormSubmit(e) {
+    e.preventDefault()
     const { event, lastoccurrence, frequency } = this.state
     const entry = {
       event,
