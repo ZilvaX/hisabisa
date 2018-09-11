@@ -4,10 +4,15 @@ const session = require('express-session')
 const pgSession = require('connect-pg-simple')(session)
 
 const router = require('./api')
-const { expressSession } = require('./config')
+let { expressSession } = require('./config')
 const { pool } = require('./db')
 
 const app = express()
+if (app.get('env') === 'production') {
+  app.set('trust proxy', 1) // trust first proxy
+  const cookie = Object.assign({}, expressSession.cookie, { secure: true })
+  expressSession = Object.assign({}, expressSession, { cookie }) // serve secure cookies
+}
 app.use(express.json())
 app.use(helmet())
 app.use(
