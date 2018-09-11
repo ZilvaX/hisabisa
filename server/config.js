@@ -6,7 +6,7 @@ const nodeEnv = env.NODE_ENV || 'production'
 const db = {
   user: env.DB_USER || 'admin',
   database: env.DB_NAME || 'hisabisa',
-  pasword: env.DB_PASSWORD,
+  password: env.DB_PASSWORD,
 }
 
 const expressSession = {
