@@ -7,7 +7,11 @@ import thunk from 'redux-thunk'
 import hisabisaApp from './reducers'
 import { Provider } from 'react-redux'
 
-const store = createStore(hisabisaApp, applyMiddleware(thunk, logger))
+let middleware = [thunk]
+if (process.env.NODE_ENV !== 'production') {
+  middleware = [...middleware, logger]
+}
+const store = createStore(hisabisaApp, applyMiddleware(...middleware))
 
 render(
   <Provider store={store}>
