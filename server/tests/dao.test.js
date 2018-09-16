@@ -1,10 +1,10 @@
 const { Client, types } = require('pg')
 const { Duration, DateTime } = require('luxon')
-const config = require('../config')
-const typeConfigurer = require('../db/typeConfigurer')
-const db = require('../db')
-const dao = require('../dao')
-jest.mock('../db')
+const config = require('../src/config')
+const typeConfigurer = require('../src/db/typeConfigurer')
+const db = require('../src/db')
+const dao = require('../src/dao')
+jest.mock('../src/db')
 
 // Type Parsers
 typeConfigurer(types)
