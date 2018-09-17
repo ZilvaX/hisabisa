@@ -1,4 +1,3 @@
----
 env:
   browser: true
   es6: true
@@ -8,10 +7,10 @@ extends:
   - plugin:prettier/recommended
   - plugin:react/recommended
   - plugin:jest/recommended
+parser: typescript-eslint-parser
 parserOptions:
   ecmaVersion: 8
   ecmaFeatures:
-    experimentalObjectRestSpread: true
     jsx: true
   sourceType: module
 plugins:
@@ -20,4 +19,6 @@ plugins:
 rules:
   no-console: off
   prettier/prettier: error
-
+settings:
+  react:
+    version: 16.5

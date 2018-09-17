@@ -66,4 +66,8 @@ typings/
 # Webpack
 /dist
 
+# Environment Variables
 .env
+
+# Typescript dist
+server/dist
