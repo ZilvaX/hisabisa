@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "module": "commonjs",
+    "target": "ES2017",
     "outDir": "dist",
     "removeComments": true,
     "sourceMap": true
