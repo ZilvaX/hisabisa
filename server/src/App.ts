@@ -1,3 +1,4 @@
+import usersRoute from './api/users'
 const express = require('express')
 
 class App {
@@ -5,17 +6,16 @@ class App {
 
   constructor() {
     this.express = express()
+    this.mountMiddleware()
     this.mountRoutes()
   }
 
+  private mountMiddleware(): void {
+    this.express.use(express.json())
+  }
+
   private mountRoutes(): void {
-    const router = express.Router()
-    router.get('/', (req, res) => {
-      res.json({
-        message: 'Hello World',
-      })
-    })
-    this.express.use('/', router)
+    this.express.use('/api/users', usersRoute)
   }
 }
 

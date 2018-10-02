@@ -16,9 +16,17 @@ parserOptions:
 plugins:
   - react
   - prettier
+  - typescript
 rules:
   no-console: off
   prettier/prettier: error
+  typescript/no-unused-vars: error
 settings:
   react:
     version: 16.5
+overrides:
+  files:
+    - '**/*.ts'
+  parser: typescript-eslint-parser
+  rules:
+    typescript/no-undef: off
