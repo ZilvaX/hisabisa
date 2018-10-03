@@ -1,5 +1,6 @@
 import NewUser from '../model/NewUser'
-function checkUserExists(user: NewUser): Promise<boolean> {
+function checkUserExists(user: String): Promise<boolean> {
+  // return dao.checkUserExists(user)
   return undefined
 }
 

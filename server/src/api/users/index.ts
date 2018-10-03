@@ -26,7 +26,7 @@ router.post(
   },
   async (req, res, next) => {
     const newUser: NewUser = res.locals.newUser
-    if (!(await hisabisaService.checkUserExists(newUser))) {
+    if (!(await hisabisaService.checkUserExists(newUser.username))) {
       next()
     } else {
       res.sendStatus(409)
