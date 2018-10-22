@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "outDir": "./built",
+    "removeComments": true,
+    "allowJs": true
+  },
+  "include": ["./src/**/*"]
+}
