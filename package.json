@@ -4,8 +4,8 @@
   "description": "An application to help keep up with old friends",
   "main": "index.js",
   "scripts": {
-    "start": "node server",
-    "startd": "nodemon server",
+    "start": "node server/built",
+    "startd": "nodemon server/built",
     "startw": "webpack-dev-server --config webpack.dev.js",
     "test": "jest",
     "build": "webpack --config webpack.production.js",

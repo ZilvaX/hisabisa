@@ -67,3 +67,5 @@ typings/
 /dist
 
 .env
+
+/server/built
