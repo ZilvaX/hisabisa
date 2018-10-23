@@ -10,8 +10,7 @@ jest.mock('../db')
 typeConfigurer(types)
 
 let client
-beforeEach(() => {
-  // Create new client for each test
+beforeAll(() => {
   client = new Client(config.db)
   db.query.mockImplementation(client.query.bind(client))
   return client.connect().then(() => {
@@ -20,8 +19,11 @@ beforeEach(() => {
     )
   })
 })
+beforeEach(() => {
+  return client.query('TRUNCATE users, entries')
+})
 
-afterEach(() => {
+afterAll(() => {
   return client.end()
 })
 test('Get no entry', async () => {
@@ -106,7 +108,6 @@ test('Insert and get user', async () => {
 })
 test('Insert multiple and get entries', async () => {
   const entryToExpect1 = {
-    entryid: 1,
     event: 'Hello World',
     lastoccurrence: DateTime.fromISO('2018-08-03'),
     frequency: Duration.fromObject({ days: 1 }),
@@ -118,7 +119,6 @@ test('Insert multiple and get entries', async () => {
     frequency: Duration.fromObject({ days: 1 }),
   }
   const entryToExpect2 = {
-    entryid: 2,
     event: 'Hello World 2',
     lastoccurrence: DateTime.fromISO('2018-08-03'),
     frequency: Duration.fromObject({ days: 1 }),
@@ -134,7 +134,7 @@ test('Insert multiple and get entries', async () => {
     entryToInsert1,
     entryToInsert2,
   ])
-  expect(insertedEntries).toEqual(entriesToExpect)
+  expect(insertedEntries).toMatchObject(entriesToExpect)
   const entries = await dao.getEntries('1')
-  expect(entries).toEqual(entriesToExpect)
+  expect(entries).toMatchObject(entriesToExpect)
 })
