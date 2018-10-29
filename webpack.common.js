@@ -17,7 +17,7 @@ const config = {
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.(t|j)sx?$/,
         include: APP_DIR,
         loader: 'babel-loader',
       },
