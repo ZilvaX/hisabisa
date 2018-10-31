@@ -4,6 +4,8 @@ import { connect } from 'react-redux'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import { withStyles } from '@material-ui/core/styles'
+import DialogContent from '@material-ui/core/DialogContent'
+import DialogActions from '@material-ui/core/DialogActions'
 
 import { updateUserid, updateUsername, showError, showLogin } from '../actions/'
 
@@ -131,29 +133,33 @@ class LoginForm extends React.Component {
     const { classes } = this.props
     const form = (
       <form onSubmit={this.handleSubmit} className={classes.div}>
-        <TextField
-          id="username"
-          label="Username"
-          margin="normal"
-          onChange={this.handleChange}
-          error={this.state.usernameError.error}
-          fullWidth
-          autoFocus
-          helperText={this.state.usernameError.toString()}
-        />
-        <TextField
-          id="password"
-          label="Password"
-          type="password"
-          margin="normal"
-          onChange={this.handleChange}
-          error={this.state.passwordError.error}
-          fullWidth
-          helperText={this.state.passwordError.toString()}
-        />
-        <Button className={classes.button} type="submit">
-          Login
-        </Button>
+        <DialogContent>
+          <TextField
+            id="username"
+            label="Username"
+            margin="normal"
+            onChange={this.handleChange}
+            error={this.state.usernameError.error}
+            fullWidth
+            autoFocus
+            helperText={this.state.usernameError.toString()}
+          />
+          <TextField
+            id="password"
+            label="Password"
+            type="password"
+            margin="normal"
+            onChange={this.handleChange}
+            error={this.state.passwordError.error}
+            fullWidth
+            helperText={this.state.passwordError.toString()}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button className={classes.button} type="submit">
+            Login
+          </Button>
+        </DialogActions>
       </form>
     )
     return form
