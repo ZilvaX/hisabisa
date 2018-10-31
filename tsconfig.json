@@ -3,10 +3,11 @@
     "outDir": "./dist",
     "sourceMap": true,
     "strictNullChecks": true,
-    "module": "es6",
+    "noImplicitAny": true,
+    "module": "commonjs",
     "jsx": "react",
     "target": "es5",
     "allowJs": true
   },
-  "include": ["./client/"]
+  "include": ["./client/**/*"]
 }

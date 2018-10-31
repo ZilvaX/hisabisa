@@ -21,6 +21,11 @@ const config = {
         include: APP_DIR,
         loader: 'babel-loader',
       },
+      {
+        test: /\.js$/,
+        use: ['source-map-loader'],
+        enforce: 'pre',
+      },
     ],
   },
   plugins: [
